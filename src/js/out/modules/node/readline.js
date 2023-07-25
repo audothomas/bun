@@ -1149,6 +1149,8 @@ var _Interface = class Interface2 extends InterfaceConstructor {
           this[kYank]();
           break;
         case "z":
+          if (process.platform === "win32")
+            break;
           if (this.listenerCount("SIGTSTP") > 0)
             this.emit("SIGTSTP");
           else

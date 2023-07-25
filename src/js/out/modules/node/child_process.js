@@ -303,6 +303,8 @@ var convertToValidSignal = function(signal) {
     const command = ArrayPrototypeJoin.call([file, ...args], " ");
     if (typeof options.shell === "string")
       file = options.shell;
+    else if (process.platform === "android")
+      file = "sh";
     else
       file = "sh";
     args = ["-c", command];

@@ -95,7 +95,7 @@ declare module "bun" {
   };
   function fs(): BunFS;
   function _Os(): typeof import("node:os");
-  function _Path(isWindows?: boolean): typeof import("node:path");
+  function _Path(isWin32?: boolean): typeof import("node:path");
   function jest(): typeof import("bun:test");
   var main: string;
   var tty: Array<{ hasColors: boolean }>;

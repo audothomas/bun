@@ -49,8 +49,6 @@ const opts = {
   },
   root: import.meta.dir,
   define: {
-    "process.platform": JSON.stringify(process.platform),
-    "process.arch": JSON.stringify(process.arch),
     "$lazy": "$$BUN_LAZY$$",
   },
 } as const;
@@ -113,7 +111,8 @@ for (const [build, outdir] of [
     if (output.kind === "entry-point" || output.kind === "chunk") {
       const transformedOutput = (await output.text())
         .replace(/^(\/\/.*?\n)+/g, "")
-        .replace(/\$\$BUN_LAZY\$\$/g, 'globalThis[Symbol.for("Bun.lazy")]');
+        .replace(/\$\$BUN_LAZY\$\$/g, 'globalThis[Symbol.for("Bun.lazy")]')
+        .replace(/(\b|\n)\$export\b/g, "$1module.exports");
 
       if (transformedOutput.includes("$bundleError")) {
         // attempt to find the string that was passed to $bundleError

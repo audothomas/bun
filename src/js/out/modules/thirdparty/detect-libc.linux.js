@@ -2,13 +2,19 @@ function family() {
   return Promise.resolve(familySync());
 }
 function familySync() {
-  return null;
+  if (process.platform === "linux")
+    return GLIBC;
+  else
+    return null;
 }
 function versionAsync() {
   return Promise.resolve(version());
 }
 function version() {
-  return null;
+  if (process.platform === "linux")
+    return "2.29";
+  else
+    return null;
 }
 function isNonGlibcLinuxSync() {
   return !1;
