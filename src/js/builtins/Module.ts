@@ -95,6 +95,17 @@ export function require(this: Module, id: string) {
   return mod.exports;
 }
 
+// This takes in an exact specifier to a built-in module (like "node:stream") and loads it.
+// It assumes such module will always succeed and that you do not try to load something else.
+export function requireBuiltin(id: string) {
+  let mod = $requireMap.$get(id);
+  if (!mod) {
+    mod = $createAndLoadBuiltinModule(id);
+    $requireMap.$set(id, mod);
+  }
+  return mod.exports;
+}
+
 export function requireResolve(this: Module, id: string) {
   return $resolveSync(id, this.path, false);
 }

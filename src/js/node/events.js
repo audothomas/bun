@@ -429,7 +429,7 @@ $exports = Object.assign(EventEmitter, {
   once,
   on,
   getEventListeners,
-  getMaxListeners,
+  // getMaxListeners,
   setMaxListeners,
   EventEmitter,
   usingDomains: false,

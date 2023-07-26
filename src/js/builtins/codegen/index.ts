@@ -216,7 +216,7 @@ $$capture_start$$(${fn.async ? "async " : ""}${
     const build = await Bun.build({
       entrypoints: [tmpFile],
       define,
-      minify: true,
+      minify: false,
     });
     if (!build.success) {
       throw new AggregateError(build.logs, "Failed bundling builtin function " + fn.name + " from " + basename + ".ts");

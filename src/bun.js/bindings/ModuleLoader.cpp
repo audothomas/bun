@@ -426,6 +426,11 @@ JSValue fetchCommonJSModule(
             RETURN_IF_EXCEPTION(scope, {});
             RELEASE_AND_RETURN(scope, target);
         }
+        case SyntheticModuleType::Constants: {
+            target->evaluate(globalObject, Bun::toWTFString(*specifier), generateConstantsSourceCode);
+            RETURN_IF_EXCEPTION(scope, {});
+            RELEASE_AND_RETURN(scope, target);
+        }
         case SyntheticModuleType::ESM: {
             RELEASE_AND_RETURN(scope, jsNumber(-1));
         }

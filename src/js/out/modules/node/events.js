@@ -160,7 +160,7 @@ EventEmitterPrototype._maxListeners = void 0;
 EventEmitterPrototype.setMaxListeners = function setMaxListeners2(n) {
   return validateNumber(n, "setMaxListeners", 0), this._maxListeners = n, this;
 };
-EventEmitterPrototype.getMaxListeners = function getMaxListeners2() {
+EventEmitterPrototype.getMaxListeners = function getMaxListeners() {
   return this._maxListeners ?? defaultMaxListeners;
 };
 var emitWithoutRejectionCapture = function emit(type, ...args) {
@@ -334,7 +334,6 @@ module.exports = Object2.assign(EventEmitter, {
   once,
   on,
   getEventListeners,
-  getMaxListeners,
   setMaxListeners,
   EventEmitter,
   usingDomains: !1,

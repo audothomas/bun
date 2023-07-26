@@ -1,1 +1,1 @@
-console.log(require("node:zlib"));
+console.log(require("node:constants"));

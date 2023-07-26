@@ -250,6 +250,8 @@ using namespace JSC;
     macro(writer) \
     macro(writing) \
     macro(written) \
+    macro(requireBuiltin) \
+    macro(createAndLoadBuiltinModule) \
     BUN_ADDITIONAL_PRIVATE_IDENTIFIERS(macro) \
 
 class BunBuiltinNames {
