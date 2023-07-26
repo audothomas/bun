@@ -1,6 +1,4 @@
-import {EventEmitter} from "node:events";
-import http from "node:http";
-var emitWarning = function(type, message) {
+"use strict";var emitWarning = function(type, message) {
   if (emittedWarnings.has(type))
     return;
   emittedWarnings.add(type), console.warn("[bun] Warning:", message);
@@ -48,7 +46,7 @@ var emitWarning = function(type, message) {
     Error.captureStackTrace(err, abortHandshakeOrEmitwsClientError), server.emit("wsClientError", err, socket, req);
   } else
     abortHandshake(response, code, message);
-}, kBunInternals = Symbol.for("::bunternal::"), readyStates = ["CONNECTING", "OPEN", "CLOSING", "CLOSED"], encoder = new TextEncoder, eventIds = {
+}, $$REQUIRE$$ = $_BunCommonJSModule_$.require, EventEmitter = $$REQUIRE$$("node:events"), http = $$REQUIRE$$("node:http"), kBunInternals = Symbol.for("::bunternal::"), readyStates = ["CONNECTING", "OPEN", "CLOSING", "CLOSED"], encoder = new TextEncoder, eventIds = {
   open: 1,
   close: 2,
   message: 3,
@@ -233,7 +231,7 @@ class BunWebSocket extends EventEmitter {
     this.#paused = !1, emitWarning("resume()", "ws.WebSocket.resume() is not implemented in bun");
   }
 }
-BunWebSocket.WebSocket = BunWebSocket;
+Object.defineProperty(BunWebSocket, "name", { value: "WebSocket" });
 var wsKeyRegex = /^[+/0-9A-Za-z]{22}==$/, wsTokenChars = [
   0,
   0,
@@ -497,7 +495,7 @@ class BunWebSocketMocked extends EventEmitter {
   }
 }
 
-class Server extends EventEmitter {
+class WebSocketServer extends EventEmitter {
   _server;
   options;
   clients;
@@ -669,8 +667,6 @@ class Server extends EventEmitter {
     this.completeUpgrade(extensions, key, protocols, req, socket, head, cb);
   }
 }
-BunWebSocket.WebSocketServer = Server;
-BunWebSocket.Server = Server;
 Object.defineProperty(BunWebSocket, "CONNECTING", {
   enumerable: !0,
   value: readyStates.indexOf("CONNECTING")
@@ -709,26 +705,20 @@ class Sender {
     throw new Error("Not supported yet in Bun");
   }
 }
-BunWebSocket.Sender = Sender;
 
 class Receiver {
   constructor() {
     throw new Error("Not supported yet in Bun");
   }
 }
-BunWebSocket.Receiver = Receiver;
 var createWebSocketStream = (ws) => {
   throw new Error("Not supported yet in Bun");
 };
-BunWebSocket.createWebSocketStream = createWebSocketStream;
-BunWebSocket[Symbol.for("CommonJS")] = 0;
-var ws_default = BunWebSocket;
-export {
-  ws_default as default,
+$_BunCommonJSModule_$.module.exports = Object.assign(BunWebSocket, {
   createWebSocketStream,
-  Server as WebSocketServer,
-  BunWebSocket as WebSocket,
-  Server,
+  Receiver,
   Sender,
-  Receiver
-};
+  WebSocket: BunWebSocket,
+  Server: WebSocketServer,
+  WebSocketServer
+});

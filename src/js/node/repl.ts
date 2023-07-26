@@ -1,7 +1,7 @@
 // Hardcoded module "node:repl"
 // This is a stub! None of this is actually implemented yet.
 // It only exists to make some packages which import this module work.
-import { throwNotImplemented } from "../shared";
+const { throwNotImplemented } = require("$shared");
 
 function REPLServer() {
   throwNotImplemented("node:repl REPLServer");
@@ -18,7 +18,7 @@ function start() {
   throwNotImplemented("node:repl");
 }
 
-var repl = {
+module.exports = {
   [Symbol.for("CommonJS")]: 0,
   lines: [],
   context: globalThis,
@@ -76,5 +76,3 @@ var repl = {
     },
   ),
 };
-
-export { repl as default, repl, REPLServer, Recoverable, REPL_MODE_SLOPPY, REPL_MODE_STRICT, start };

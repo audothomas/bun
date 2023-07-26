@@ -1,7 +1,11 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "noEmit": true
+    "module": "ESNext",
+    "noEmit": true,
+    "paths": {
+      "$shared": ["./shared.ts"]
+    }
   },
   "include": [
     "node",

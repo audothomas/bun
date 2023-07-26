@@ -199,3 +199,6 @@ interface BunLazyModules {
   [2]: any;
   [4]: any;
 }
+
+/** Assign to this variable in src/js/{bun,node,thirdparty} to act as module.exports */
+declare var $exports: any;

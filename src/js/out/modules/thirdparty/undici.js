@@ -1,7 +1,4 @@
-import {EventEmitter} from "node:events";
-import NodeStreamModule from "node:stream";
-import {Readable} from "node:stream";
-var notImplemented = function() {
+"use strict";var notImplemented = function() {
   throw new Error("Not implemented in bun");
 };
 async function request(url, options = {
@@ -79,11 +76,9 @@ var stream = function() {
   throw new Error("Not implemented in bun");
 }, mockErrors = function() {
   throw new Error("Not implemented in bun");
-};
-function Undici() {
+}, Undici = function() {
   throw new Error("Not implemented in bun");
-}
-var { Object } = globalThis[Symbol.for("Bun.lazy")]("primordials"), { _ReadableFromWebForUndici: ReadableFromWeb } = NodeStreamModule[Symbol.for("::bunternal::")], ObjectCreate = Object.create, kEmptyObject = ObjectCreate(null), fetch = Bun.fetch, Response = globalThis.Response, Headers = globalThis.Headers, Request = globalThis.Request, URLSearchParams = globalThis.URLSearchParams, URL = globalThis.URL;
+}, $$REQUIRE$$ = $_BunCommonJSModule_$.require, { Object } = globalThis[Symbol.for("Bun.lazy")]("primordials"), EventEmitter = $$REQUIRE$$("node:events"), StreamModule = $$REQUIRE$$("node:stream"), { Readable } = StreamModule, { _ReadableFromWebForUndici: ReadableFromWeb } = StreamModule[Symbol.for("::bunternal::")], ObjectCreate = Object.create, kEmptyObject = ObjectCreate(null), fetch = Bun.fetch, Response = globalThis.Response, Headers = globalThis.Headers, Request = globalThis.Request, URLSearchParams = globalThis.URLSearchParams, URL = globalThis.URL;
 
 class File extends Blob {
 }
@@ -175,7 +170,7 @@ Undici.Client = Client;
 Undici.Agent = Agent;
 Undici.buildConnector = Undici.errors = Undici.setGlobalDispatcher = Undici.getGlobalDispatcher = Undici.request = Undici.stream = Undici.pipeline = Undici.connect = Undici.upgrade = Undici.MockClient = Undici.MockPool = Undici.MockAgent = Undici.mockErrors = notImplemented;
 Undici.fetch = fetch;
-var undici_default = {
+$_BunCommonJSModule_$.module.exports = {
   fetch,
   Response,
   Headers,
@@ -199,33 +194,5 @@ var undici_default = {
   BalancedPool,
   Client,
   Agent,
-  Undici,
-  [Symbol.for("CommonJS")]: 0
-};
-export {
-  upgrade,
-  stream,
-  request,
-  pipeline,
-  mockErrors,
-  fetch,
-  undici_default as default,
-  connect,
-  Undici,
-  URLSearchParams,
-  URL,
-  Response,
-  Request,
-  Pool,
-  MockPool,
-  MockClient,
-  MockAgent,
-  Headers,
-  FormData,
-  FileReader,
-  File,
-  Dispatcher,
-  Client,
-  BalancedPool,
-  Agent
+  Undici
 };

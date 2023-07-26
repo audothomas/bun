@@ -298,7 +298,7 @@ const asyncWrapProviders = {
   INSPECTORJSBINDING: 57,
 };
 
-export {
+module.exports = {
   AsyncLocalStorage,
   createHook,
   executionAsyncId,
@@ -306,15 +306,4 @@ export {
   executionAsyncResource,
   asyncWrapProviders,
   AsyncResource,
-};
-
-export default {
-  AsyncLocalStorage,
-  createHook,
-  executionAsyncId,
-  triggerAsyncId,
-  executionAsyncResource,
-  asyncWrapProviders,
-  AsyncResource,
-  [Symbol.for("CommonJS")]: 0,
 };

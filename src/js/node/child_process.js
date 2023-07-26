@@ -1,13 +1,12 @@
 // Hardcoded module "node:child_process"
-import { EventEmitter } from "node:events";
-import * as StreamModule from "node:stream";
-import { constants } from "node:os";
-import { promisify } from "node:util";
-const signals = constants.signals;
-
+const EventEmitter = require("node:events");
+const StreamModule = require("node:stream");
+const {
+  constants: { signals },
+} = require("node:os");
+const { promisify } = require("node:util");
 const { ArrayBuffer, Uint8Array, String, Object, Buffer, Promise } = $lazy("primordials");
 
-var ObjectPrototypeHasOwnProperty = Object.prototype.hasOwnProperty;
 var ObjectCreate = Object.create;
 var ObjectAssign = Object.assign;
 var ObjectDefineProperty = Object.defineProperty;
@@ -154,7 +153,7 @@ function spawnTimeoutFunction(child, timeoutHolder) {
  *   }} [options]
  * @returns {ChildProcess}
  */
-export function spawn(file, args, options) {
+function spawn(file, args, options) {
   options = normalizeSpawnArguments(file, args, options);
   validateTimeout(options.timeout);
   validateAbortSignal(options.signal, "options.signal");
@@ -225,7 +224,7 @@ export function spawn(file, args, options) {
  *   ) => any} [callback]
  * @returns {ChildProcess}
  */
-export function execFile(file, args, options, callback) {
+function execFile(file, args, options, callback) {
   ({ file, args, options, callback } = normalizeExecFileArgs(file, args, options, callback));
 
   options = {
@@ -479,7 +478,7 @@ export function execFile(file, args, options, callback) {
  *   ) => any} [callback]
  * @returns {ChildProcess}
  */
-export function exec(command, options, callback) {
+function exec(command, options, callback) {
   const opts = normalizeExecArgs(command, options, callback);
   return execFile(opts.file, opts.options, opts.callback);
 }
@@ -541,7 +540,7 @@ ObjectDefineProperty(exec, promisify.custom, {
  *   error: Error;
  *   }}
  */
-export function spawnSync(file, args, options) {
+function spawnSync(file, args, options) {
   options = {
     maxBuffer: MAX_BUFFER,
     ...normalizeSpawnArguments(file, args, options),
@@ -629,7 +628,7 @@ export function spawnSync(file, args, options) {
  *   }} [options]
  * @returns {Buffer | string}
  */
-export function execFileSync(file, args, options) {
+function execFileSync(file, args, options) {
   ({ file, args, options } = normalizeExecFileArgs(file, args, options));
 
   // const inheritStderr = !options.stdio;
@@ -665,7 +664,7 @@ export function execFileSync(file, args, options) {
  *   }} [options]
  * @returns {Buffer | string}
  */
-export function execSync(command, options) {
+function execSync(command, options) {
   const opts = normalizeExecArgs(command, options, null);
   // const inheritStderr = !opts.options.stdio;
 
@@ -680,7 +679,7 @@ export function execSync(command, options) {
   return ret.stdout;
 }
 
-export function fork() {
+function fork() {
   throw new Error("Not implemented");
 }
 
@@ -884,7 +883,7 @@ function checkExecSyncError(ret, args, cmd) {
 //------------------------------------------------------------------------------
 // Section 3. ChildProcess class
 //------------------------------------------------------------------------------
-export class ChildProcess extends EventEmitter {
+class ChildProcess extends EventEmitter {
   #handle;
   #exited = false;
   #closesNeeded = 1;
@@ -1727,7 +1726,7 @@ class SystemError extends Error {
   }
 }
 
-export default {
+module.exports = {
   ChildProcess,
   spawn,
   execFile,
@@ -1736,6 +1735,4 @@ export default {
   spawnSync,
   execFileSync,
   execSync,
-
-  [Symbol.for("CommonJS")]: 0,
 };

@@ -1,4 +1,4 @@
-var bound = function(obj) {
+"use strict";var bound = function(obj) {
   const toNamespacedPath = obj.toNamespacedPath.bind(obj);
   return {
     resolve: obj.resolve.bind(obj),
@@ -21,4 +21,4 @@ var bound = function(obj) {
 }, posix = bound(Bun._Path(!1)), win32 = bound(Bun._Path(!0));
 posix.win32 = win32.win32 = win32;
 posix.posix = win32.posix = posix;
-module.exports = process.platform === "win32" ? win32 : posix;
+$_BunCommonJSModule_$.module.exports = process.platform === "win32" ? win32 : posix;

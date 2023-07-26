@@ -1,4 +1,4 @@
-var nodeFsConstants = constants, __getOwnPropNames = Object.getOwnPropertyNames, __commonJS = (cb, mod) => function __require2() {
+"use strict";var $$REQUIRE$$ = $_BunCommonJSModule_$.require, nodeFsConstants = constants, __getOwnPropNames = Object.getOwnPropertyNames, __commonJS = (cb, mod) => function __require2() {
   return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
 }, require_types = __commonJS({
   "node_modules/wasi-js/dist/types.js"(exports) {
@@ -248,9 +248,9 @@ var nodeFsConstants = constants, __getOwnPropNames = Object.getOwnPropertyNames,
           process.kill(process.pid, signal);
         },
         randomFillSync: (array) => crypto.getRandomValues(array),
-        isTTY: (fd) => import.meta.require("node:tty").isatty(fd),
+        isTTY: (fd) => $$REQUIRE$$("node:tty").isatty(fd),
         fs: Bun.fs(),
-        path: import.meta.require("node:path")
+        path: $$REQUIRE$$("node:path")
       };
       return defaultConfig = {
         args: [],
@@ -1093,10 +1093,5 @@ var nodeFsConstants = constants, __getOwnPropNames = Object.getOwnPropertyNames,
     };
     exports.default = WASI;
   }
-}), WASIExport = require_wasi(), WASI = WASIExport.default;
-WASIExport[Symbol.for("CommonJS")] = 0;
-var wasi_default = WASIExport;
-export {
-  wasi_default as default,
-  WASIExport as WASI
-};
+});
+$_BunCommonJSModule_$.module.exports = require_wasi();

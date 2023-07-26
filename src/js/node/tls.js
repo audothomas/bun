@@ -1,7 +1,7 @@
 // Hardcoded module "node:tls"
-import { isArrayBufferView, isTypedArray } from "util/types";
-import net, { Server as NetServer } from "node:net";
-const InternalTCPSocket = net[Symbol.for("::bunternal::")];
+const { isArrayBufferView, isTypedArray } = require("node:util/types");
+const net = require("node:net");
+const { Server: NetServer, [Symbol.for("::bunternal::")]: InternalTCPSocket } = net;
 const bunSocketInternal = Symbol.for("::bunnetsocketinternal::");
 
 const { RegExp, Array, String } = $lazy("primordials");
@@ -684,8 +684,7 @@ function convertALPNProtocols(protocols, out) {
   }
 }
 var rootCertificates = $lazy("rootCertificates");
-var exports = {
-  [Symbol.for("CommonJS")]: 0,
+module.exports = {
   CLIENT_RENEG_LIMIT,
   CLIENT_RENEG_WINDOW,
   connect,
@@ -705,27 +704,4 @@ var exports = {
   TLSSocket,
   checkServerIdentity,
   rootCertificates,
-};
-
-export {
-  CLIENT_RENEG_LIMIT,
-  CLIENT_RENEG_WINDOW,
-  connect,
-  convertALPNProtocols,
-  createConnection,
-  createSecureContext,
-  createServer,
-  DEFAULT_CIPHERS,
-  DEFAULT_ECDH_CURVE,
-  DEFAULT_MAX_VERSION,
-  DEFAULT_MIN_VERSION,
-  getCiphers,
-  getCurves,
-  parseCertString,
-  SecureContext,
-  checkServerIdentity,
-  Server,
-  TLSSocket,
-  rootCertificates,
-  exports as default,
 };

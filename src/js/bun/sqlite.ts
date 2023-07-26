@@ -4,10 +4,10 @@ const lazy = $lazy;
 var defineProperties = Object.defineProperties;
 
 var toStringTag = Symbol.toStringTag;
-var apply = Function.prototype.apply;
 var isArray = Array.isArray;
 var isTypedArray = ArrayBuffer.isView;
-export const constants = {
+
+const constants = {
   SQLITE_OPEN_READONLY: 0x00000001 /* Ok for sqlite3_open_v2() */,
   SQLITE_OPEN_READWRITE: 0x00000002 /* Ok for sqlite3_open_v2() */,
   SQLITE_OPEN_CREATE: 0x00000004 /* Ok for sqlite3_open_v2() */,
@@ -36,11 +36,10 @@ export const constants = {
 };
 
 var SQL;
-var _SQL;
 
 var controllers;
 
-export class Statement {
+class Statement {
   constructor(raw) {
     this.#raw = raw;
 
@@ -213,7 +212,7 @@ export class Database {
     }
 
     if (!SQL) {
-      _SQL = SQL = lazy("sqlite");
+      SQL = lazy("sqlite");
     }
 
     this.#handle = SQL.open(anonymous ? ":memory:" : filename, flags);
@@ -248,7 +247,7 @@ export class Database {
 
   static deserialize(serialized, isReadOnly = false) {
     if (!SQL) {
-      _SQL = SQL = lazy("sqlite");
+      SQL = lazy("sqlite");
     }
 
     return SQL.deserialize(serialized, isReadOnly);
@@ -256,7 +255,7 @@ export class Database {
 
   static setCustomSQLite(path) {
     if (!SQL) {
-      _SQL = SQL = lazy("sqlite");
+      SQL = lazy("sqlite");
     }
 
     return SQL.setCustomSQLite(path);
@@ -370,6 +369,7 @@ export class Database {
   }
 }
 
+// @ts-expect-error
 Database.prototype.exec = Database.prototype.run;
 
 // Return the database's cached transaction controller, or create a new one
@@ -399,7 +399,7 @@ const getController = (db, self) => {
 
 // Return a new transaction function by wrapping the given function
 const wrapTransaction = (fn, db, { begin, commit, rollback, savepoint, release, rollbackTo }) =>
-  function transaction(...args) {
+  function transaction(this, ...args) {
     let before, after, undo;
     if (db.inTransaction) {
       before = savepoint;
@@ -424,5 +424,10 @@ const wrapTransaction = (fn, db, { begin, commit, rollback, savepoint, release, 
     }
   };
 
-export { _SQL as native };
-export { Database as default };
+module.exports = {
+  __esModule: true,
+  Database,
+  Statement,
+  constants,
+  default: Database,
+};

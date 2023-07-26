@@ -236,6 +236,7 @@ pub const ResolvedSource = extern struct {
         @"node:tty" = 1029,
         @"node:util/types" = 1030,
         @"node:constants" = 1031,
+        ESM = 1032,
     };
 };
 

@@ -1,6 +1,6 @@
 // Hardcoded module "node:os"
 
-export var tmpdir = function () {
+var tmpdir = function () {
   var { Bun } = $lazy("primordials");
   var env = Bun.env;
 
@@ -102,34 +102,7 @@ function bound(obj) {
     devNull: obj.devNull,
     EOL: obj.EOL,
     constants: obj.constants,
-    [Symbol.for("CommonJS")]: 0,
   };
 }
 
-var os = bound(Bun._Os());
-
-export var {
-  arch,
-  cpus,
-  endianness,
-  freemem,
-  getPriority,
-  homedir,
-  hostname,
-  loadavg,
-  networkInterfaces,
-  platform,
-  release,
-  setPriority,
-  totalmem,
-  type,
-  uptime,
-  userInfo,
-  version,
-  machine,
-  devNull,
-  EOL,
-  constants,
-} = os;
-
-export default os;
+module.exports = bound(Bun._Os());

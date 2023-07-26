@@ -1,4 +1,4 @@
-var validateObject = function(object, name) {
+"use strict";var validateObject = function(object, name) {
   if (object === null || typeof object !== "object")
     throw new ERR_INVALID_ARG_TYPE(name, "Object", object);
 }, validateBoolean = function(value, name) {
@@ -173,10 +173,12 @@ class AbortError extends Error {
     this.code = "ABORT_ERR";
   }
 }
-var timers_promises_default = { setTimeout: setTimeoutPromise, setImmediate: setImmediatePromise, setInterval: setIntervalPromise };
-export {
-  setTimeoutPromise as setTimeout,
-  setIntervalPromise as setInterval,
-  setImmediatePromise as setImmediate,
-  timers_promises_default as default
+$_BunCommonJSModule_$.module.exports = {
+  setTimeout: setTimeoutPromise,
+  setImmediate: setImmediatePromise,
+  setInterval: setIntervalPromise,
+  scheduler: {
+    wait: (delay, options) => setTimeoutPromise(delay, void 0, options),
+    yield: setImmediatePromise
+  }
 };

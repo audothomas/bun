@@ -1,4 +1,4 @@
-var lookup = function(domain, options, callback) {
+"use strict";var lookup = function(domain, options, callback) {
   if (typeof options == "function")
     callback = options;
   if (typeof callback != "function")
@@ -113,7 +113,9 @@ var lookup = function(domain, options, callback) {
   return new InternalResolver(options);
 }, setDefaultResultOrder = function() {
 }, setServers = function() {
-}, { dns } = globalThis.Bun, InternalResolver = class Resolver2 {
+}, {
+  Bun: { dns }
+} = globalThis[Symbol.for("Bun.lazy")]("primordials"), InternalResolver = class Resolver2 {
   constructor(options) {
   }
   cancel() {
@@ -405,7 +407,7 @@ var {
 };
 for (let key of ["resolveAny", "reverse"])
   promises[key] = () => Promise.resolve(void 0);
-var exports = {
+$_BunCommonJSModule_$.module.exports = {
   ADDRCONFIG: 0,
   ALL: 1,
   V4MAPPED: 2,
@@ -452,84 +454,5 @@ var exports = {
   resolveSrv,
   resolveTxt,
   resolveNaptr,
-  promises,
-  [Symbol.for("CommonJS")]: 0
-}, dns_default = exports, {
-  ADDRCONFIG,
-  ALL,
-  V4MAPPED,
-  NODATA,
-  FORMERR,
-  SERVFAIL,
-  NOTFOUND,
-  NOTIMP,
-  REFUSED,
-  BADQUERY,
-  BADNAME,
-  BADFAMILY,
-  BADRESP,
-  CONNREFUSED,
-  TIMEOUT,
-  EOF,
-  FILE,
-  NOMEM,
-  DESTRUCTION,
-  BADSTR,
-  BADFLAGS,
-  NONAME,
-  BADHINTS,
-  NOTINITIALIZED,
-  LOADIPHLPAPI,
-  ADDRGETNETWORKPARAMS,
-  CANCELLED
-} = exports;
-export {
-  setServers,
-  setDefaultResultOrder,
-  reverse,
-  resolveTxt,
-  resolveSrv,
-  resolveSoa,
-  resolvePtr,
-  resolveNs,
-  resolveNaptr,
-  resolveMx,
-  resolveCname,
-  resolveCaa,
-  resolveAny,
-  resolve6,
-  resolve4,
-  resolve,
-  promises,
-  lookupService,
-  lookup,
-  dns_default as default,
-  V4MAPPED,
-  TIMEOUT,
-  SERVFAIL,
-  Resolver,
-  REFUSED,
-  NOTINITIALIZED,
-  NOTIMP,
-  NOTFOUND,
-  NONAME,
-  NOMEM,
-  NODATA,
-  LOADIPHLPAPI,
-  FORMERR,
-  FILE,
-  EOF,
-  DESTRUCTION,
-  CONNREFUSED,
-  CANCELLED,
-  BADSTR,
-  BADRESP,
-  BADQUERY,
-  BADNAME,
-  BADHINTS,
-  BADFLAGS,
-  BADFAMILY,
-  ALL,
-  ADDRGETNETWORKPARAMS,
-  ADDRCONFIG
+  promises
 };

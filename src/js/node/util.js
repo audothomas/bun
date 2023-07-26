@@ -1,144 +1,25 @@
 // Hardcoded module "node:util"
-import * as types from "node:util/types";
-export { default as types } from "node:util/types";
+// Transpiled from browserify-util with some manual adjustments
+var { isArray, isObject, isUndefinedOrNull } = $lazy("primordials");
+const UtilTypes = require("node:util/types");
 
-var cjs_exports = {};
+var Exports = module.exports;
 
-export default cjs_exports;
-
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __commonJS = (cb, mod) =>
-  function __require() {
-    return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-  };
-
-function isBufferInterface({ copy, fill, readUint8 }) {
-  return typeof copy === "function" && typeof fill === "function" && typeof readUint8 === "function";
-}
-
-export function isBuffer(value) {
-  return (
-    Buffer.isBuffer(value) ||
-    // incase it ends up as a browserify buffer
-    (typeof value === "object" && isBufferInterface(value || {}))
-  );
-}
-
-function isFunction(value) {
-  return typeof value === "function";
-}
-
-// node_modules/inherits/inherits_browser.js
-var require_inherits_browser = __commonJS({
-  "node_modules/inherits/inherits_browser.js"(exports, module2) {
-    module2.exports = function inherits(ctor, superCtor) {
-      ctor.super_ = superCtor;
-      ctor.prototype = Object.create(superCtor.prototype, {
-        constructor: {
-          value: ctor,
-          enumerable: false,
-          writable: true,
-          configurable: true,
-        },
-      });
-    };
-  },
-});
-const deepEquals = Bun.deepEquals;
-const isDeepStrictEqual = (a, b) => deepEquals(a, b, true);
-var getOwnPropertyDescriptors = Object.getOwnPropertyDescriptors;
-var formatRegExp = /%[sdj%]/g;
-function format(f) {
-  if (!isString(f)) {
-    var objects = [];
-    for (var i = 0; i < arguments.length; i++) {
-      objects.push(inspect(arguments[i]));
-    }
-    return objects.join(" ");
+function inherits(ctor, superCtor) {
+  if (superCtor) {
+    ctor.super_ = superCtor;
+    ctor.prototype = Object.create(superCtor.prototype, {
+      constructor: {
+        value: ctor,
+        enumerable: false,
+        writable: true,
+        configurable: true,
+      },
+    });
   }
-  var i = 1;
-  var args = arguments;
-  var len = args.length;
-  var str = String(f).replace(formatRegExp, function (x2) {
-    if (x2 === "%%") return "%";
-    if (i >= len) return x2;
-    switch (x2) {
-      case "%s":
-        return String(args[i++]);
-      case "%d":
-        return Number(args[i++]);
-      case "%j":
-        try {
-          return JSON.stringify(args[i++]);
-        } catch (_) {
-          return "[Circular]";
-        }
-      default:
-        return x2;
-    }
-  });
-  for (var x = args[i]; i < len; x = args[++i]) {
-    if (isNull(x) || !isObject(x)) {
-      str += " " + x;
-    } else {
-      str += " " + inspect(x);
-    }
-  }
-  return str;
 }
 
-function deprecate(fn, msg, code) {
-  if (process.noDeprecation === true) {
-    return fn;
-  }
-
-  var warned = false;
-  function deprecated() {
-    if (!warned) {
-      if (process.throwDeprecation) {
-        var err = new Error(msg);
-        if (code) err.code = code;
-        throw err;
-      } else if (process.traceDeprecation) {
-        console.trace(msg);
-      } else {
-        console.error(msg);
-      }
-      warned = true;
-    }
-    return fn.apply(this, arguments);
-  }
-  return deprecated;
-}
-
-var debugs = {};
-var debugEnvRegex = /^$/;
-if (process.env.NODE_DEBUG) {
-  debugEnv = process.env.NODE_DEBUG;
-  debugEnv = debugEnv
-    .replace(/[|\\{}()[\]^$+?.]/g, "\\$&")
-    .replace(/\*/g, ".*")
-    .replace(/,/g, "$|^")
-    .toUpperCase();
-  debugEnvRegex = new RegExp("^" + debugEnv + "$", "i");
-}
-var debugEnv;
-function debuglog(set) {
-  set = set.toUpperCase();
-  if (!debugs[set]) {
-    if (debugEnvRegex.test(set)) {
-      var pid = process.pid;
-      debugs[set] = function () {
-        var msg = format.apply(cjs_exports, arguments);
-        console.error("%s %d: %s", set, pid, msg);
-      };
-    } else {
-      debugs[set] = function () {};
-    }
-  }
-  return debugs[set];
-}
-function inspect(obj, opts) {
+var inspect = function (obj, opts) {
   var ctx = {
     seen: [],
     stylize: stylizeNoColor,
@@ -148,7 +29,7 @@ function inspect(obj, opts) {
   if (isBoolean(opts)) {
     ctx.showHidden = opts;
   } else if (opts) {
-    _extend(ctx, opts);
+    Exports._extend(ctx, opts);
   }
   if (isUndefined(ctx.showHidden)) ctx.showHidden = false;
   if (isUndefined(ctx.depth)) ctx.depth = 2;
@@ -156,56 +37,31 @@ function inspect(obj, opts) {
   if (isUndefined(ctx.customInspect)) ctx.customInspect = true;
   if (ctx.colors) ctx.stylize = stylizeWithColor;
   return formatValue(ctx, obj, ctx.depth);
-}
-inspect.colors = {
-  bold: [1, 22],
-  italic: [3, 23],
-  underline: [4, 24],
-  inverse: [7, 27],
-  white: [37, 39],
-  grey: [90, 39],
-  black: [30, 39],
-  blue: [34, 39],
-  cyan: [36, 39],
-  green: [32, 39],
-  magenta: [35, 39],
-  red: [31, 39],
-  yellow: [33, 39],
 };
-inspect.styles = {
-  special: "cyan",
-  number: "yellow",
-  boolean: "yellow",
-  undefined: "grey",
-  null: "bold",
-  string: "green",
-  date: "magenta",
-  regexp: "red",
-};
-function stylizeWithColor(str, styleType) {
+var stylizeWithColor = function (str, styleType) {
   var style = inspect.styles[styleType];
   if (style) {
     return "\x1B[" + inspect.colors[style][0] + "m" + str + "\x1B[" + inspect.colors[style][1] + "m";
   } else {
     return str;
   }
-}
-function stylizeNoColor(str, styleType) {
+};
+var stylizeNoColor = function (str, styleType) {
   return str;
-}
-function arrayToHash(array) {
+};
+var arrayToHash = function (array) {
   var hash = {};
   array.forEach(function (val, idx) {
     hash[val] = true;
   });
   return hash;
-}
-function formatValue(ctx, value, recurseTimes) {
+};
+var formatValue = function (ctx, value, recurseTimes) {
   if (
     ctx.customInspect &&
     value &&
     isFunction(value.inspect) &&
-    value.inspect !== inspect &&
+    value.inspect !== Exports.inspect &&
     !(value.constructor && value.constructor.prototype === value)
   ) {
     var ret = value.inspect(recurseTimes, ctx);
@@ -282,8 +138,8 @@ function formatValue(ctx, value, recurseTimes) {
   }
   ctx.seen.pop();
   return reduceToSingleString(output, base, braces);
-}
-function formatPrimitive(ctx, value) {
+};
+var formatPrimitive = function (ctx, value) {
   if (isUndefined(value)) return ctx.stylize("undefined", "undefined");
   if (isString(value)) {
     var simple = "'" + JSON.stringify(value).replace(/^"|"$/g, "").replace(/'/g, "\\'").replace(/\\"/g, '"') + "'";
@@ -292,11 +148,11 @@ function formatPrimitive(ctx, value) {
   if (isNumber(value)) return ctx.stylize("" + value, "number");
   if (isBoolean(value)) return ctx.stylize("" + value, "boolean");
   if (isNull(value)) return ctx.stylize("null", "null");
-}
-function formatError(value) {
+};
+var formatError = function (value) {
   return "[" + Error.prototype.toString.call(value) + "]";
-}
-function formatArray(ctx, value, recurseTimes, visibleKeys, keys) {
+};
+var formatArray = function (ctx, value, recurseTimes, visibleKeys, keys) {
   var output = [];
   for (var i = 0, l = value.length; i < l; ++i) {
     if (hasOwnProperty(value, String(i))) {
@@ -311,12 +167,10 @@ function formatArray(ctx, value, recurseTimes, visibleKeys, keys) {
     }
   });
   return output;
-}
-function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
+};
+var formatProperty = function (ctx, value, recurseTimes, visibleKeys, key, array) {
   var name, str, desc;
-  desc = Object.getOwnPropertyDescriptor(value, key) || {
-    value: value[key],
-  };
+  desc = Object.getOwnPropertyDescriptor(value, key) || { value: value[key] };
   if (desc.get) {
     if (desc.set) {
       str = ctx.stylize("[Getter/Setter]", "special");
@@ -346,7 +200,7 @@ function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
               return "  " + line;
             })
             .join("\n")
-            .substr(2);
+            .slice(2);
         } else {
           str =
             "\n" +
@@ -368,7 +222,7 @@ function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
     }
     name = JSON.stringify("" + key);
     if (name.match(/^"([a-zA-Z_][a-zA-Z_0-9]*)"$/)) {
-      name = name.substr(1, name.length - 2);
+      name = name.slice(1, -1);
       name = ctx.stylize(name, "name");
     } else {
       name = name
@@ -379,8 +233,8 @@ function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
     }
   }
   return name + ": " + str;
-}
-function reduceToSingleString(output, base, braces) {
+};
+var reduceToSingleString = function (output, base, braces) {
   var numLinesEst = 0;
   var length = output.reduce(function (prev, cur) {
     numLinesEst++;
@@ -391,44 +245,32 @@ function reduceToSingleString(output, base, braces) {
     return braces[0] + (base === "" ? "" : base + "\n ") + " " + output.join(",\n  ") + " " + braces[1];
   }
   return braces[0] + base + " " + output.join(", ") + " " + braces[1];
-}
-
-function isArray(ar) {
-  return Array.isArray(ar);
-}
-
-function isBoolean(arg) {
+};
+var isBoolean = function (arg) {
   return typeof arg === "boolean";
-}
-
-function isNull(arg) {
+};
+var isNull = function (arg) {
   return arg === null;
-}
-
-function isNullOrUndefined(arg) {
-  return arg == null;
-}
-
-function isNumber(arg) {
+};
+var isNumber = function (arg) {
   return typeof arg === "number";
-}
-
-function isString(arg) {
+};
+var isString = function (arg) {
   return typeof arg === "string";
-}
-function isSymbol(arg) {
+};
+var isSymbol = function (arg) {
   return typeof arg === "symbol";
-}
-function isUndefined(arg) {
-  return arg === void 0;
-}
-var isRegExp = types.isRegExp;
-function isObject(arg) {
-  return typeof arg === "object" && arg !== null;
-}
-var isDate = types.isDate;
-var isError = types.isNativeError;
-function isPrimitive(arg) {
+};
+var isUndefined = function (arg) {
+  return arg === undefined;
+};
+var isError = function (e) {
+  return isObject(e) && (objectToString(e) === "[object Error]" || e instanceof Error);
+};
+var isFunction = function (arg) {
+  return typeof arg === "function";
+};
+var isPrimitive = function (arg) {
   return (
     arg === null ||
     typeof arg === "boolean" ||
@@ -437,21 +279,212 @@ function isPrimitive(arg) {
     typeof arg === "symbol" ||
     typeof arg === "undefined"
   );
-}
-function pad(n) {
+};
+var objectToString = function (o) {
+  return Object.prototype.toString.call(o);
+};
+var pad = function (n) {
   return n < 10 ? "0" + n.toString(10) : n.toString(10);
-}
-var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-function timestamp() {
+};
+var timestamp = function () {
   var d = new Date();
   var time = [pad(d.getHours()), pad(d.getMinutes()), pad(d.getSeconds())].join(":");
   return [d.getDate(), months[d.getMonth()], time].join(" ");
-}
-var log = function log() {
-  console.log("%s - %s", timestamp(), format.apply(cjs_exports, arguments));
 };
-var inherits = (inherits = require_inherits_browser());
-var _extend = function (origin, add) {
+var hasOwnProperty = function (obj, prop) {
+  return Object.prototype.hasOwnProperty.call(obj, prop);
+};
+var callbackifyOnRejected = function (reason, cb) {
+  if (!reason) {
+    var newReason = new Error("Promise was rejected with a falsy value");
+    newReason.reason = reason;
+    reason = newReason;
+  }
+  return cb(reason);
+};
+var callbackify = function (original) {
+  if (typeof original !== "function") {
+    throw new TypeError('The "original" argument must be of type Function');
+  }
+  function callbackified() {
+    var args = [];
+    for (var i = 0; i < arguments.length; i++) {
+      args.push(arguments[i]);
+    }
+    var maybeCb = args.pop();
+    if (typeof maybeCb !== "function") {
+      throw new TypeError("The last argument must be of type Function");
+    }
+    var self = this;
+    var cb = function () {
+      return maybeCb.apply(self, arguments);
+    };
+    original.apply(this, args).then(
+      function (ret) {
+        process.nextTick(cb.bind(null, null, ret));
+      },
+      function (rej) {
+        process.nextTick(callbackifyOnRejected.bind(null, rej, cb));
+      },
+    );
+  }
+  Object.setPrototypeOf(callbackified, Object.getPrototypeOf(original));
+  Object.defineProperties(callbackified, getOwnPropertyDescriptors(original));
+  return callbackified;
+};
+var Exports = {};
+var getOwnPropertyDescriptors =
+  Object.getOwnPropertyDescriptors ||
+  function getOwnPropertyDescriptors(obj) {
+    var keys = Object.keys(obj);
+    var descriptors = {};
+    for (var i = 0; i < keys.length; i++) {
+      descriptors[keys[i]] = Object.getOwnPropertyDescriptor(obj, keys[i]);
+    }
+    return descriptors;
+  };
+var formatRegExp = /%[sdj%]/g;
+exports.format = function (f) {
+  if (!isString(f)) {
+    var objects = [];
+    for (var i = 0; i < arguments.length; i++) {
+      objects.push(inspect(arguments[i]));
+    }
+    return objects.join(" ");
+  }
+  var i = 1;
+  var args = arguments;
+  var len = args.length;
+  var str = String(f).replace(formatRegExp, function (x2) {
+    if (x2 === "%%") return "%";
+    if (i >= len) return x2;
+    switch (x2) {
+      case "%s":
+        return String(args[i++]);
+      case "%d":
+        return Number(args[i++]);
+      case "%j":
+        try {
+          return JSON.stringify(args[i++]);
+        } catch (_) {
+          return "[Circular]";
+        }
+      default:
+        return x2;
+    }
+  });
+  for (var x = args[i]; i < len; x = args[++i]) {
+    if (isNull(x) || !isObject(x)) {
+      str += " " + x;
+    } else {
+      str += " " + inspect(x);
+    }
+  }
+  return str;
+};
+exports.deprecate = function (fn, msg) {
+  if (typeof process !== "undefined" && process.noDeprecation === true) {
+    return fn;
+  }
+  if (typeof process === "undefined") {
+    return function () {
+      return Exports.deprecate(fn, msg).apply(this, arguments);
+    };
+  }
+  var warned = false;
+  function deprecated() {
+    if (!warned) {
+      if (process.throwDeprecation) {
+        throw new Error(msg);
+      } else if (process.traceDeprecation) {
+        console.trace(msg);
+      } else {
+        console.error(msg);
+      }
+      warned = true;
+    }
+    return fn.apply(this, arguments);
+  }
+  return deprecated;
+};
+var debugs = {};
+var debugEnvRegex = /^$/;
+if (process.env.NODE_DEBUG) {
+  debugEnv = process.env.NODE_DEBUG;
+  debugEnv = debugEnv
+    .replace(/[|\\{}()[\]^$+?.]/g, "\\$&")
+    .replace(/\*/g, ".*")
+    .replace(/,/g, "$|^")
+    .toUpperCase();
+  debugEnvRegex = new RegExp("^" + debugEnv + "$", "i");
+}
+var debugEnv;
+exports.debuglog = function (set) {
+  set = set.toUpperCase();
+  if (!debugs[set]) {
+    if (debugEnvRegex.test(set)) {
+      var pid = process.pid;
+      debugs[set] = function () {
+        var msg = Exports.format.apply(Exports, arguments);
+        console.error("%s %d: %s", set, pid, msg);
+      };
+    } else {
+      debugs[set] = function () {};
+    }
+  }
+  return debugs[set];
+};
+exports.inspect = inspect;
+inspect.colors = {
+  bold: [1, 22],
+  italic: [3, 23],
+  underline: [4, 24],
+  inverse: [7, 27],
+  white: [37, 39],
+  grey: [90, 39],
+  black: [30, 39],
+  blue: [34, 39],
+  cyan: [36, 39],
+  green: [32, 39],
+  magenta: [35, 39],
+  red: [31, 39],
+  yellow: [33, 39],
+};
+inspect.styles = {
+  special: "cyan",
+  number: "yellow",
+  boolean: "yellow",
+  undefined: "grey",
+  null: "bold",
+  string: "green",
+  date: "magenta",
+  regexp: "red",
+};
+exports.types = UtilTypes;
+exports.isArray = isArray;
+exports.isBoolean = isBoolean;
+exports.isNull = isNull;
+exports.isNullOrUndefined = isUndefinedOrNull;
+exports.isNumber = isNumber;
+exports.isString = isString;
+exports.isSymbol = isSymbol;
+exports.isUndefined = isUndefined;
+exports.isRegExp = UtilTypes.isRegExp;
+exports.isObject = isObject;
+exports.isDate = UtilTypes.isDate;
+exports.isError = isError;
+Exports.types.isNativeError = isError;
+exports.isFunction = isFunction;
+exports.isPrimitive = isPrimitive;
+exports.isBuffer = function isBuffer(arg) {
+  return arg instanceof Buffer;
+};
+var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+exports.log = function () {
+  console.log("%s - %s", timestamp(), Exports.format.apply(Exports, arguments));
+};
+exports.inherits = inherits;
+exports._extend = function (origin, add) {
   if (!add || !isObject(add)) return origin;
   var keys = Object.keys(add);
   var i = keys.length;
@@ -460,11 +493,8 @@ var _extend = function (origin, add) {
   }
   return origin;
 };
-function hasOwnProperty(obj, prop) {
-  return Object.prototype.hasOwnProperty.call(obj, prop);
-}
-var kCustomPromisifiedSymbol = Symbol.for("util.promisify.custom");
-var promisify = function promisify(original) {
+var kCustomPromisifiedSymbol = typeof Symbol !== "undefined" ? Symbol("util.promisify.custom") : undefined;
+exports.promisify = function promisify(original) {
   if (typeof original !== "function") throw new TypeError('The "original" argument must be of type Function');
   if (kCustomPromisifiedSymbol && original[kCustomPromisifiedSymbol]) {
     var fn = original[kCustomPromisifiedSymbol];
@@ -513,105 +543,5 @@ var promisify = function promisify(original) {
     });
   return Object.defineProperties(fn, getOwnPropertyDescriptors(original));
 };
-promisify.custom = kCustomPromisifiedSymbol;
-function callbackifyOnRejected(reason, cb) {
-  if (!reason) {
-    var newReason = new Error("Promise was rejected with a falsy value");
-    newReason.reason = reason;
-    newReason.code = "ERR_FALSY_VALUE_REJECTION";
-    reason = newReason;
-  }
-  return cb(reason);
-}
-function callbackify(original) {
-  if (typeof original !== "function") {
-    throw new TypeError('The "original" argument must be of type Function');
-  }
-  function callbackified() {
-    var args = Array.prototype.slice.call(arguments);
-    var maybeCb = args.pop();
-    if (typeof maybeCb !== "function") {
-      throw new TypeError("The last argument must be of type Function");
-    }
-    var self = this;
-    var cb = function () {
-      return maybeCb.apply(self, arguments);
-    };
-    original.apply(this, args).then(
-      function (ret) {
-        process.nextTick(cb, null, ret);
-      },
-      function (rej) {
-        process.nextTick(callbackifyOnRejected, rej, cb);
-      },
-    );
-  }
-  Object.setPrototypeOf(callbackified, Object.getPrototypeOf(original));
-  Object.defineProperties(callbackified, getOwnPropertyDescriptors(original));
-  return callbackified;
-}
-export var TextDecoder = globalThis.TextDecoder;
-export var TextEncoder = globalThis.TextEncoder;
-var toUSVString = input => {
-  return (input + "").toWellFormed();
-};
-
-Object.assign(cjs_exports, {
-  format,
-  deprecate,
-  debuglog,
-  _extend,
-  inspect,
-  types,
-  isArray,
-  isBoolean,
-  isNull,
-  isNullOrUndefined,
-  isNumber,
-  isString,
-  isSymbol,
-  isUndefined,
-  isRegExp,
-  isObject,
-  isDate,
-  isFunction,
-  isError,
-  isPrimitive,
-  isBuffer,
-  log,
-  inherits,
-  toUSVString,
-  promisify,
-  callbackify,
-  isDeepStrictEqual,
-  TextDecoder,
-  TextEncoder,
-  [Symbol.for("CommonJS")]: 0,
-});
-
-export {
-  format,
-  deprecate,
-  debuglog,
-  inspect,
-  isArray,
-  isBoolean,
-  isNull,
-  isNullOrUndefined,
-  isNumber,
-  isString,
-  isSymbol,
-  isUndefined,
-  isRegExp,
-  isObject,
-  isDate,
-  isError,
-  isFunction,
-  isPrimitive,
-  log,
-  inherits,
-  promisify,
-  callbackify,
-  isDeepStrictEqual,
-  toUSVString,
-};
+Exports.promisify.custom = kCustomPromisifiedSymbol;
+exports.callbackify = callbackify;

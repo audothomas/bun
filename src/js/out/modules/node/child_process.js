@@ -1,8 +1,4 @@
-import {EventEmitter} from "node:events";
-import * as StreamModule from "node:stream";
-import {constants} from "node:os";
-import {promisify} from "node:util";
-function spawn(file, args, options) {
+"use strict";var spawn = function(file, args, options) {
   options = normalizeSpawnArguments(file, args, options), validateTimeout(options.timeout), validateAbortSignal(options.signal, "options.signal");
   const killSignal2 = sanitizeKillSignal(options.killSignal), child = new ChildProcess;
   if (debug("spawn", options), child.spawn(options), options.timeout > 0) {
@@ -22,18 +18,18 @@ function spawn(file, args, options) {
     });
   }
   if (options.signal) {
-    let onAbortListener = function() {
+    let onAbortListener2 = function() {
       abortChildProcess(child, killSignal2);
     };
+    var onAbortListener = onAbortListener2;
     const signal = options.signal;
     if (signal.aborted)
-      process.nextTick(onAbortListener);
+      process.nextTick(onAbortListener2);
     else
-      signal.addEventListener("abort", onAbortListener, { once: !0 }), child.once("exit", () => signal.removeEventListener("abort", onAbortListener));
+      signal.addEventListener("abort", onAbortListener2, { once: !0 }), child.once("exit", () => signal.removeEventListener("abort", onAbortListener2));
   }
   return child;
-}
-function execFile(file, args, options, callback) {
+}, execFile = function(file, args, options, callback) {
   ({ file, args, options, callback } = normalizeExecFileArgs(file, args, options, callback)), options = {
     encoding: "utf8",
     timeout: 0,
@@ -168,12 +164,10 @@ function execFile(file, args, options, callback) {
     });
   }
   return child.addListener("close", exitHandler), child.addListener("error", errorHandler), child;
-}
-function exec(command, options, callback) {
+}, exec = function(command, options, callback) {
   const opts = normalizeExecArgs(command, options, callback);
   return execFile(opts.file, opts.options, opts.callback);
-}
-function spawnSync(file, args, options) {
+}, spawnSync = function(file, args, options) {
   options = {
     maxBuffer: MAX_BUFFER,
     ...normalizeSpawnArguments(file, args, options)
@@ -208,8 +202,7 @@ function spawnSync(file, args, options) {
   if (result.stdout = result.output[1], result.stderr = result.output[2], !success)
     result.error = new SystemError(result.output[2], options.file, "spawnSync", -1, result.status), result.error.spawnargs = ArrayPrototypeSlice.call(options.args, 1);
   return result;
-}
-function execFileSync(file, args, options) {
+}, execFileSync = function(file, args, options) {
   ({ file, args, options } = normalizeExecFileArgs(file, args, options));
   const ret = spawnSync(file, args, options), errArgs = [options.argv0 || file];
   ArrayPrototypePush.apply(errArgs, args);
@@ -217,17 +210,14 @@ function execFileSync(file, args, options) {
   if (err)
     throw err;
   return ret.stdout;
-}
-function execSync(command, options) {
+}, execSync = function(command, options) {
   const opts = normalizeExecArgs(command, options, null), ret = spawnSync(opts.file, opts.options), err = checkExecSyncError(ret, void 0, command);
   if (err)
     throw err;
   return ret.stdout;
-}
-function fork() {
+}, fork = function() {
   throw new Error("Not implemented");
-}
-var convertToValidSignal = function(signal) {
+}, convertToValidSignal = function(signal) {
   if (typeof signal === "number" && getSignalsToNamesMapping()[signal])
     return signal;
   if (typeof signal === "string") {
@@ -455,14 +445,16 @@ var validateFunction = function(value, name) {
   return new TypeError(`The value "${value}" is invalid for option "${name}"`);
 }, ERR_INVALID_ARG_VALUE = function(name, value, reason) {
   return new Error(`The value "${value}" is invalid for argument '${name}'. Reason: ${reason}`);
-}, signals = constants.signals, { ArrayBuffer, Uint8Array, String, Object, Buffer, Promise: Promise2 } = globalThis[Symbol.for("Bun.lazy")]("primordials"), ObjectPrototypeHasOwnProperty = Object.prototype.hasOwnProperty, ObjectCreate = Object.create, ObjectAssign = Object.assign, ObjectDefineProperty = Object.defineProperty, BufferConcat = Buffer.concat, BufferIsEncoding = Buffer.isEncoding, kEmptyObject = ObjectCreate(null), ArrayPrototypePush = Array.prototype.push, ArrayPrototypeJoin = Array.prototype.join, ArrayPrototypeMap = Array.prototype.map, ArrayPrototypeIncludes = Array.prototype.includes, ArrayPrototypeSlice = Array.prototype.slice, ArrayPrototypeUnshift = Array.prototype.unshift, ArrayIsArray = Array.isArray, ArrayBufferIsView = ArrayBuffer.isView, NumberIsInteger = Number.isInteger;
+}, $$REQUIRE$$ = $_BunCommonJSModule_$.require, EventEmitter = $$REQUIRE$$("node:events"), StreamModule = $$REQUIRE$$("node:stream"), {
+  constants: { signals }
+} = $$REQUIRE$$("node:os"), { promisify } = $$REQUIRE$$("node:util"), { ArrayBuffer, Uint8Array, String, Object, Buffer, Promise: Promise2 } = globalThis[Symbol.for("Bun.lazy")]("primordials"), ObjectCreate = Object.create, ObjectAssign = Object.assign, ObjectDefineProperty = Object.defineProperty, BufferConcat = Buffer.concat, BufferIsEncoding = Buffer.isEncoding, kEmptyObject = ObjectCreate(null), ArrayPrototypePush = Array.prototype.push, ArrayPrototypeJoin = Array.prototype.join, ArrayPrototypeMap = Array.prototype.map, ArrayPrototypeIncludes = Array.prototype.includes, ArrayPrototypeSlice = Array.prototype.slice, ArrayPrototypeUnshift = Array.prototype.unshift, ArrayIsArray = Array.isArray, ArrayBufferIsView = ArrayBuffer.isView, NumberIsInteger = Number.isInteger;
 var StringPrototypeToUpperCase = String.prototype.toUpperCase, StringPrototypeIncludes = String.prototype.includes, StringPrototypeSlice = String.prototype.slice, Uint8ArrayPrototypeIncludes = Uint8Array.prototype.includes, MAX_BUFFER = 1048576, __DEBUG__ = process.env.DEBUG || !1, __TRACK_STDIO__ = process.env.DEBUG_STDIO, debug = __DEBUG__ ? console.log : () => {
 };
 if (__TRACK_STDIO__)
   debug("child_process: debug mode on"), globalThis.__lastId = null, globalThis.__getId = () => {
     return globalThis.__lastId !== null ? globalThis.__lastId++ : 0;
   };
-var NativeWritable2, ReadableFromWeb, customPromiseExecFunction = (orig) => {
+var NativeWritable, ReadableFromWeb, customPromiseExecFunction = (orig) => {
   return (...args) => {
     let resolve, reject;
     const promise = new Promise2((res, rej) => {
@@ -521,13 +513,13 @@ class ChildProcess extends EventEmitter {
         debug("ChildProcess: getBunSpawnIo: this.#handle is null. This means the subprocess already exited");
       else
         debug("ChildProcess: getBunSpawnIo: this.#handle is undefined");
-    NativeWritable2 ||= StreamModule.NativeWritable, ReadableFromWeb ||= StreamModule.Readable.fromWeb;
+    NativeWritable ||= StreamModule.NativeWritable, ReadableFromWeb ||= StreamModule.Readable.fromWeb;
     const io = this.#stdioOptions[i];
     switch (i) {
       case 0:
         switch (io) {
           case "pipe":
-            return new NativeWritable2(this.#handle.stdin);
+            return new NativeWritable(this.#handle.stdin);
           case "inherit":
             return process.stdin || null;
           case "destroyed":
@@ -693,7 +685,7 @@ class SystemError extends Error {
     return "SystemError";
   }
 }
-var child_process_default = {
+$_BunCommonJSModule_$.module.exports = {
   ChildProcess,
   spawn,
   execFile,
@@ -701,17 +693,5 @@ var child_process_default = {
   fork,
   spawnSync,
   execFileSync,
-  execSync,
-  [Symbol.for("CommonJS")]: 0
-};
-export {
-  spawnSync,
-  spawn,
-  fork,
-  execSync,
-  execFileSync,
-  execFile,
-  exec,
-  child_process_default as default,
-  ChildProcess
+  execSync
 };

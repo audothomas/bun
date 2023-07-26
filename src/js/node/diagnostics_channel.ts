@@ -1,7 +1,7 @@
 // Hardcoded module "node:diagnostics_channel"
 // This is a stub! None of this is actually implemented yet.
 
-import { hideFromStack, throwNotImplemented } from "../shared";
+const { hideFromStack, throwNotImplemented } = require("$shared");
 
 class Channel {
   constructor(name) {
@@ -24,15 +24,12 @@ function unsubscribe() {
   throwNotImplemented("node:diagnostics_channel", 2688);
 }
 
-const defaultObject = {
+module.exports = {
   channel,
   hasSubscribers,
   subscribe,
   unsubscribe,
   Channel,
-  [Symbol.for("CommonJS")]: 0,
 };
-
-export { defaultObject as default, Channel, channel, hasSubscribers, subscribe, unsubscribe };
 
 hideFromStack([channel, hasSubscribers, subscribe, unsubscribe, Channel]);

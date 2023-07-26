@@ -35,16 +35,13 @@ var debug = __DEBUG__
   : () => {};
 
 var { isPromise, isCallable, direct, Object } = $lazy("primordials");
-import { EventEmitter as EE } from "bun:events_native";
-import { StringDecoder } from "node:string_decoder";
+const EE = require("bun:events_native");
+const StringDecoder = require("node:string_decoder").StringDecoder;
 
-var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
-var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __ObjectSetPrototypeOf = Object.setPrototypeOf;
 
 var __commonJS = (cb, mod) =>
   function __require2() {
@@ -5580,28 +5577,8 @@ var NativeWritable = class NativeWritable extends Writable {
   }
 };
 
-const stream_exports = require_ours();
-stream_exports[Symbol.for("CommonJS")] = 0;
-stream_exports[Symbol.for("::bunternal::")] = { _ReadableFromWeb, _ReadableFromWebForUndici };
-export default stream_exports;
-export var _uint8ArrayToBuffer = stream_exports._uint8ArrayToBuffer;
-export var _isUint8Array = stream_exports._isUint8Array;
-export var isDisturbed = stream_exports.isDisturbed;
-export var isErrored = stream_exports.isErrored;
-export var isWritable = stream_exports.isWritable;
-export var isReadable = stream_exports.isReadable;
-export var Readable = stream_exports.Readable;
-export var Writable = stream_exports.Writable;
-export var Duplex = stream_exports.Duplex;
-export var Transform = stream_exports.Transform;
-export var PassThrough = stream_exports.PassThrough;
-export var addAbortSignal = stream_exports.addAbortSignal;
-export var finished = stream_exports.finished;
-export var destroy = stream_exports.destroy;
-export var pipeline = stream_exports.pipeline;
-export var compose = stream_exports.compose;
-export var Stream = stream_exports.Stream;
-export var eos = (stream_exports["eos"] = require_end_of_stream);
-export var _getNativeReadableStreamPrototype = stream_exports._getNativeReadableStreamPrototype;
-export var NativeWritable = stream_exports.NativeWritable;
-export var promises = Stream.promises;
+var exports = require_ours();
+exports[Symbol.for("::bunternal::")] = { _ReadableFromWeb, _ReadableFromWebForUndici };
+exports.eos = stream_exports["eos"] = require_end_of_stream;
+exports.promises = Stream.promises;
+module.exports = exports;

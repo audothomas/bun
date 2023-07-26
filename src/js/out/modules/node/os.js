@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 var lazyCpus = function({ cpus }) {
   return () => {
     const array = new Array(navigator.hardwareConcurrency);
@@ -50,6 +51,9 @@ var lazyCpus = function({ cpus }) {
     return array;
   };
 }, bound = function(obj) {
+=======
+"use strict";var bound = function(obj) {
+>>>>>>> 0678fef5a (sadffdsa)
   return {
     arch: obj.arch.bind(obj),
     cpus: lazyCpus(obj),
@@ -74,8 +78,7 @@ var lazyCpus = function({ cpus }) {
     machine: obj.machine.bind(obj),
     devNull: obj.devNull,
     EOL: obj.EOL,
-    constants: obj.constants,
-    [Symbol.for("CommonJS")]: 0
+    constants: obj.constants
   };
 }, tmpdir = function() {
   var { Bun: Bun2 } = globalThis[Symbol.for("Bun.lazy")]("primordials"), env = Bun2.env;
@@ -86,51 +89,5 @@ var lazyCpus = function({ cpus }) {
       path = path.slice(0, -1);
     return path;
   }, tmpdir();
-}, os = bound(Bun._Os()), {
-  arch,
-  cpus,
-  endianness,
-  freemem,
-  getPriority,
-  homedir,
-  hostname,
-  loadavg,
-  networkInterfaces,
-  platform,
-  release,
-  setPriority,
-  totalmem,
-  type,
-  uptime,
-  userInfo,
-  version,
-  machine,
-  devNull,
-  EOL,
-  constants
-} = os, os_default = os;
-export {
-  version,
-  userInfo,
-  uptime,
-  type,
-  totalmem,
-  tmpdir,
-  setPriority,
-  release,
-  platform,
-  networkInterfaces,
-  machine,
-  loadavg,
-  hostname,
-  homedir,
-  getPriority,
-  freemem,
-  endianness,
-  devNull,
-  os_default as default,
-  cpus,
-  constants,
-  arch,
-  EOL
 };
+$_BunCommonJSModule_$.module.exports = bound(Bun._Os());

@@ -1,13 +1,10 @@
-export var ReadStream;
-export var WriteStream;
-
-import { EventEmitter } from "node:events";
-
 // Hardcoded module "node:fs"
+var ReadStream;
+var WriteStream;
+const EventEmitter = require("node:events");
 var { direct, isPromise, isCallable } = $lazy("primordials");
-import promises from "node:fs/promises";
-export { default as promises } from "node:fs/promises";
-import * as Stream from "node:stream";
+const promises = require("node:fs/promises");
+const Stream = require("node:stream");
 
 var fs = Bun.fs();
 var debug = process.env.DEBUG ? console.log : () => {};
@@ -68,7 +65,7 @@ class FSWatcher extends EventEmitter {
     this.#watcher?.unref();
   }
 }
-export var access = function access(...args) {
+var access = function access(...args) {
     callbackify(fs.accessSync, args);
   },
   appendFile = function appendFile(...args) {
@@ -671,7 +668,7 @@ ReadStream = (function (InternalReadStream) {
   },
 );
 
-export function createReadStream(path, options) {
+function createReadStream(path, options) {
   return new ReadStream(path, options);
 }
 
@@ -993,7 +990,7 @@ WriteStream = (function (InternalWriteStream) {
   },
 );
 
-export function createWriteStream(path, options) {
+function createWriteStream(path, options) {
   // const WriteStream = getLazyWriteStream();
   return new WriteStream(path, options);
 }
@@ -1042,7 +1039,7 @@ Object.defineProperties(fs, {
 realpath.native = realpath;
 realpathSync.native = realpathSync;
 
-export default {
+module.exports = {
   [Symbol.for("CommonJS")]: 0,
   access,
   accessSync,
@@ -1141,5 +1138,3 @@ export default {
   //   return getLazyReadStream();
   // },
 };
-
-export { constants } from "node:fs/promises";

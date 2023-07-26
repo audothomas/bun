@@ -1,4 +1,35 @@
-var lazy = globalThis[Symbol.for("Bun.lazy")], defineProperties = Object.defineProperties, toStringTag = Symbol.toStringTag, apply = Function.prototype.apply, isArray = Array.isArray, isTypedArray = ArrayBuffer.isView, constants = {
+"use strict";var __defProp = Object.defineProperty;
+var { getOwnPropertyNames: __getOwnPropNames, getOwnPropertyDescriptor: __getOwnPropDesc } = Object, __hasOwnProp = Object.prototype.hasOwnProperty;
+var __toCommonJS = (from) => {
+  const moduleCache = __toCommonJS.moduleCache ??= new WeakMap;
+  var cached = moduleCache.get(from);
+  if (cached)
+    return cached;
+  var to = __defProp({}, "__esModule", { value: !0 }), desc = { enumerable: !1 };
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key))
+        __defProp(to, key, {
+          get: () => from[key],
+          enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable
+        });
+  }
+  return moduleCache.set(from, to), to;
+};
+var __commonJS = (cb, mod) => () => (mod || cb((mod = { exports: {} }).exports, mod), mod.exports);
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, {
+      get: all[name],
+      enumerable: !0,
+      configurable: !0,
+      set: (newValue) => all[name] = () => newValue
+    });
+};
+var __esm = (fn, res) => () => (fn && (res = fn(fn = 0)), res);
+
+// src/js/out/tmp/bun/sqlite.ts
+var lazy = globalThis[Symbol.for("Bun.lazy")], defineProperties = Object.defineProperties, toStringTag = Symbol.toStringTag, isArray = Array.isArray, isTypedArray = ArrayBuffer.isView, constants = {
   SQLITE_OPEN_READONLY: 1,
   SQLITE_OPEN_READWRITE: 2,
   SQLITE_OPEN_CREATE: 4,
@@ -24,7 +55,7 @@ var lazy = globalThis[Symbol.for("Bun.lazy")], defineProperties = Object.defineP
   SQLITE_PREPARE_PERSISTENT: 1,
   SQLITE_PREPARE_NORMALIZE: 2,
   SQLITE_PREPARE_NO_VTAB: 4
-}, SQL, _SQL, controllers;
+}, SQL, controllers;
 
 class Statement {
   constructor(raw) {
@@ -137,7 +168,7 @@ class Database {
     if (anonymous && (flags & constants.SQLITE_OPEN_READONLY) !== 0)
       throw new Error("Cannot open an anonymous database in read-only mode.");
     if (!SQL)
-      _SQL = SQL = lazy("sqlite");
+      SQL = lazy("sqlite");
     this.#handle = SQL.open(anonymous ? ":memory:" : filename, flags), this.filename = filename;
   }
   #handle;
@@ -162,12 +193,12 @@ class Database {
   }
   static deserialize(serialized, isReadOnly = !1) {
     if (!SQL)
-      _SQL = SQL = lazy("sqlite");
+      SQL = lazy("sqlite");
     return SQL.deserialize(serialized, isReadOnly);
   }
   static setCustomSQLite(path) {
     if (!SQL)
-      _SQL = SQL = lazy("sqlite");
+      SQL = lazy("sqlite");
     return SQL.setCustomSQLite(path);
   }
   close() {
@@ -269,10 +300,13 @@ var getController = (db, self) => {
     throw ex;
   }
 };
-export {
-  _SQL as native,
-  Database as default,
-  constants,
+$_BunCommonJSModule_$.module.exports = {
+  __esModule: !0,
+  Database,
   Statement,
+  constants,
+  default: Database
+};
+export {
   Database
 };

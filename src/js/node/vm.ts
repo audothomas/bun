@@ -1,5 +1,5 @@
 // Hardcoded module "node:vm"
-import { throwNotImplemented } from "../shared";
+const { throwNotImplemented } = require("$shared");
 
 const vm = $lazy("vm");
 
@@ -16,20 +16,7 @@ function measureMemory() {
   throwNotImplemented("node:vm measureMemory", 401);
 }
 
-const defaultObject = {
-  createContext,
-  runInContext,
-  runInNewContext,
-  runInThisContext,
-  isContext,
-  compileFunction,
-  measureMemory,
-  Script,
-  [Symbol.for("CommonJS")]: 0,
-};
-
-export {
-  defaultObject as default,
+module.exports = {
   createContext,
   runInContext,
   runInNewContext,

@@ -275,6 +275,7 @@ enum SyntheticModuleType : uint64_t {
     TTY = 1029,
     NodeUtilTypes = 1030,
     Constants = 1031,
+    ESM = 1032,
 };
 
 extern "C" const char* Bun__userAgent;

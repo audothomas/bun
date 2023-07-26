@@ -1789,11 +1789,12 @@ pub const ModuleLoader = struct {
                                 bun.default_allocator,
                                 JSC.Node.fs.constants_string,
                                 @as(string, jsModuleFromFile(jsc_vm.load_builtins_from_path, "node/wasi.js")),
-                                @as(string, jsModuleFromFile(jsc_vm.load_builtins_from_path, "bun/wasi-runner.js")),
+                                @embedFile("../js/wasi-runner.js"),
                             ) catch unreachable,
                         ),
                         .specifier = input_specifier,
                         .source_url = ZigString.init(path.text),
+                        .tag = .ESM,
                         .hash = 0,
                     };
                 }
@@ -2180,6 +2181,7 @@ pub const ModuleLoader = struct {
                             .specifier = bun.String.init(bun.asByteSlice(JSC.VirtualMachine.main_file_name)),
                             .source_url = ZigString.init(bun.asByteSlice(JSC.VirtualMachine.main_file_name)),
                             .hash = 0,
+                            .tag = .@"bun:main",
                         };
                     }
                     defer jsc_vm.transpiled_count += 1;
@@ -2274,6 +2276,7 @@ pub const ModuleLoader = struct {
                         .specifier = specifier,
                         .source_url = ZigString.init(bun.asByteSlice(JSC.VirtualMachine.main_file_name)),
                         .hash = 0,
+                        .tag = .@"bun:main",
                     };
                 },
                 .@"node:buffer" => return jsSyntheticModule(.@"node:buffer", specifier),

@@ -1,4 +1,4 @@
-function depd2(namespace) {
+module.exports = function depd(namespace) {
   if (!namespace) {
     throw new TypeError("argument namespace is required");
   }
@@ -11,7 +11,7 @@ function depd2(namespace) {
   deprecate.function = wrapfunction;
   deprecate.property = wrapproperty;
   return deprecate;
-}
+};
 function wrapfunction(fn, message) {
   if (typeof fn !== "function") {
     throw new TypeError("argument fn must be a function");
@@ -30,6 +30,3 @@ function wrapproperty(obj, prop, message) {
     throw new TypeError("property must be configurable");
   }
 }
-
-export default depd2;
-depd2[Symbol.for("CommonJS")] = 0;

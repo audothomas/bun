@@ -1,5 +1,5 @@
 // Hardcoded module "node:stream/web" / "readable-stream/web"
-export const {
+module.exports = {
   ReadableStream,
   ReadableStreamDefaultReader,
   ReadableStreamBYOBReader,
@@ -13,28 +13,8 @@ export const {
   WritableStreamDefaultController,
   ByteLengthQueuingStrategy,
   CountQueuingStrategy,
-  TextEncoderStream,
-  TextDecoderStream,
-  CompressionStream,
-  DecompressionStream,
-} = globalThis;
-export default {
-  ReadableStream,
-  ReadableStreamDefaultReader,
-  ReadableStreamBYOBReader,
-  ReadableStreamBYOBRequest,
-  ReadableByteStreamController,
-  ReadableStreamDefaultController,
-  TransformStream,
-  TransformStreamDefaultController,
-  WritableStream,
-  WritableStreamDefaultWriter,
-  WritableStreamDefaultController,
-  ByteLengthQueuingStrategy,
-  CountQueuingStrategy,
-  TextEncoderStream,
-  TextDecoderStream,
-  CompressionStream,
-  DecompressionStream,
-  [Symbol.for("CommonJS")]: 0,
+  // TextEncoderStream,
+  // TextDecoderStream,
+  // CompressionStream,
+  // DecompressionStream,
 };

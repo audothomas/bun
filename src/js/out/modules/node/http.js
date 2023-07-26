@@ -1,7 +1,4 @@
-import {EventEmitter} from "node:events";
-import {Readable, Writable, Duplex} from "node:stream";
-import {isTypedArray} from "node:util/types";
-var checkInvalidHeaderChar = function(val) {
+"use strict";var checkInvalidHeaderChar = function(val) {
   return RegExpPrototypeExec.call(headerCharRegex, val) !== null;
 }, isIPv6 = function(input) {
   return new RegExp("^((?:(?:[0-9a-fA-F]{1,4}):){7}(?:(?:[0-9a-fA-F]{1,4})|:)|(?:(?:[0-9a-fA-F]{1,4}):){6}(?:((?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])[.]){3}(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])|:(?:[0-9a-fA-F]{1,4})|:)|(?:(?:[0-9a-fA-F]{1,4}):){5}(?::((?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])[.]){3}(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])|(:(?:[0-9a-fA-F]{1,4})){1,2}|:)|(?:(?:[0-9a-fA-F]{1,4}):){4}(?:(:(?:[0-9a-fA-F]{1,4})){0,1}:((?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])[.]){3}(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])|(:(?:[0-9a-fA-F]{1,4})){1,3}|:)|(?:(?:[0-9a-fA-F]{1,4}):){3}(?:(:(?:[0-9a-fA-F]{1,4})){0,2}:((?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])[.]){3}(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])|(:(?:[0-9a-fA-F]{1,4})){1,4}|:)|(?:(?:[0-9a-fA-F]{1,4}):){2}(?:(:(?:[0-9a-fA-F]{1,4})){0,3}:((?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])[.]){3}(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])|(:(?:[0-9a-fA-F]{1,4})){1,5}|:)|(?:(?:[0-9a-fA-F]{1,4}):){1}(?:(:(?:[0-9a-fA-F]{1,4})){0,4}:((?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])[.]){3}(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])|(:(?:[0-9a-fA-F]{1,4})){1,6}|:)|(?::((?::(?:[0-9a-fA-F]{1,4})){0,5}:((?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])[.]){3}(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])|(?::(?:[0-9a-fA-F]{1,4})){1,7}|:)))(%[0-9a-zA-Z-.:]{1,})?$").test(input);
@@ -27,11 +24,9 @@ var checkInvalidHeaderChar = function(val) {
     return;
   const result = headers.get(name);
   return result == null ? void 0 : result;
-};
-function createServer(options, callback) {
+}, createServer = function(options, callback) {
   return new Server(options, callback);
-}
-var emitListeningNextTick = function(self, onListen, err, hostname, port) {
+}, emitListeningNextTick = function(self, onListen, err, hostname, port) {
   if (typeof onListen === "function")
     try {
       onListen(err, hostname, port);
@@ -101,15 +96,12 @@ var _writeHead = function(statusCode, reason, obj, response) {
   }
   if (statusCode === 204 || statusCode === 304 || statusCode >= 100 && statusCode <= 199)
     response._hasBody = !1;
-};
-function request(url, options, cb) {
+}, request = function(url, options, cb) {
   return new ClientRequest(url, options, cb);
-}
-function get(url, options, cb) {
+}, get = function(url, options, cb) {
   const req = request(url, options, cb);
   return req.end(), req;
-}
-var headerCharRegex = /[^\t\x20-\x7e\x80-\xff]/, validateHeaderName = (name, label) => {
+}, $$REQUIRE$$ = $_BunCommonJSModule_$.require, EventEmitter = $$REQUIRE$$("node:events"), { Readable, Writable, Duplex } = $$REQUIRE$$("node:stream"), { isTypedArray } = $$REQUIRE$$("node:util/types"), headerCharRegex = /[^\t\x20-\x7e\x80-\xff]/, validateHeaderName = (name, label) => {
   if (typeof name !== "string" || !name || !checkIsHttpToken(name))
     throw new Error("ERR_INVALID_HTTP_TOKEN");
 }, validateHeaderValue = (name, value) => {
@@ -1107,7 +1099,8 @@ var tokenRegExp = /^[\^_`a-zA-Z\-0-9!#$%&'*+.|~]+$/, METHODS = [
   509: "Bandwidth Limit Exceeded",
   510: "Not Extended",
   511: "Network Authentication Required"
-}, globalAgent = new Agent, defaultObject = {
+}, globalAgent = new Agent;
+$_BunCommonJSModule_$.module.exports = {
   Agent,
   Server,
   METHODS,
@@ -1125,23 +1118,5 @@ var tokenRegExp = /^[\^_`a-zA-Z\-0-9!#$%&'*+.|~]+$/, METHODS = [
   },
   globalAgent,
   ClientRequest,
-  OutgoingMessage,
-  [Symbol.for("CommonJS")]: 0
-}, http_default = defaultObject;
-export {
-  validateHeaderValue,
-  validateHeaderName,
-  request,
-  globalAgent,
-  get,
-  http_default as default,
-  createServer,
-  ServerResponse,
-  Server,
-  STATUS_CODES,
-  OutgoingMessage,
-  METHODS,
-  IncomingMessage,
-  ClientRequest,
-  Agent
+  OutgoingMessage
 };

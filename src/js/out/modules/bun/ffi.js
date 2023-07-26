@@ -1,4 +1,4 @@
-var cstringReturnType = function(val) {
+"use strict";var cstringReturnType = function(val) {
   return new __GlobalBunCString(val);
 }, FFIBuilder = function(params, returnType, functionToCall, name) {
   const hasReturnType = typeof FFIType[returnType] === "number" && FFIType[returnType] !== FFIType.void;
@@ -59,8 +59,7 @@ var cstringReturnType = function(val) {
     }
   }
   return wrap.native = functionToCall, wrap.ptr = functionToCall.ptr, wrap;
-};
-function dlopen(path, options) {
+}, dlopen = function(path, options) {
   const result = nativeDLOpen(path, options);
   for (let key in result.symbols) {
     var symbol = result.symbols[key];
@@ -70,8 +69,7 @@ function dlopen(path, options) {
       result.symbols[key].native = result.symbols[key];
   }
   return result;
-}
-function linkSymbols(options) {
+}, linkSymbols = function(options) {
   const result = nativeLinkSymbols(options);
   for (let key in result.symbols) {
     var symbol = result.symbols[key];
@@ -81,11 +79,9 @@ function linkSymbols(options) {
       result.symbols[key].native = result.symbols[key];
   }
   return result;
-}
-var onCloseCFunction = function(close) {
+}, onCloseCFunction = function(close) {
   close();
-};
-function CFunction(options) {
+}, CFunction = function(options) {
   const identifier = `CFunction${cFunctionI++}`;
   var result = linkSymbols({
     [identifier]: options
@@ -95,8 +91,7 @@ function CFunction(options) {
       return;
     hasClosed = !0, close(), close = void 0;
   }, cFunctionRegistry ||= new FinalizationRegistry(onCloseCFunction), cFunctionRegistry.register(result.symbols[identifier], result.symbols[identifier].close), result.symbols[identifier];
-}
-var ffi = globalThis.Bun.FFI, ptr = (arg1, arg2) => typeof arg2 === "undefined" ? ffi.ptr(arg1) : ffi.ptr(arg1, arg2), toBuffer = ffi.toBuffer, toArrayBuffer = ffi.toArrayBuffer, viewSource = ffi.viewSource, BunCString = ffi.CString, nativeLinkSymbols = ffi.linkSymbols, nativeDLOpen = ffi.dlopen, nativeCallback = ffi.callback, closeCallback = ffi.closeCallback;
+}, ffi = globalThis.Bun.FFI, ptr = (arg1, arg2) => typeof arg2 === "undefined" ? ffi.ptr(arg1) : ffi.ptr(arg1, arg2), toBuffer = ffi.toBuffer, toArrayBuffer = ffi.toArrayBuffer, viewSource = ffi.viewSource, BunCString = ffi.CString, nativeLinkSymbols = ffi.linkSymbols, nativeDLOpen = ffi.dlopen, nativeCallback = ffi.callback, closeCallback = ffi.closeCallback;
 delete ffi.callback;
 delete ffi.closeCallback;
 
@@ -253,16 +248,18 @@ var native = {
     throw new Error("Deprecated. Use new JSCallback(options, fn) instead");
   }
 }, cFunctionI = 0, cFunctionRegistry, read = ffi.read;
-export {
-  viewSource,
-  toBuffer,
-  toArrayBuffer,
-  read,
-  ptr,
-  native,
-  linkSymbols,
-  dlopen,
-  JSCallback,
+$_BunCommonJSModule_$.module.exports = {
+  CFunction,
   CString,
-  CFunction
+  FFIType,
+  JSCallback,
+  dlopen,
+  linkSymbols,
+  native,
+  ptr,
+  read,
+  suffix,
+  toArrayBuffer,
+  toBuffer,
+  viewSource
 };

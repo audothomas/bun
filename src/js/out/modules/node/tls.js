@@ -1,6 +1,4 @@
-import {isArrayBufferView, isTypedArray} from "node:util/types";
-import net, {Server as NetServer} from "node:net";
-var parseCertString = function() {
+"use strict";var parseCertString = function() {
   throwNotImplemented("Not implemented");
 }, isValidTLSArray = function(obj) {
   if (typeof obj === "string" || isTypedArray(obj) || obj instanceof ArrayBuffer || obj instanceof Blob)
@@ -151,7 +149,7 @@ var parseCertString = function() {
     out.ALPNProtocols = Buffer.from(protocols.buffer.slice(protocols.byteOffset, protocols.byteOffset + protocols.byteLength));
   else if (Buffer.isBuffer(protocols))
     out.ALPNProtocols = protocols;
-}, InternalTCPSocket = net[Symbol.for("::bunternal::")], bunSocketInternal = Symbol.for("::bunnetsocketinternal::"), { RegExp, Array, String } = globalThis[Symbol.for("Bun.lazy")]("primordials"), SymbolReplace = Symbol.replace, RegExpPrototypeSymbolReplace = RegExp.prototype[SymbolReplace], RegExpPrototypeExec = RegExp.prototype.exec, StringPrototypeStartsWith = String.prototype.startsWith, StringPrototypeSlice = String.prototype.slice, StringPrototypeIncludes = String.prototype.includes, StringPrototypeSplit = String.prototype.split, StringPrototypeIndexOf = String.prototype.indexOf, StringPrototypeSubstring = String.prototype.substring, StringPrototypeEndsWith = String.prototype.endsWith, StringFromCharCode = String.fromCharCode, StringPrototypeCharCodeAt = String.prototype.charCodeAt, ArrayPrototypeIncludes = Array.prototype.includes, ArrayPrototypeJoin = Array.prototype.join, ArrayPrototypeForEach = Array.prototype.forEach, ArrayPrototypePush = Array.prototype.push, ArrayPrototypeSome = Array.prototype.some, ArrayPrototypeReduce = Array.prototype.reduce, jsonStringPattern = /^"(?:[^"\\\u0000-\u001f]|\\(?:["\\/bfnrt]|u[0-9a-fA-F]{4}))*"/, InternalSecureContext = class SecureContext2 {
+}, $$REQUIRE$$ = $_BunCommonJSModule_$.require, { isArrayBufferView, isTypedArray } = $$REQUIRE$$("node:util/types"), net = $$REQUIRE$$("node:net"), { Server: NetServer, [Symbol.for("::bunternal::")]: InternalTCPSocket } = net, bunSocketInternal = Symbol.for("::bunnetsocketinternal::"), { RegExp, Array, String } = globalThis[Symbol.for("Bun.lazy")]("primordials"), SymbolReplace = Symbol.replace, RegExpPrototypeSymbolReplace = RegExp.prototype[SymbolReplace], RegExpPrototypeExec = RegExp.prototype.exec, StringPrototypeStartsWith = String.prototype.startsWith, StringPrototypeSlice = String.prototype.slice, StringPrototypeIncludes = String.prototype.includes, StringPrototypeSplit = String.prototype.split, StringPrototypeIndexOf = String.prototype.indexOf, StringPrototypeSubstring = String.prototype.substring, StringPrototypeEndsWith = String.prototype.endsWith, StringFromCharCode = String.fromCharCode, StringPrototypeCharCodeAt = String.prototype.charCodeAt, ArrayPrototypeIncludes = Array.prototype.includes, ArrayPrototypeJoin = Array.prototype.join, ArrayPrototypeForEach = Array.prototype.forEach, ArrayPrototypePush = Array.prototype.push, ArrayPrototypeSome = Array.prototype.some, ArrayPrototypeReduce = Array.prototype.reduce, jsonStringPattern = /^"(?:[^"\\\u0000-\u001f]|\\(?:["\\/bfnrt]|u[0-9a-fA-F]{4}))*"/, InternalSecureContext = class SecureContext2 {
   context;
   constructor(options) {
     const context = {};
@@ -416,8 +414,8 @@ var CLIENT_RENEG_LIMIT = 3, CLIENT_RENEG_WINDOW = 600, DEFAULT_ECDH_CURVE = "aut
     return new TLSSocket(port).connect(port, host2, connectListener);
   }
   return new TLSSocket().connect(port, host2, connectListener);
-}, connect = createConnection, rootCertificates = globalThis[Symbol.for("Bun.lazy")]("rootCertificates"), exports = {
-  [Symbol.for("CommonJS")]: 0,
+}, connect = createConnection, rootCertificates = globalThis[Symbol.for("Bun.lazy")]("rootCertificates");
+$_BunCommonJSModule_$.module.exports = {
   CLIENT_RENEG_LIMIT,
   CLIENT_RENEG_WINDOW,
   connect,
@@ -437,26 +435,4 @@ var CLIENT_RENEG_LIMIT = 3, CLIENT_RENEG_WINDOW = 600, DEFAULT_ECDH_CURVE = "aut
   TLSSocket,
   checkServerIdentity,
   rootCertificates
-};
-export {
-  rootCertificates,
-  parseCertString,
-  getCurves,
-  getCiphers,
-  exports as default,
-  createServer,
-  createSecureContext,
-  createConnection,
-  convertALPNProtocols,
-  connect,
-  checkServerIdentity,
-  TLSSocket,
-  Server,
-  SecureContext,
-  DEFAULT_MIN_VERSION,
-  DEFAULT_MAX_VERSION,
-  DEFAULT_ECDH_CURVE,
-  DEFAULT_CIPHERS,
-  CLIENT_RENEG_WINDOW,
-  CLIENT_RENEG_LIMIT
 };

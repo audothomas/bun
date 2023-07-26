@@ -1,79 +1,45 @@
-import * as types from "node:util/types";
-import {default as default2} from "node:util/types";
-var isBufferInterface = function({ copy, fill, readUint8 }) {
-  return typeof copy === "function" && typeof fill === "function" && typeof readUint8 === "function";
+"use strict";var __defProp = Object.defineProperty;
+var { getOwnPropertyNames: __getOwnPropNames, getOwnPropertyDescriptor: __getOwnPropDesc } = Object, __hasOwnProp = Object.prototype.hasOwnProperty;
+var __toCommonJS = (from) => {
+  const moduleCache = __toCommonJS.moduleCache ??= new WeakMap;
+  var cached = moduleCache.get(from);
+  if (cached)
+    return cached;
+  var to = __defProp({}, "__esModule", { value: !0 }), desc = { enumerable: !1 };
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key))
+        __defProp(to, key, {
+          get: () => from[key],
+          enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable
+        });
+  }
+  return moduleCache.set(from, to), to;
 };
-function isBuffer(value) {
-  return Buffer.isBuffer(value) || typeof value === "object" && isBufferInterface(value || {});
-}
-var isFunction = function(value) {
-  return typeof value === "function";
-}, format = function(f) {
-  if (!isString(f)) {
-    var objects = [];
-    for (var i = 0;i < arguments.length; i++)
-      objects.push(inspect(arguments[i]));
-    return objects.join(" ");
-  }
-  var i = 1, args = arguments, len = args.length, str = String(f).replace(formatRegExp, function(x2) {
-    if (x2 === "%%")
-      return "%";
-    if (i >= len)
-      return x2;
-    switch (x2) {
-      case "%s":
-        return String(args[i++]);
-      case "%d":
-        return Number(args[i++]);
-      case "%j":
-        try {
-          return JSON.stringify(args[i++]);
-        } catch (_) {
-          return "[Circular]";
-        }
-      default:
-        return x2;
-    }
-  });
-  for (var x = args[i];i < len; x = args[++i])
-    if (isNull(x) || !isObject(x))
-      str += " " + x;
-    else
-      str += " " + inspect(x);
-  return str;
-}, deprecate = function(fn, msg, code) {
-  if (process.noDeprecation === !0)
-    return fn;
-  var warned = !1;
-  function deprecated() {
-    if (!warned) {
-      if (process.throwDeprecation) {
-        var err = new Error(msg);
-        if (code)
-          err.code = code;
-        throw err;
-      } else if (process.traceDeprecation)
-        console.trace(msg);
-      else
-        console.error(msg);
-      warned = !0;
-    }
-    return fn.apply(this, arguments);
-  }
-  return deprecated;
-}, debuglog = function(set) {
-  if (set = set.toUpperCase(), !debugs[set])
-    if (debugEnvRegex.test(set)) {
-      var pid = process.pid;
-      debugs[set] = function() {
-        var msg = format.apply(cjs_exports, arguments);
-        console.error("%s %d: %s", set, pid, msg);
-      };
-    } else
-      debugs[set] = function() {
-      };
-  return debugs[set];
-}, inspect = function(obj, opts) {
+var __commonJS = (cb, mod) => () => (mod || cb((mod = { exports: {} }).exports, mod), mod.exports);
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, {
+      get: all[name],
+      enumerable: !0,
+      configurable: !0,
+      set: (newValue) => all[name] = () => newValue
+    });
+};
+var __esm = (fn, res) => () => (fn && (res = fn(fn = 0)), res);
+
+// src/js/out/tmp/node/util.js
+var inherits = function(ctor, superCtor) {
+  if (superCtor)
+    ctor.super_ = superCtor, ctor.prototype = Object.create(superCtor.prototype, {
+      constructor: {
+        value: ctor,
+        enumerable: !1,
+        writable: !0,
+        configurable: !0
+      }
+    });
+}, { isArray, isObject, isUndefinedOrNull } = globalThis[Symbol.for("Bun.lazy")]("primordials"), UtilTypes = $_BunCommonJSModule_$.require("node:util/types"), Exports = $_BunCommonJSModule_$.module.exports, inspect = function(obj, opts) {
   var ctx = {
     seen: [],
     stylize: stylizeNoColor
@@ -85,7 +51,7 @@ var isFunction = function(value) {
   if (isBoolean(opts))
     ctx.showHidden = opts;
   else if (opts)
-    _extend(ctx, opts);
+    Exports._extend(ctx, opts);
   if (isUndefined(ctx.showHidden))
     ctx.showHidden = !1;
   if (isUndefined(ctx.depth))
@@ -111,7 +77,7 @@ var isFunction = function(value) {
     hash[val] = !0;
   }), hash;
 }, formatValue = function(ctx, value, recurseTimes) {
-  if (ctx.customInspect && value && isFunction(value.inspect) && value.inspect !== inspect && !(value.constructor && value.constructor.prototype === value)) {
+  if (ctx.customInspect && value && isFunction(value.inspect) && value.inspect !== Exports.inspect && !(value.constructor && value.constructor.prototype === value)) {
     var ret = value.inspect(recurseTimes, ctx);
     if (!isString(ret))
       ret = formatValue(ctx, ret, recurseTimes);
@@ -130,9 +96,9 @@ var isFunction = function(value) {
       var name = value.name ? ": " + value.name : "";
       return ctx.stylize("[Function" + name + "]", "special");
     }
-    if (isRegExp2(value))
+    if (isRegExp(value))
       return ctx.stylize(RegExp.prototype.toString.call(value), "regexp");
-    if (isDate2(value))
+    if (isDate(value))
       return ctx.stylize(Date.prototype.toString.call(value), "date");
     if (isError(value))
       return formatError(value);
@@ -144,16 +110,16 @@ var isFunction = function(value) {
     var n = value.name ? ": " + value.name : "";
     base = " [Function" + n + "]";
   }
-  if (isRegExp2(value))
+  if (isRegExp(value))
     base = " " + RegExp.prototype.toString.call(value);
-  if (isDate2(value))
+  if (isDate(value))
     base = " " + Date.prototype.toUTCString.call(value);
   if (isError(value))
     base = " " + formatError(value);
   if (keys.length === 0 && (!array || value.length == 0))
     return braces[0] + base + braces[1];
   if (recurseTimes < 0)
-    if (isRegExp2(value))
+    if (isRegExp(value))
       return ctx.stylize(RegExp.prototype.toString.call(value), "regexp");
     else
       return ctx.stylize("[Object]", "special");
@@ -194,9 +160,7 @@ var isFunction = function(value) {
   }), output;
 }, formatProperty = function(ctx, value, recurseTimes, visibleKeys, key, array) {
   var name, str, desc;
-  if (desc = Object.getOwnPropertyDescriptor(value, key) || {
-    value: value[key]
-  }, desc.get)
+  if (desc = Object.getOwnPropertyDescriptor(value, key) || { value: value[key] }, desc.get)
     if (desc.set)
       str = ctx.stylize("[Getter/Setter]", "special");
     else
@@ -215,7 +179,7 @@ var isFunction = function(value) {
         if (array)
           str = str.split("\n").map(function(line) {
             return "  " + line;
-          }).join("\n").substr(2);
+          }).join("\n").slice(2);
         else
           str = "\n" + str.split("\n").map(function(line) {
             return "   " + line;
@@ -226,7 +190,7 @@ var isFunction = function(value) {
     if (array && key.match(/^\d+$/))
       return str;
     if (name = JSON.stringify("" + key), name.match(/^"([a-zA-Z_][a-zA-Z_0-9]*)"$/))
-      name = name.substr(1, name.length - 2), name = ctx.stylize(name, "name");
+      name = name.slice(1, -1), name = ctx.stylize(name, "name");
     else
       name = name.replace(/'/g, "\\'").replace(/\\"/g, '"').replace(/(^"|"$)/g, "'"), name = ctx.stylize(name, "string");
   }
@@ -240,14 +204,10 @@ var isFunction = function(value) {
   if (length > 60)
     return braces[0] + (base === "" ? "" : base + "\n ") + " " + output.join(",\n  ") + " " + braces[1];
   return braces[0] + base + " " + output.join(", ") + " " + braces[1];
-}, isArray = function(ar) {
-  return Array.isArray(ar);
 }, isBoolean = function(arg) {
   return typeof arg === "boolean";
 }, isNull = function(arg) {
   return arg === null;
-}, isNullOrUndefined = function(arg) {
-  return arg == null;
 }, isNumber = function(arg) {
   return typeof arg === "number";
 }, isString = function(arg) {
@@ -256,10 +216,14 @@ var isFunction = function(value) {
   return typeof arg === "symbol";
 }, isUndefined = function(arg) {
   return arg === void 0;
-}, isObject = function(arg) {
-  return typeof arg === "object" && arg !== null;
+}, isError = function(e) {
+  return isObject(e) && (objectToString(e) === "[object Error]" || e instanceof Error);
+}, isFunction = function(arg) {
+  return typeof arg === "function";
 }, isPrimitive = function(arg) {
   return arg === null || typeof arg === "boolean" || typeof arg === "number" || typeof arg === "string" || typeof arg === "symbol" || typeof arg === "undefined";
+}, objectToString = function(o) {
+  return Object.prototype.toString.call(o);
 }, pad = function(n) {
   return n < 10 ? "0" + n.toString(10) : n.toString(10);
 }, timestamp = function() {
@@ -270,45 +234,107 @@ var isFunction = function(value) {
 }, callbackifyOnRejected = function(reason, cb) {
   if (!reason) {
     var newReason = new Error("Promise was rejected with a falsy value");
-    newReason.reason = reason, newReason.code = "ERR_FALSY_VALUE_REJECTION", reason = newReason;
+    newReason.reason = reason, reason = newReason;
   }
   return cb(reason);
 }, callbackify = function(original) {
   if (typeof original !== "function")
     throw new TypeError('The "original" argument must be of type Function');
   function callbackified() {
-    var args = Array.prototype.slice.call(arguments), maybeCb = args.pop();
+    var args = [];
+    for (var i = 0;i < arguments.length; i++)
+      args.push(arguments[i]);
+    var maybeCb = args.pop();
     if (typeof maybeCb !== "function")
       throw new TypeError("The last argument must be of type Function");
     var self = this, cb = function() {
       return maybeCb.apply(self, arguments);
     };
     original.apply(this, args).then(function(ret) {
-      process.nextTick(cb, null, ret);
+      process.nextTick(cb.bind(null, null, ret));
     }, function(rej) {
-      process.nextTick(callbackifyOnRejected, rej, cb);
+      process.nextTick(callbackifyOnRejected.bind(null, rej, cb));
     });
   }
   return Object.setPrototypeOf(callbackified, Object.getPrototypeOf(original)), Object.defineProperties(callbackified, getOwnPropertyDescriptors(original)), callbackified;
-}, cjs_exports = {}, util_default = cjs_exports, __getOwnPropNames = Object.getOwnPropertyNames, __commonJS = (cb, mod) => function __require() {
-  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-}, require_inherits_browser = __commonJS({
-  "node_modules/inherits/inherits_browser.js"(exports, module2) {
-    module2.exports = function inherits(ctor, superCtor) {
-      ctor.super_ = superCtor, ctor.prototype = Object.create(superCtor.prototype, {
-        constructor: {
-          value: ctor,
-          enumerable: !1,
-          writable: !0,
-          configurable: !0
-        }
-      });
-    };
+}, Exports = {}, getOwnPropertyDescriptors = Object.getOwnPropertyDescriptors || function getOwnPropertyDescriptors2(obj) {
+  var keys = Object.keys(obj), descriptors = {};
+  for (var i = 0;i < keys.length; i++)
+    descriptors[keys[i]] = Object.getOwnPropertyDescriptor(obj, keys[i]);
+  return descriptors;
+}, formatRegExp = /%[sdj%]/g;
+var $format = function(f) {
+  if (!isString(f)) {
+    var objects = [];
+    for (var i = 0;i < arguments.length; i++)
+      objects.push(inspect(arguments[i]));
+    return objects.join(" ");
   }
-}), deepEquals = Bun.deepEquals, isDeepStrictEqual = (a, b) => deepEquals(a, b, !0), getOwnPropertyDescriptors = Object.getOwnPropertyDescriptors, formatRegExp = /%[sdj%]/g, debugs = {}, debugEnvRegex = /^$/;
+  var i = 1, args = arguments, len = args.length, str = String(f).replace(formatRegExp, function(x2) {
+    if (x2 === "%%")
+      return "%";
+    if (i >= len)
+      return x2;
+    switch (x2) {
+      case "%s":
+        return String(args[i++]);
+      case "%d":
+        return Number(args[i++]);
+      case "%j":
+        try {
+          return JSON.stringify(args[i++]);
+        } catch (_) {
+          return "[Circular]";
+        }
+      default:
+        return x2;
+    }
+  });
+  for (var x = args[i];i < len; x = args[++i])
+    if (isNull(x) || !isObject(x))
+      str += " " + x;
+    else
+      str += " " + inspect(x);
+  return str;
+}, $deprecate = function(fn, msg) {
+  if (typeof process !== "undefined" && process.noDeprecation === !0)
+    return fn;
+  if (typeof process === "undefined")
+    return function() {
+      return Exports.deprecate(fn, msg).apply(this, arguments);
+    };
+  var warned = !1;
+  function deprecated() {
+    if (!warned) {
+      if (process.throwDeprecation)
+        throw new Error(msg);
+      else if (process.traceDeprecation)
+        console.trace(msg);
+      else
+        console.error(msg);
+      warned = !0;
+    }
+    return fn.apply(this, arguments);
+  }
+  return deprecated;
+};
+var debugs = {}, debugEnvRegex = /^$/;
 if (process.env.NODE_DEBUG)
   debugEnv = process.env.NODE_DEBUG, debugEnv = debugEnv.replace(/[|\\{}()[\]^$+?.]/g, "\\$&").replace(/\*/g, ".*").replace(/,/g, "$|^").toUpperCase(), debugEnvRegex = new RegExp("^" + debugEnv + "$", "i");
 var debugEnv;
+var $debuglog = function(set) {
+  if (set = set.toUpperCase(), !debugs[set])
+    if (debugEnvRegex.test(set)) {
+      var pid = process.pid;
+      debugs[set] = function() {
+        var msg = Exports.format.apply(Exports, arguments);
+        console.error("%s %d: %s", set, pid, msg);
+      };
+    } else
+      debugs[set] = function() {
+      };
+  return debugs[set];
+}, $inspect = inspect;
 inspect.colors = {
   bold: [1, 22],
   italic: [3, 23],
@@ -334,16 +360,24 @@ inspect.styles = {
   date: "magenta",
   regexp: "red"
 };
-var isRegExp2 = types.isRegExp, isDate2 = types.isDate, isError = types.isNativeError, months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"], log = function log2() {
-  console.log("%s - %s", timestamp(), format.apply(cjs_exports, arguments));
-}, inherits = inherits = require_inherits_browser(), _extend = function(origin, add) {
+var $types = UtilTypes, $isArray = isArray, $isBoolean = isBoolean, $isNull = isNull, $isNullOrUndefined = isUndefinedOrNull, $isNumber = isNumber, $isString = isString, $isSymbol = isSymbol, $isUndefined = isUndefined, $isRegExp = UtilTypes.isRegExp, $isObject = isObject, $isDate = UtilTypes.isDate, $isError = isError;
+Exports.types.isNativeError = isError;
+var $isFunction = isFunction, $isPrimitive = isPrimitive, $isBuffer = function isBuffer(arg) {
+  return arg instanceof Buffer;
+};
+var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+var $log = function() {
+  console.log("%s - %s", timestamp(), Exports.format.apply(Exports, arguments));
+}, $inherits = inherits, $_extend = function(origin, add) {
   if (!add || !isObject(add))
     return origin;
   var keys = Object.keys(add), i = keys.length;
   while (i--)
     origin[keys[i]] = add[keys[i]];
   return origin;
-}, kCustomPromisifiedSymbol = Symbol.for("util.promisify.custom"), promisify = function promisify2(original) {
+};
+var kCustomPromisifiedSymbol = typeof Symbol !== "undefined" ? Symbol("util.promisify.custom") : void 0;
+var $promisify = function promisify(original) {
   if (typeof original !== "function")
     throw new TypeError('The "original" argument must be of type Function');
   if (kCustomPromisifiedSymbol && original[kCustomPromisifiedSymbol]) {
@@ -385,70 +419,32 @@ var isRegExp2 = types.isRegExp, isDate2 = types.isDate, isError = types.isNative
     });
   return Object.defineProperties(fn, getOwnPropertyDescriptors(original));
 };
-promisify.custom = kCustomPromisifiedSymbol;
-var { TextDecoder, TextEncoder } = globalThis, toUSVString = (input) => {
-  return (input + "").toWellFormed();
-};
-Object.assign(cjs_exports, {
-  format,
-  deprecate,
-  debuglog,
-  _extend,
-  inspect,
-  types,
-  isArray,
-  isBoolean,
-  isNull,
-  isNullOrUndefined,
-  isNumber,
-  isString,
-  isSymbol,
-  isUndefined,
-  isRegExp: isRegExp2,
-  isObject,
-  isDate: isDate2,
-  isFunction,
-  isError,
-  isPrimitive,
-  isBuffer,
-  log,
-  inherits,
-  toUSVString,
-  promisify,
-  callbackify,
-  isDeepStrictEqual,
-  TextDecoder,
-  TextEncoder,
-  [Symbol.for("CommonJS")]: 0
-});
+Exports.promisify.custom = kCustomPromisifiedSymbol;
+var $callbackify = callbackify;
 export {
-  default2 as types,
-  toUSVString,
-  promisify,
-  log,
-  isUndefined,
-  isSymbol,
-  isString,
-  isRegExp2 as isRegExp,
-  isPrimitive,
-  isObject,
-  isNumber,
-  isNullOrUndefined,
-  isNull,
-  isFunction,
-  isError,
-  isDeepStrictEqual,
-  isDate2 as isDate,
-  isBuffer,
-  isBoolean,
-  isArray,
-  inspect,
-  inherits,
-  format,
-  deprecate,
-  util_default as default,
-  debuglog,
-  callbackify,
-  TextEncoder,
-  TextDecoder
+  $types as types,
+  $promisify as promisify,
+  $log as log,
+  $isUndefined as isUndefined,
+  $isSymbol as isSymbol,
+  $isString as isString,
+  $isRegExp as isRegExp,
+  $isPrimitive as isPrimitive,
+  $isObject as isObject,
+  $isNumber as isNumber,
+  $isNullOrUndefined as isNullOrUndefined,
+  $isNull as isNull,
+  $isFunction as isFunction,
+  $isError as isError,
+  $isDate as isDate,
+  $isBuffer as isBuffer,
+  $isBoolean as isBoolean,
+  $isArray as isArray,
+  $inspect as inspect,
+  $inherits as inherits,
+  $format as format,
+  $deprecate as deprecate,
+  $debuglog as debuglog,
+  $callbackify as callbackify,
+  $_extend as _extend
 };

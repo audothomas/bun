@@ -26,10 +26,7 @@ function getEnabledCategories() {
   return "";
 }
 
-var defaultObject = {
+module.exports = {
   createTracing,
   getEnabledCategories,
-  [Symbol.for("CommonJS")]: 0,
 };
-
-export { defaultObject as default, createTracing, getEnabledCategories };

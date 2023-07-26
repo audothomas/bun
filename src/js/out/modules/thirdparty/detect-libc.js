@@ -1,29 +1,23 @@
-function family() {
+"use strict";var family = function() {
   return Promise.resolve(familySync());
-}
-function familySync() {
+}, familySync = function() {
   return null;
-}
-function versionAsync() {
+}, versionAsync = function() {
   return Promise.resolve(version());
-}
-function version() {
+}, version = function() {
   return null;
-}
-function isNonGlibcLinuxSync() {
+}, isNonGlibcLinuxSync = function() {
   return !1;
-}
-function isNonGlibcLinux() {
+}, isNonGlibcLinux = function() {
   return Promise.resolve(isNonGlibcLinuxSync());
-}
-var GLIBC = "glibc", MUSL = "musl";
-export {
-  versionAsync,
-  version,
-  isNonGlibcLinuxSync,
-  isNonGlibcLinux,
-  familySync,
-  family,
+}, GLIBC = "glibc", MUSL = "musl";
+$_BunCommonJSModule_$.module.exports = {
+  GLIBC,
   MUSL,
-  GLIBC
+  family,
+  familySync,
+  isNonGlibcLinux,
+  isNonGlibcLinuxSync,
+  version,
+  versionAsync
 };

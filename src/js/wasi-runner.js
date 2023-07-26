@@ -1,5 +1,5 @@
 /** This file is used when a .wasm file is ran.
- *  The contents of `../node/wasi.js` is pasted into the top of this file.
+ *  The transpiled contents of `./node/wasi.js` is pasted into the top of this file.
  */
 
 const filePath = process.argv.at(1);

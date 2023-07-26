@@ -1,6 +1,4 @@
-import {Duplex} from "node:stream";
-import {EventEmitter} from "node:events";
-var isIPv4 = function(s) {
+"use strict";var isIPv4 = function(s) {
   return IPv4Reg.test(s);
 }, isIPv6 = function(s) {
   return IPv6Reg.test(s);
@@ -26,7 +24,7 @@ var isIPv4 = function(s) {
   self.emit("listening");
 }, createServer = function(options, connectionListener) {
   return new Server(options, connectionListener);
-}, v4Seg = "(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])", v4Str = `(${v4Seg}[.]){3}${v4Seg}`, IPv4Reg = new RegExp(`^${v4Str}\$`), v6Seg = "(?:[0-9a-fA-F]{1,4})", IPv6Reg = new RegExp("^(" + `(?:${v6Seg}:){7}(?:${v6Seg}|:)|` + `(?:${v6Seg}:){6}(?:${v4Str}|:${v6Seg}|:)|` + `(?:${v6Seg}:){5}(?::${v4Str}|(:${v6Seg}){1,2}|:)|` + `(?:${v6Seg}:){4}(?:(:${v6Seg}){0,1}:${v4Str}|(:${v6Seg}){1,3}|:)|` + `(?:${v6Seg}:){3}(?:(:${v6Seg}){0,2}:${v4Str}|(:${v6Seg}){1,4}|:)|` + `(?:${v6Seg}:){2}(?:(:${v6Seg}){0,3}:${v4Str}|(:${v6Seg}){1,5}|:)|` + `(?:${v6Seg}:){1}(?:(:${v6Seg}){0,4}:${v4Str}|(:${v6Seg}){1,6}|:)|` + `(?::((?::${v6Seg}){0,5}:${v4Str}|(?::${v6Seg}){1,7}|:))` + ")(%[0-9a-zA-Z-.:]{1,})?$"), { Bun, createFIFO, Object } = globalThis[Symbol.for("Bun.lazy")]("primordials"), { connect: bunConnect } = Bun, { setTimeout } = globalThis, bunTlsSymbol = Symbol.for("::buntls::"), bunSocketServerHandlers = Symbol.for("::bunsocket_serverhandlers::"), bunSocketServerConnections = Symbol.for("::bunnetserverconnections::"), bunSocketServerOptions = Symbol.for("::bunnetserveroptions::"), bunSocketInternal = Symbol.for("::bunnetsocketinternal::"), bunTLSConnectOptions = Symbol.for("::buntlsconnectoptions::"), SocketClass, Socket = function(InternalSocket) {
+}, $$REQUIRE$$ = $_BunCommonJSModule_$.require, { Duplex } = $$REQUIRE$$("node:stream"), EventEmitter = $$REQUIRE$$("node:events"), v4Seg = "(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])", v4Str = `(${v4Seg}[.]){3}${v4Seg}`, IPv4Reg = new RegExp(`^${v4Str}\$`), v6Seg = "(?:[0-9a-fA-F]{1,4})", IPv6Reg = new RegExp("^(" + `(?:${v6Seg}:){7}(?:${v6Seg}|:)|` + `(?:${v6Seg}:){6}(?:${v4Str}|:${v6Seg}|:)|` + `(?:${v6Seg}:){5}(?::${v4Str}|(:${v6Seg}){1,2}|:)|` + `(?:${v6Seg}:){4}(?:(:${v6Seg}){0,1}:${v4Str}|(:${v6Seg}){1,3}|:)|` + `(?:${v6Seg}:){3}(?:(:${v6Seg}){0,2}:${v4Str}|(:${v6Seg}){1,4}|:)|` + `(?:${v6Seg}:){2}(?:(:${v6Seg}){0,3}:${v4Str}|(:${v6Seg}){1,5}|:)|` + `(?:${v6Seg}:){1}(?:(:${v6Seg}){0,4}:${v4Str}|(:${v6Seg}){1,6}|:)|` + `(?::((?::${v6Seg}){0,5}:${v4Str}|(?::${v6Seg}){1,7}|:))` + ")(%[0-9a-zA-Z-.:]{1,})?$"), { Bun, createFIFO, Object } = globalThis[Symbol.for("Bun.lazy")]("primordials"), { connect: bunConnect } = Bun, { setTimeout } = globalThis, bunTlsSymbol = Symbol.for("::buntls::"), bunSocketServerHandlers = Symbol.for("::bunsocket_serverhandlers::"), bunSocketServerConnections = Symbol.for("::bunnetserverconnections::"), bunSocketServerOptions = Symbol.for("::bunnetserveroptions::"), bunSocketInternal = Symbol.for("::bunnetsocketinternal::"), bunTLSConnectOptions = Symbol.for("::buntlsconnectoptions::"), SocketClass, Socket = function(InternalSocket) {
   return SocketClass = InternalSocket, Object.defineProperty(SocketClass.prototype, Symbol.toStringTag, {
     value: "Socket",
     enumerable: !1
@@ -528,7 +526,7 @@ class Server extends EventEmitter {
     return this;
   }
 }
-var net_default = {
+$_BunCommonJSModule_$.module.exports = {
   createServer,
   Server,
   createConnection,
@@ -537,17 +535,5 @@ var net_default = {
   isIPv4,
   isIPv6,
   Socket,
-  [Symbol.for("CommonJS")]: 0,
   [Symbol.for("::bunternal::")]: SocketClass
-};
-export {
-  isIPv6,
-  isIPv4,
-  isIP,
-  net_default as default,
-  createServer,
-  createConnection,
-  connect,
-  Socket,
-  Server
 };

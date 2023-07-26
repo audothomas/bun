@@ -1,8 +1,4 @@
-import {EventEmitter} from "node:events";
-import promises2 from "node:fs/promises";
-import {default as default2} from "node:fs/promises";
-import * as Stream from "node:stream";
-var callbackify = function(fsFunction, args) {
+"use strict";var callbackify = function(fsFunction, args) {
   try {
     const result = fsFunction.apply(fs, args.slice(0, args.length - 1)), callback = args[args.length - 1];
     if (typeof callback === "function")
@@ -12,15 +8,11 @@ var callbackify = function(fsFunction, args) {
     if (typeof callback === "function")
       queueMicrotask(() => callback(e));
   }
-};
-function createReadStream(path, options) {
+}, createReadStream = function(path, options) {
   return new ReadStream(path, options);
-}
-function createWriteStream(path, options) {
+}, createWriteStream = function(path, options) {
   return new WriteStream(path, options);
-}
-import {constants} from "node:fs/promises";
-var ReadStream, WriteStream, { direct, isPromise, isCallable } = globalThis[Symbol.for("Bun.lazy")]("primordials"), fs = Bun.fs(), debug = process.env.DEBUG ? console.log : () => {
+}, $$REQUIRE$$ = $_BunCommonJSModule_$.require, ReadStream, WriteStream, EventEmitter = $$REQUIRE$$("node:events"), { direct, isPromise, isCallable } = globalThis[Symbol.for("Bun.lazy")]("primordials"), promises = $$REQUIRE$$("node:fs/promises"), Stream = $$REQUIRE$$("node:stream"), fs = Bun.fs(), debug = process.env.DEBUG ? console.log : () => {
 };
 
 class FSWatcher extends EventEmitter {
@@ -592,7 +584,7 @@ Object.defineProperties(fs, {
 });
 realpath.native = realpath;
 realpathSync.native = realpathSync;
-var fs_default = {
+$_BunCommonJSModule_$.module.exports = {
   [Symbol.for("CommonJS")]: 0,
   access,
   accessSync,
@@ -604,7 +596,7 @@ var fs_default = {
   chownSync,
   close,
   closeSync,
-  constants: promises2.constants,
+  constants: promises.constants,
   copyFile,
   copyFileSync,
   createReadStream,
@@ -640,7 +632,7 @@ var fs_default = {
   mkdtempSync,
   open,
   openSync,
-  promises: promises2,
+  promises,
   read,
   readFile,
   readFileSync,
@@ -684,92 +676,4 @@ var fs_default = {
     ReadStreamClass,
     WriteStreamClass
   }
-};
-export {
-  writevSync,
-  writev,
-  writeSync,
-  writeFileSync,
-  writeFile,
-  write,
-  watch,
-  utimesSync,
-  utimes,
-  unlinkSync,
-  unlink,
-  truncateSync,
-  truncate,
-  symlinkSync,
-  symlink,
-  statSync,
-  stat,
-  rmdirSync,
-  rmdir,
-  rmSync,
-  rm,
-  renameSync,
-  rename,
-  realpathSync,
-  realpath,
-  readvSync,
-  readv,
-  readlinkSync,
-  readlink,
-  readdirSync,
-  readdir,
-  readSync,
-  readFileSync,
-  readFile,
-  read,
-  default2 as promises,
-  openSync,
-  open,
-  mkdtempSync,
-  mkdtemp,
-  mkdirSync,
-  mkdir,
-  lutimesSync,
-  lutimes,
-  lstatSync,
-  lstat,
-  linkSync,
-  link,
-  lchownSync,
-  lchown,
-  lchmodSync,
-  lchmod,
-  futimesSync,
-  futimes,
-  ftruncateSync,
-  ftruncate,
-  fsyncSync,
-  fsync,
-  fstatSync,
-  fstat,
-  fchownSync,
-  fchown,
-  fchmodSync,
-  fchmod,
-  existsSync,
-  exists,
-  fs_default as default,
-  createWriteStream,
-  createReadStream,
-  copyFileSync,
-  copyFile,
-  constants,
-  closeSync,
-  close,
-  chownSync,
-  chown,
-  chmodSync,
-  chmod,
-  appendFileSync,
-  appendFile,
-  accessSync,
-  access,
-  WriteStream,
-  Stats,
-  ReadStream,
-  Dirent
 };

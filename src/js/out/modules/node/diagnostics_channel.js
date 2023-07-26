@@ -1,3 +1,52 @@
+"use strict";var __defProp = Object.defineProperty;
+var { getOwnPropertyNames: __getOwnPropNames, getOwnPropertyDescriptor: __getOwnPropDesc } = Object, __hasOwnProp = Object.prototype.hasOwnProperty;
+var __toCommonJS = (from) => {
+  const moduleCache = __toCommonJS.moduleCache ??= new WeakMap;
+  var cached = moduleCache.get(from);
+  if (cached)
+    return cached;
+  var to = __defProp({}, "__esModule", { value: !0 }), desc = { enumerable: !1 };
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key))
+        __defProp(to, key, {
+          get: () => from[key],
+          enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable
+        });
+  }
+  return moduleCache.set(from, to), to;
+};
+var __commonJS = (cb, mod) => () => (mod || cb((mod = { exports: {} }).exports, mod), mod.exports);
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, {
+      get: all[name],
+      enumerable: !0,
+      configurable: !0,
+      set: (newValue) => all[name] = () => newValue
+    });
+};
+var __esm = (fn, res) => () => (fn && (res = fn(fn = 0)), res);
+
+// src/js/shared.ts
+var exports_shared = {};
+__export(exports_shared, {
+  throwNotImplemented: () => {
+    {
+      return throwNotImplemented;
+    }
+  },
+  hideFromStack: () => {
+    {
+      return hideFromStack;
+    }
+  },
+  NotImplementedError: () => {
+    {
+      return NotImplementedError;
+    }
+  }
+});
 function throwNotImplemented(feature, issue) {
   throw hideFromStack(throwNotImplemented), new NotImplementedError(feature, issue);
 }
@@ -15,37 +64,33 @@ class NotImplementedError extends Error {
     this.name = "NotImplementedError", this.code = "ERR_NOT_IMPLEMENTED", hideFromStack(NotImplementedError);
   }
 }
+var init_shared = __esm(() => {
+});
 
-// src/js/node/diagnostics_channel.js
-var channel = function() {
-  throwNotImplemented("node:diagnostics_channel", 2688);
-}, hasSubscribers = function() {
-  throwNotImplemented("node:diagnostics_channel", 2688);
-}, subscribe = function() {
-  throwNotImplemented("node:diagnostics_channel", 2688);
-}, unsubscribe = function() {
-  throwNotImplemented("node:diagnostics_channel", 2688);
-};
+// src/js/out/tmp/node/diagnostics_channel.ts
+var require_diagnostics_channel = __commonJS(() => {
+  var channel = function() {
+    throwNotImplemented2("node:diagnostics_channel", 2688);
+  }, hasSubscribers = function() {
+    throwNotImplemented2("node:diagnostics_channel", 2688);
+  }, subscribe = function() {
+    throwNotImplemented2("node:diagnostics_channel", 2688);
+  }, unsubscribe = function() {
+    throwNotImplemented2("node:diagnostics_channel", 2688);
+  }, { hideFromStack: hideFromStack2, throwNotImplemented: throwNotImplemented2 } = (init_shared(), __toCommonJS(exports_shared));
 
-class Channel {
-  constructor(name) {
-    throwNotImplemented("node:diagnostics_channel", 2688);
+  class Channel {
+    constructor(name) {
+      throwNotImplemented2("node:diagnostics_channel", 2688);
+    }
   }
-}
-var defaultObject = {
-  channel,
-  hasSubscribers,
-  subscribe,
-  unsubscribe,
-  Channel,
-  [Symbol.for("CommonJS")]: 0
-};
-hideFromStack([channel, hasSubscribers, subscribe, unsubscribe, Channel]);
-export {
-  unsubscribe,
-  subscribe,
-  hasSubscribers,
-  defaultObject as default,
-  channel,
-  Channel
-};
+  $_BunCommonJSModule_$.module.exports = {
+    channel,
+    hasSubscribers,
+    subscribe,
+    unsubscribe,
+    Channel
+  };
+  hideFromStack2([channel, hasSubscribers, subscribe, unsubscribe, Channel]);
+});
+export default require_diagnostics_channel();

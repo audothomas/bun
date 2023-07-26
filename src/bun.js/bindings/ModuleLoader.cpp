@@ -426,8 +426,14 @@ JSValue fetchCommonJSModule(
             RETURN_IF_EXCEPTION(scope, {});
             RELEASE_AND_RETURN(scope, target);
         }
-        default: {
+        case SyntheticModuleType::ESM: {
             RELEASE_AND_RETURN(scope, jsNumber(-1));
+        }
+
+        default: {
+            target->evaluate(globalObject, Bun::toWTFString(*specifier).isolatedCopy(), res->result.value);
+            RETURN_IF_EXCEPTION(scope, {});
+            RELEASE_AND_RETURN(scope, target);
         }
         }
     }
@@ -556,6 +562,10 @@ static JSValue fetchSourceCode(
         auto moduleKey = Bun::toWTFString(*specifier);
 
         switch (res->result.value.tag) {
+        case SyntheticModuleType::ESM: {
+            auto&& provider = Zig::SourceProvider::create(globalObject, res->result.value, JSC::SourceProviderSourceType::Module, true);
+            return rejectOrResolve(JSSourceCode::create(vm, JSC::SourceCode(provider)));
+        }
         case SyntheticModuleType::Module: {
             auto source = JSC::SourceCode(
                 JSC::SyntheticSourceProvider::create(generateNodeModuleModule,
@@ -614,8 +624,19 @@ static JSValue fetchSourceCode(
             return rejectOrResolve(JSSourceCode::create(vm, WTFMove(source)));
         }
         default: {
-            auto&& provider = Zig::SourceProvider::create(globalObject, res->result.value, JSC::SourceProviderSourceType::Module, true);
-            return rejectOrResolve(JSC::JSSourceCode::create(vm, JSC::SourceCode(provider)));
+            auto created = Bun::createCommonJSModule(globalObject, res->result.value);
+
+            if (created.has_value()) {
+                return rejectOrResolve(JSSourceCode::create(vm, WTFMove(created.value())));
+            }
+
+            if constexpr (allowPromise) {
+                auto* exception = scope.exception();
+                scope.clearException();
+                return rejectedInternalPromise(globalObject, exception);
+            } else {
+                return JSC::jsUndefined();
+            }
         }
         }
     }
