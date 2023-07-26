@@ -227,7 +227,9 @@ pub const ResolvedSource = extern struct {
         wasm = 2,
         object = 3,
         file = 4,
+        ESM = 2000,
 
+        // Native Modules
         @"node:buffer" = 1024,
         @"node:process" = 1025,
         @"bun:events_native" = 1026, // native version of EventEmitter used for streams
@@ -236,7 +238,7 @@ pub const ResolvedSource = extern struct {
         @"node:tty" = 1029,
         @"node:util/types" = 1030,
         @"node:constants" = 1031,
-        ESM = 1032,
+        @"bun:jsc" = 1032,
     };
 };
 

@@ -1,8 +1,5 @@
-#include "../bindings/JSBuffer.h"
-#include "../bindings/ZigGlobalObject.h"
-#include "JavaScriptCore/JSGlobalObject.h"
-
-#include "JavaScriptCore/ObjectConstructor.h"
+#include "_NativeModule.h"
+#include "JSBuffer.h"
 
 namespace Zig {
 using namespace WebCore;
@@ -31,51 +28,24 @@ JSC_DEFINE_HOST_FUNCTION(jsFunctionNotImplementedYet,
   return JSValue::encode(jsUndefined());
 }
 
-inline void generateTTYSourceCode(JSC::JSGlobalObject *lexicalGlobalObject,
-                                  JSC::Identifier moduleKey,
-                                  Vector<JSC::Identifier, 4> &exportNames,
-                                  JSC::MarkedArgumentBuffer &exportValues) {
-  JSC::VM &vm = lexicalGlobalObject->vm();
-  GlobalObject *globalObject =
-      reinterpret_cast<GlobalObject *>(lexicalGlobalObject);
-
-  auto *tty = JSC::constructEmptyObject(globalObject,
-                                        globalObject->objectPrototype(), 3);
+DEFINE_NATIVE_MODULE(TTY)
+{
+  INIT_NATIVE_MODULE(3);
 
   auto *isattyFunction =
       JSFunction::create(vm, globalObject, 1, "isatty"_s, jsFunctionTty_isatty,
-                         ImplementationVisibility::Public);
+                        ImplementationVisibility::Public);
 
   auto *notimpl = JSFunction::create(vm, globalObject, 0, "notimpl"_s,
-                                     jsFunctionNotImplementedYet,
-                                     ImplementationVisibility::Public,
-                                     NoIntrinsic, jsFunctionNotImplementedYet);
+                                    jsFunctionNotImplementedYet,
+                                    ImplementationVisibility::Public,
+                                    NoIntrinsic, jsFunctionNotImplementedYet);
 
-  exportNames.append(JSC::Identifier::fromString(vm, "isatty"_s));
-  exportValues.append(isattyFunction);
+  putNativeFn(Identifier::fromString(vm, "isatty"_s), jsFunctionTty_isatty);
+  put(Identifier::fromString(vm, "ReadStream"_s), notimpl);
+  put(Identifier::fromString(vm, "WriteStream"_s), notimpl);
 
-  exportNames.append(JSC::Identifier::fromString(vm, "ReadStream"_s));
-  tty->putDirect(vm, JSC::Identifier::fromString(vm, "ReadStream"_s), notimpl);
-  exportValues.append(notimpl);
-
-  exportNames.append(JSC::Identifier::fromString(vm, "WriteStream"_s));
-  tty->putDirect(vm, JSC::Identifier::fromString(vm, "WriteStream"_s), notimpl);
-  exportValues.append(notimpl);
-
-  for (size_t i = 0; i < exportNames.size(); i++) {
-    tty->putDirect(vm, exportNames[i], exportValues.at(i), 0);
-  }
-
-  exportNames.append(vm.propertyNames->defaultKeyword);
-  exportValues.append(tty);
-
-  auto CommonJS =
-      Identifier::fromUid(vm.symbolRegistry().symbolForKey("CommonJS"_s));
-
-  exportNames.append(CommonJS);
-  exportValues.append(jsNumber(0));
-
-  tty->putDirect(vm, PropertyName(CommonJS), jsNumber(0), 0);
+  RETURN_NATIVE_MODULE();
 }
 
 } // namespace Zig

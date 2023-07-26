@@ -27,21 +27,26 @@
 #include "EventEmitter.h"
 #include "JSEventEmitter.h"
 
-#include "../modules/BufferModule.h"
-#include "../modules/EventsModule.h"
-#include "../modules/ProcessModule.h"
-#include "../modules/StringDecoderModule.h"
-#include "../modules/ObjectModule.h"
-#include "../modules/NodeModuleModule.h"
-#include "../modules/TTYModule.h"
-#include "../modules/ConstantsModule.h"
-#include "node_util_types.h"
 #include "CommonJSModuleRecord.h"
 #include <JavaScriptCore/JSModuleLoader.h>
 #include <JavaScriptCore/Completion.h>
 #include <JavaScriptCore/JSModuleNamespaceObject.h>
 #include <JavaScriptCore/JSMap.h>
 #include <JavaScriptCore/JSMapInlines.h>
+
+#include "../modules/_NativeModule.h"
+#include "../modules/BufferModule.h"
+#include "../modules/BunJSCModule.h"
+#include "../modules/ConstantsModule.h"
+#include "../modules/NativeEventsModule.h"
+#include "../modules/NodeModuleModule.h"
+#include "../modules/NodeUtilTypesModule.h"
+#include "../modules/ProcessModule.h"
+#include "../modules/StringDecoderModule.h"
+#include "../modules/TTYModule.h"
+
+#include "../modules/ObjectModule.h"
+
 
 namespace Bun {
 using namespace Zig;
@@ -390,47 +395,15 @@ JSValue fetchCommonJSModule(
         }
 
         switch (res->result.value.tag) {
-        case SyntheticModuleType::Module: {
-            target->evaluate(globalObject, Bun::toWTFString(*specifier), generateNodeModuleModule);
-            RETURN_IF_EXCEPTION(scope, {});
-            RELEASE_AND_RETURN(scope, target);
-        }
+        #define CASE(name, _) \
+            case SyntheticModuleType::name: {\
+                target->evaluate(globalObject, Bun::toWTFString(*specifier), generateNativeModule_##name); \
+                RETURN_IF_EXCEPTION(scope, {});\
+                RELEASE_AND_RETURN(scope, target);\
+            }
+        BUN_FOREACH_NATIVE_MODULE_NAME(CASE)
+        #undef CASE
 
-        case SyntheticModuleType::Buffer: {
-            target->evaluate(globalObject, Bun::toWTFString(*specifier), generateBufferSourceCode);
-            RETURN_IF_EXCEPTION(scope, {});
-            RELEASE_AND_RETURN(scope, target);
-        }
-        case SyntheticModuleType::TTY: {
-            target->evaluate(globalObject, Bun::toWTFString(*specifier), generateTTYSourceCode);
-            RETURN_IF_EXCEPTION(scope, {});
-            RELEASE_AND_RETURN(scope, target);
-        }
-        case SyntheticModuleType::NodeUtilTypes: {
-            target->evaluate(globalObject, Bun::toWTFString(*specifier), Bun::generateNodeUtilTypesSourceCode);
-            RETURN_IF_EXCEPTION(scope, {});
-            RELEASE_AND_RETURN(scope, target);
-        }
-        case SyntheticModuleType::Process: {
-            target->evaluate(globalObject, Bun::toWTFString(*specifier), generateProcessSourceCode);
-            RETURN_IF_EXCEPTION(scope, {});
-            RELEASE_AND_RETURN(scope, target);
-        }
-        case SyntheticModuleType::Events: {
-            target->evaluate(globalObject, Bun::toWTFString(*specifier), generateEventsSourceCode);
-            RETURN_IF_EXCEPTION(scope, {});
-            RELEASE_AND_RETURN(scope, target);
-        }
-        case SyntheticModuleType::StringDecoder: {
-            target->evaluate(globalObject, Bun::toWTFString(*specifier), generateStringDecoderSourceCode);
-            RETURN_IF_EXCEPTION(scope, {});
-            RELEASE_AND_RETURN(scope, target);
-        }
-        case SyntheticModuleType::Constants: {
-            target->evaluate(globalObject, Bun::toWTFString(*specifier), generateConstantsSourceCode);
-            RETURN_IF_EXCEPTION(scope, {});
-            RELEASE_AND_RETURN(scope, target);
-        }
         case SyntheticModuleType::ESM: {
             RELEASE_AND_RETURN(scope, jsNumber(-1));
         }
@@ -507,7 +480,7 @@ JSValue fetchCommonJSModule(
 }
 
 template<bool allowPromise>
-static JSValue fetchSourceCode(
+static JSValue fetchESMSourceCode(
     Zig::GlobalObject* globalObject,
     ErrorableResolvedSource* res,
     BunString* specifier,
@@ -571,63 +544,16 @@ static JSValue fetchSourceCode(
             auto&& provider = Zig::SourceProvider::create(globalObject, res->result.value, JSC::SourceProviderSourceType::Module, true);
             return rejectOrResolve(JSSourceCode::create(vm, JSC::SourceCode(provider)));
         }
-        case SyntheticModuleType::Module: {
-            auto source = JSC::SourceCode(
-                JSC::SyntheticSourceProvider::create(generateNodeModuleModule,
-                    JSC::SourceOrigin(), WTFMove(moduleKey)));
 
-            return rejectOrResolve(JSSourceCode::create(vm, WTFMove(source)));
-        }
+        #define CASE(name, _) \
+            case SyntheticModuleType::name: {\
+                auto source = JSC::SourceCode(JSC::SyntheticSourceProvider::create(generateNativeModule_##name, JSC::SourceOrigin(), WTFMove(moduleKey))); \
+                return rejectOrResolve(JSSourceCode::create(vm, WTFMove(source))); \
+            }
+        BUN_FOREACH_NATIVE_MODULE_NAME(CASE)
+        #undef CASE
 
-        case SyntheticModuleType::Buffer: {
-            auto source = JSC::SourceCode(
-                JSC::SyntheticSourceProvider::create(generateBufferSourceCode,
-                    JSC::SourceOrigin(), WTFMove(moduleKey)));
-
-            return rejectOrResolve(JSSourceCode::create(vm, WTFMove(source)));
-        }
-        case SyntheticModuleType::TTY: {
-            auto source = JSC::SourceCode(
-                JSC::SyntheticSourceProvider::create(generateTTYSourceCode,
-                    JSC::SourceOrigin(), WTFMove(moduleKey)));
-
-            return rejectOrResolve(JSSourceCode::create(vm, WTFMove(source)));
-        }
-        case SyntheticModuleType::NodeUtilTypes: {
-            auto source = JSC::SourceCode(
-                JSC::SyntheticSourceProvider::create(Bun::generateNodeUtilTypesSourceCode,
-                    JSC::SourceOrigin(), WTFMove(moduleKey)));
-
-            return rejectOrResolve(JSSourceCode::create(vm, WTFMove(source)));
-        }
-        case SyntheticModuleType::Process: {
-            auto source = JSC::SourceCode(
-                JSC::SyntheticSourceProvider::create(generateProcessSourceCode,
-                    JSC::SourceOrigin(), WTFMove(moduleKey)));
-
-            return rejectOrResolve(JSSourceCode::create(vm, WTFMove(source)));
-        }
-        case SyntheticModuleType::Events: {
-            auto source = JSC::SourceCode(
-                JSC::SyntheticSourceProvider::create(generateEventsSourceCode,
-                    JSC::SourceOrigin(), WTFMove(moduleKey)));
-
-            return rejectOrResolve(JSSourceCode::create(vm, WTFMove(source)));
-        }
-        case SyntheticModuleType::StringDecoder: {
-            auto source = JSC::SourceCode(
-                JSC::SyntheticSourceProvider::create(generateStringDecoderSourceCode,
-                    JSC::SourceOrigin(), WTFMove(moduleKey)));
-
-            return rejectOrResolve(JSSourceCode::create(vm, WTFMove(source)));
-        }
-        case SyntheticModuleType::Constants: {
-            auto source = JSC::SourceCode(
-                JSC::SyntheticSourceProvider::create(generateConstantsSourceCode,
-                    JSC::SourceOrigin(), WTFMove(moduleKey)));
-
-            return rejectOrResolve(JSSourceCode::create(vm, WTFMove(source)));
-        }
+        // CommonJS modules from src/js/*
         default: {
             auto created = Bun::createCommonJSModule(globalObject, res->result.value, true);
 
@@ -741,22 +667,22 @@ extern "C" JSC::EncodedJSValue jsFunctionOnLoadObjectResultReject(JSC::JSGlobalO
     return JSValue::encode(reason);
 }
 
-JSValue fetchSourceCodeSync(
+JSValue fetchESMSourceCodeSync(
     Zig::GlobalObject* globalObject,
     ErrorableResolvedSource* res,
     BunString* specifier,
     BunString* referrer)
 {
-    return fetchSourceCode<false>(globalObject, res, specifier, referrer);
+    return fetchESMSourceCode<false>(globalObject, res, specifier, referrer);
 }
 
-JSValue fetchSourceCodeAsync(
+JSValue fetchESMSourceCodeAsync(
     Zig::GlobalObject* globalObject,
     ErrorableResolvedSource* res,
     BunString* specifier,
     BunString* referrer)
 {
-    return fetchSourceCode<true>(globalObject, res, specifier, referrer);
+    return fetchESMSourceCode<true>(globalObject, res, specifier, referrer);
 }
 }
 namespace JSC {

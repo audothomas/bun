@@ -43,10 +43,7 @@ export function require(this: Module, id: string) {
   if (esm?.evaluated && (esm.state ?? 0) >= $ModuleReady) {
     const mod = esm.module;
     const namespace = Loader.getModuleNamespaceObject(mod);
-    const exports =
-      namespace?.[$commonJSSymbol] === 0 || namespace?.default?.[$commonJSSymbol] === 0
-        ? namespace.default
-        : namespace.__esModule
+    const exports = namespace.__esModule
         ? namespace
         : Object.create(namespace, { __esModule: { value: true } });
     $requireMap.$set(id, $createCommonJSModule(id, exports, true));
@@ -83,9 +80,7 @@ export function require(this: Module, id: string) {
       const namespace = Loader.getModuleNamespaceObject(esm!.module);
       return (mod.exports =
         // if they choose a module
-        namespace?.[$commonJSSymbol] === 0 || namespace?.default?.[$commonJSSymbol] === 0
-          ? namespace.default
-          : namespace.__esModule
+        namespace.__esModule
           ? namespace
           : Object.create(namespace, { __esModule: { value: true } }));
     }
@@ -98,7 +93,7 @@ export function require(this: Module, id: string) {
 // This takes in an exact specifier to a built-in module (like "node:stream") and loads it.
 // It assumes such module will always succeed and that you do not try to load something else.
 export function requireBuiltin(id: string) {
-  let mod = $requireMap.$get(id);
+  let mod = $requireMap.$get(id),;
   if (!mod) {
     mod = $createAndLoadBuiltinModule(id);
     $requireMap.$set(id, mod);

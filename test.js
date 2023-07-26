@@ -1,1 +1,3 @@
-console.log(require("node:constants"));
+const reqd = import.meta.require('')
+const hi = await import('path');
+console.log(reqd);

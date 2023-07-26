@@ -10,10 +10,28 @@ function runInContext(code, context, options) {
 }
 
 function compileFunction() {
-  throwNotImplemented("node:vm compileFunction", 401);
+  throwNotImplemented("node:vm compileFunction");
 }
 function measureMemory() {
-  throwNotImplemented("node:vm measureMemory", 401);
+  throwNotImplemented("node:vm measureMemory");
+}
+
+class Module {
+  constructor() {
+    throwNotImplemented("node:vm Module");
+  }
+}
+
+class SourceTextModule {
+  constructor() {
+    throwNotImplemented("node:vm Module");
+  }
+}
+
+class SyntheticModule {
+  constructor() {
+    throwNotImplemented("node:vm Module");
+  }
 }
 
 $exports = {
@@ -25,6 +43,9 @@ $exports = {
   compileFunction,
   measureMemory,
   Script,
+  Module,
+  SourceTextModule,
+  SyntheticModule,
 };
 
 export {};

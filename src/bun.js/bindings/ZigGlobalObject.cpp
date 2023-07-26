@@ -105,7 +105,6 @@
 #include "JavaScriptCore/FunctionPrototype.h"
 #include "napi.h"
 #include "JSSQLStatement.h"
-#include "BunJSCModule.h"
 #include "ModuleLoader.h"
 #include "NodeVMScript.h"
 #include "ProcessIdentifier.h"
@@ -487,7 +486,7 @@ JSC_DEFINE_HOST_FUNCTION(functionFulfillModuleSync,
     res.result.err.code = 0;
     res.result.err.ptr = nullptr;
 
-    JSValue result = Bun::fetchSourceCodeSync(
+    JSValue result = Bun::fetchESMSourceCodeSync(
         reinterpret_cast<Zig::GlobalObject*>(globalObject),
         &res,
         &specifier,
@@ -1624,10 +1623,6 @@ JSC:
 
         if (string == "sqlite"_s) {
             return JSC::JSValue::encode(JSSQLStatementConstructor::create(vm, globalObject, JSSQLStatementConstructor::createStructure(vm, globalObject, globalObject->m_functionPrototype.get())));
-        }
-
-        if (string == "bun:jsc"_s) {
-            return JSC::JSValue::encode(createJSCModule(globalObject));
         }
 
         if (string == "pathToFileURL"_s) {
@@ -4066,7 +4061,6 @@ void GlobalObject::addBuiltinGlobals(JSC::VM& vm)
             JSC::PropertyAttribute::Function | JSC::PropertyAttribute::DontDelete | 0 });
 
     static NeverDestroyed<const String> BunLazyString(MAKE_STATIC_STRING_IMPL("Bun.lazy"));
-    static NeverDestroyed<const String> CommonJSSymbolKey(MAKE_STATIC_STRING_IMPL("CommonJS"));
     JSC::Identifier BunLazyIdentifier = JSC::Identifier::fromUid(vm.symbolRegistry().symbolForKey(BunLazyString));
     JSC::JSFunction* lazyLoadFunction = JSC::JSFunction::create(vm, this, 0,
         BunLazyString, functionLazyLoad, ImplementationVisibility::Public);
@@ -4096,7 +4090,6 @@ void GlobalObject::addBuiltinGlobals(JSC::VM& vm)
     extraStaticGlobals.uncheckedAppend(GlobalPropertyInfo(builtinNames.getInternalWritableStreamPrivateName(), JSFunction::create(vm, this, 1, String(), getInternalWritableStream, ImplementationVisibility::Public), PropertyAttribute::DontDelete | PropertyAttribute::ReadOnly));
     extraStaticGlobals.uncheckedAppend(GlobalPropertyInfo(builtinNames.createWritableStreamFromInternalPrivateName(), JSFunction::create(vm, this, 1, String(), createWritableStreamFromInternal, ImplementationVisibility::Public), PropertyAttribute::DontDelete | PropertyAttribute::ReadOnly));
     extraStaticGlobals.uncheckedAppend(GlobalPropertyInfo(builtinNames.fulfillModuleSyncPrivateName(), JSFunction::create(vm, this, 1, String(), functionFulfillModuleSync, ImplementationVisibility::Public), PropertyAttribute::DontDelete | PropertyAttribute::ReadOnly | PropertyAttribute::Function));
-    extraStaticGlobals.uncheckedAppend(GlobalPropertyInfo(builtinNames.commonJSSymbolPrivateName(), JSC::Symbol::create(vm, vm.symbolRegistry().symbolForKey(CommonJSSymbolKey)), PropertyAttribute::DontDelete | PropertyAttribute::ReadOnly));
     extraStaticGlobals.uncheckedAppend(GlobalPropertyInfo(builtinNames.directPrivateName(), JSFunction::create(vm, this, 1, String(), functionGetDirectStreamDetails, ImplementationVisibility::Public), PropertyAttribute::DontDelete | PropertyAttribute::ReadOnly | PropertyAttribute::Function));
     extraStaticGlobals.uncheckedAppend(GlobalPropertyInfo(vm.propertyNames->builtinNames().ArrayBufferPrivateName(), arrayBufferConstructor(), PropertyAttribute::DontDelete | PropertyAttribute::ReadOnly));
 
@@ -4917,7 +4910,7 @@ JSC::JSInternalPromise* GlobalObject::moduleLoaderFetch(JSGlobalObject* globalOb
     res.result.err.code = 0;
     res.result.err.ptr = nullptr;
 
-    JSValue result = Bun::fetchSourceCodeAsync(
+    JSValue result = Bun::fetchESMSourceCodeAsync(
         reinterpret_cast<Zig::GlobalObject*>(globalObject),
         &res,
         &moduleKeyBun,

@@ -1,4 +1,4 @@
-#include "root.h"
+#include "_NativeModule.h"
 
 #include "JavaScriptCore/JavaScript.h"
 #include "wtf/FileSystem.h"
@@ -597,49 +597,48 @@ JSC_DEFINE_HOST_FUNCTION(functionDeserialize, (JSGlobalObject * globalObject, Ca
     RELEASE_AND_RETURN(throwScope, JSValue::encode(result));
 }
 
-JSC::JSObject* createJSCModule(JSC::JSGlobalObject* globalObject)
+namespace Zig {
+DEFINE_NATIVE_MODULE(BunJSC)
 {
-    VM& vm = globalObject->vm();
-    JSC::JSObject* object = nullptr;
+    INIT_NATIVE_MODULE(42);
 
-    {
-        JSC::ObjectInitializationScope initializationScope(vm);
-        object = JSC::constructEmptyObject(globalObject, globalObject->objectPrototype(), 33);
-        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "callerSourceOrigin"_s), 1, functionCallerSourceOrigin, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
-        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "jscDescribe"_s), 1, functionDescribe, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
-        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "jscDescribeArray"_s), 1, functionDescribeArray, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
-        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "drainMicrotasks"_s), 1, functionDrainMicrotasks, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
-        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "edenGC"_s), 1, functionEdenGC, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
-        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "fullGC"_s), 1, functionFullGC, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
-        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "gcAndSweep"_s), 1, functionGCAndSweep, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
-        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "getRandomSeed"_s), 1, functionGetRandomSeed, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
-        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "heapSize"_s), 1, functionHeapSize, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
-        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "heapStats"_s), 1, functionMemoryUsageStatistics, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
-        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "startSamplingProfiler"_s), 1, functionStartSamplingProfiler, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
-        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "samplingProfilerStackTraces"_s), 1, functionSamplingProfilerStackTraces, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
-        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "noInline"_s), 1, functionNeverInlineFunction, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
-        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "isRope"_s), 1, functionIsRope, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
-        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "memoryUsage"_s), 1, functionCreateMemoryFootprint, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
-        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "noFTL"_s), 1, functionNoFTL, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
-        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "noOSRExitFuzzing"_s), 1, functionNoOSRExitFuzzing, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
-        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "numberOfDFGCompiles"_s), 1, functionNumberOfDFGCompiles, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
-        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "optimizeNextInvocation"_s), 1, functionOptimizeNextInvocation, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
-        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "releaseWeakRefs"_s), 1, functionReleaseWeakRefs, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
-        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "reoptimizationRetryCount"_s), 1, functionReoptimizationRetryCount, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
-        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "setRandomSeed"_s), 1, functionSetRandomSeed, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
-        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "startRemoteDebugger"_s), 2, functionStartRemoteDebugger, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
-        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "totalCompileTime"_s), 1, functionTotalCompileTime, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
-        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "getProtectedObjects"_s), 1, functionGetProtectedObjects, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
-        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "generateHeapSnapshotForDebugging"_s), 0, functionGenerateHeapSnapshotForDebugging, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
-        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "profile"_s), 0, functionRunProfiler, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
-        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "setTimeZone"_s), 0, functionSetTimeZone, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
-        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "serialize"_s), 0, functionSerialize, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
-        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "deserialize"_s), 0, functionDeserialize, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
-        // Deprecated
-        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "describe"_s), 1, functionDescribe, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete || JSC::PropertyAttribute::DontEnum | 0);
-        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "describeArray"_s), 1, functionDescribeArray, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete || JSC::PropertyAttribute::DontEnum | 0);
-        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "setTimezone"_s), 0, functionSetTimeZone, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete || JSC::PropertyAttribute::DontEnum | 0);
-    }
+    putNativeFn(Identifier::fromString(vm, "callerSourceOrigin"_s), functionCallerSourceOrigin);
+    putNativeFn(Identifier::fromString(vm, "jscDescribe"_s), functionDescribe);
+    putNativeFn(Identifier::fromString(vm, "jscDescribeArray"_s), functionDescribeArray);
+    putNativeFn(Identifier::fromString(vm, "drainMicrotasks"_s), functionDrainMicrotasks);
+    putNativeFn(Identifier::fromString(vm, "edenGC"_s), functionEdenGC);
+    putNativeFn(Identifier::fromString(vm, "fullGC"_s), functionFullGC);
+    putNativeFn(Identifier::fromString(vm, "gcAndSweep"_s), functionGCAndSweep);
+    putNativeFn(Identifier::fromString(vm, "getRandomSeed"_s), functionGetRandomSeed);
+    putNativeFn(Identifier::fromString(vm, "heapSize"_s), functionHeapSize);
+    putNativeFn(Identifier::fromString(vm, "heapStats"_s), functionMemoryUsageStatistics);
+    putNativeFn(Identifier::fromString(vm, "startSamplingProfiler"_s), functionStartSamplingProfiler);
+    putNativeFn(Identifier::fromString(vm, "samplingProfilerStackTraces"_s), functionSamplingProfilerStackTraces);
+    putNativeFn(Identifier::fromString(vm, "noInline"_s), functionNeverInlineFunction);
+    putNativeFn(Identifier::fromString(vm, "isRope"_s), functionIsRope);
+    putNativeFn(Identifier::fromString(vm, "memoryUsage"_s), functionCreateMemoryFootprint);
+    putNativeFn(Identifier::fromString(vm, "noFTL"_s), functionNoFTL);
+    putNativeFn(Identifier::fromString(vm, "noOSRExitFuzzing"_s), functionNoOSRExitFuzzing);
+    putNativeFn(Identifier::fromString(vm, "numberOfDFGCompiles"_s), functionNumberOfDFGCompiles);
+    putNativeFn(Identifier::fromString(vm, "optimizeNextInvocation"_s), functionOptimizeNextInvocation);
+    putNativeFn(Identifier::fromString(vm, "releaseWeakRefs"_s), functionReleaseWeakRefs);
+    putNativeFn(Identifier::fromString(vm, "reoptimizationRetryCount"_s), functionReoptimizationRetryCount);
+    putNativeFn(Identifier::fromString(vm, "setRandomSeed"_s), functionSetRandomSeed);
+    putNativeFn(Identifier::fromString(vm, "startRemoteDebugger"_s), functionStartRemoteDebugger);
+    putNativeFn(Identifier::fromString(vm, "totalCompileTime"_s), functionTotalCompileTime);
+    putNativeFn(Identifier::fromString(vm, "getProtectedObjects"_s), functionGetProtectedObjects);
+    putNativeFn(Identifier::fromString(vm, "generateHeapSnapshotForDebugging"_s), functionGenerateHeapSnapshotForDebugging);
+    putNativeFn(Identifier::fromString(vm, "profile"_s), functionRunProfiler);
+    putNativeFn(Identifier::fromString(vm, "setTimeZone"_s), functionSetTimeZone);
+    putNativeFn(Identifier::fromString(vm, "serialize"_s), functionSerialize);
+    putNativeFn(Identifier::fromString(vm, "deserialize"_s), functionDeserialize);
+    
+    // Deprecated
+    putNativeFn(Identifier::fromString(vm, "describe"_s), functionDescribe);
+    putNativeFn(Identifier::fromString(vm, "describeArray"_s), functionDescribeArray);
+    putNativeFn(Identifier::fromString(vm, "setTimezone"_s), functionSetTimeZone);
 
-    return object;
+    RETURN_NATIVE_MODULE();
 }
+
+} // namespace Zig

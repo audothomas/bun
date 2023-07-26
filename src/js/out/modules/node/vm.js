@@ -50,10 +50,28 @@ class NotImplementedError extends Error {
 var runInContext = function(code, context, options) {
   return new Script(code, options).runInContext(context);
 }, compileFunction = function() {
-  throwNotImplemented2("node:vm compileFunction", 401);
+  throwNotImplemented2("node:vm compileFunction");
 }, measureMemory = function() {
-  throwNotImplemented2("node:vm measureMemory", 401);
+  throwNotImplemented2("node:vm measureMemory");
 }, { throwNotImplemented: throwNotImplemented2 } = exports_shared, vm = globalThis[Symbol.for("Bun.lazy")]("vm"), { createContext, isContext, Script, runInNewContext, runInThisContext } = vm;
+
+class Module {
+  constructor() {
+    throwNotImplemented2("node:vm Module");
+  }
+}
+
+class SourceTextModule {
+  constructor() {
+    throwNotImplemented2("node:vm Module");
+  }
+}
+
+class SyntheticModule {
+  constructor() {
+    throwNotImplemented2("node:vm Module");
+  }
+}
 module.exports = {
   createContext,
   runInContext,
@@ -62,6 +80,9 @@ module.exports = {
   isContext,
   compileFunction,
   measureMemory,
-  Script
+  Script,
+  Module,
+  SourceTextModule,
+  SyntheticModule
 };
 })()

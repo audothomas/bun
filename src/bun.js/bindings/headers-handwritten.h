@@ -266,16 +266,16 @@ typedef struct {
 
 enum SyntheticModuleType : uint64_t {
     ObjectModule = 2,
-
-    Buffer = 1024,
-    Process = 1025,
-    Events = 1026,
+    Buffer = 1025,
+    Process = 1024,
+    NativeEvents = 1026,
     StringDecoder = 1027,
-    Module = 1028,
+    NodeModule = 1028,
     TTY = 1029,
     NodeUtilTypes = 1030,
     Constants = 1031,
-    ESM = 1032,
+    BunJSC = 1032,
+    ESM = 2000,
 };
 
 extern "C" const char* Bun__userAgent;

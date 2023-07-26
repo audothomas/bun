@@ -1,6 +1,7 @@
 #include "../bindings/ZigGlobalObject.h"
 #include "JavaScriptCore/CustomGetterSetter.h"
 #include "JavaScriptCore/JSGlobalObject.h"
+#include "_NativeModule.h"
 
 namespace Zig {
 
@@ -35,10 +36,8 @@ JSC_DEFINE_CUSTOM_SETTER(jsFunctionProcessModuleCommonJSSetter,
       ->putDirect(vm, propertyName, JSValue::decode(encodedValue), 0);
 }
 
-inline void generateProcessSourceCode(JSC::JSGlobalObject *lexicalGlobalObject,
-                                      JSC::Identifier moduleKey,
-                                      Vector<JSC::Identifier, 4> &exportNames,
-                                      JSC::MarkedArgumentBuffer &exportValues) {
+DEFINE_NATIVE_MODULE(Process)
+{
   JSC::VM &vm = lexicalGlobalObject->vm();
   GlobalObject *globalObject =
       reinterpret_cast<GlobalObject *>(lexicalGlobalObject);
@@ -60,10 +59,6 @@ inline void generateProcessSourceCode(JSC::JSGlobalObject *lexicalGlobalObject,
 
   exportNames.append(vm.propertyNames->defaultKeyword);
   exportValues.append(process);
-
-  exportNames.append(
-      Identifier::fromUid(vm.symbolRegistry().symbolForKey("CommonJS"_s)));
-  exportValues.append(jsNumber(0));
 
   for (auto &entry : properties) {
     exportNames.append(entry);

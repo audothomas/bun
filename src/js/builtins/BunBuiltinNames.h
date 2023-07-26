@@ -66,7 +66,6 @@ using namespace JSC;
     macro(closedPromise) \
     macro(closedPromiseCapability) \
     macro(code) \
-    macro(commonJSSymbol) \
     macro(connect) \
     macro(consumeReadableStream) \
     macro(controlledReadableStream) \

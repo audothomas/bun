@@ -2279,6 +2279,7 @@ pub const ModuleLoader = struct {
                         .tag = .ESM,
                     };
                 },
+
                 .@"node:buffer" => return jsSyntheticModule(.@"node:buffer", specifier),
                 .@"node:string_decoder" => return jsSyntheticModule(.@"node:string_decoder", specifier),
                 .@"node:module" => return jsSyntheticModule(.@"node:module", specifier),
@@ -2287,6 +2288,7 @@ pub const ModuleLoader = struct {
                 .@"node:util/types" => return jsSyntheticModule(.@"node:util/types", specifier),
                 .@"bun:events_native" => return jsSyntheticModule(.@"bun:events_native", specifier),
                 .@"node:constants" => return jsSyntheticModule(.@"node:constants", specifier),
+                .@"bun:jsc" => return jsSyntheticModule(.@"bun:jsc", specifier),
 
                 // The following two modules have injected constants. These require rerunning `make dev` to update.
                 .@"node:fs/promises" => {
@@ -2314,7 +2316,6 @@ pub const ModuleLoader = struct {
                     };
                 },
 
-                .@"bun:jsc" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"bun:jsc", "bun/jsc.js", specifier),
                 .@"bun:sqlite" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"bun:sqlite", "bun/sqlite.js", specifier),
 
                 .@"node:assert" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:assert", "node/assert.js", specifier),

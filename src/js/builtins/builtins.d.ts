@@ -231,7 +231,6 @@ declare function $closed(): TODO;
 declare function $closedPromise(): TODO;
 declare function $closedPromiseCapability(): TODO;
 declare function $code(): TODO;
-declare const $commonJSSymbol: unique symbol;
 declare function $connect(): TODO;
 declare function $consumeReadableStream(): TODO;
 declare function $controlledReadableStream(): TODO;
