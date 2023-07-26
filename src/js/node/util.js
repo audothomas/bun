@@ -3,7 +3,7 @@
 var { isArray, isObject, isUndefinedOrNull } = $lazy("primordials");
 const UtilTypes = require("node:util/types");
 
-var Exports = module.exports;
+const exports = $exports;
 
 function inherits(ctor, superCtor) {
   if (superCtor) {
@@ -29,7 +29,7 @@ var inspect = function (obj, opts) {
   if (isBoolean(opts)) {
     ctx.showHidden = opts;
   } else if (opts) {
-    Exports._extend(ctx, opts);
+    exports._extend(ctx, opts);
   }
   if (isUndefined(ctx.showHidden)) ctx.showHidden = false;
   if (isUndefined(ctx.depth)) ctx.depth = 2;
@@ -61,7 +61,7 @@ var formatValue = function (ctx, value, recurseTimes) {
     ctx.customInspect &&
     value &&
     isFunction(value.inspect) &&
-    value.inspect !== Exports.inspect &&
+    value.inspect !== exports.inspect &&
     !(value.constructor && value.constructor.prototype === value)
   ) {
     var ret = value.inspect(recurseTimes, ctx);
@@ -332,7 +332,6 @@ var callbackify = function (original) {
   Object.defineProperties(callbackified, getOwnPropertyDescriptors(original));
   return callbackified;
 };
-var Exports = {};
 var getOwnPropertyDescriptors =
   Object.getOwnPropertyDescriptors ||
   function getOwnPropertyDescriptors(obj) {
@@ -388,7 +387,7 @@ exports.deprecate = function (fn, msg) {
   }
   if (typeof process === "undefined") {
     return function () {
-      return Exports.deprecate(fn, msg).apply(this, arguments);
+      return exports.deprecate(fn, msg).apply(this, arguments);
     };
   }
   var warned = false;
@@ -425,7 +424,7 @@ exports.debuglog = function (set) {
     if (debugEnvRegex.test(set)) {
       var pid = process.pid;
       debugs[set] = function () {
-        var msg = Exports.format.apply(Exports, arguments);
+        var msg = exports.format.apply(exports, arguments);
         console.error("%s %d: %s", set, pid, msg);
       };
     } else {
@@ -473,7 +472,7 @@ exports.isRegExp = UtilTypes.isRegExp;
 exports.isObject = isObject;
 exports.isDate = UtilTypes.isDate;
 exports.isError = isError;
-Exports.types.isNativeError = isError;
+exports.types.isNativeError = isError;
 exports.isFunction = isFunction;
 exports.isPrimitive = isPrimitive;
 exports.isBuffer = function isBuffer(arg) {
@@ -481,7 +480,7 @@ exports.isBuffer = function isBuffer(arg) {
 };
 var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 exports.log = function () {
-  console.log("%s - %s", timestamp(), Exports.format.apply(Exports, arguments));
+  console.log("%s - %s", timestamp(), exports.format.apply(exports, arguments));
 };
 exports.inherits = inherits;
 exports._extend = function (origin, add) {
@@ -543,5 +542,7 @@ exports.promisify = function promisify(original) {
     });
   return Object.defineProperties(fn, getOwnPropertyDescriptors(original));
 };
-Exports.promisify.custom = kCustomPromisifiedSymbol;
+exports.promisify.custom = kCustomPromisifiedSymbol;
 exports.callbackify = callbackify;
+
+export {};

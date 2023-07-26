@@ -1,4 +1,4 @@
-"use strict";var cstringReturnType = function(val) {
+(()=>{"use strict";var {module}=$_BunCommonJSModule_$;var cstringReturnType = function(val) {
   return new __GlobalBunCString(val);
 }, FFIBuilder = function(params, returnType, functionToCall, name) {
   const hasReturnType = typeof FFIType[returnType] === "number" && FFIType[returnType] !== FFIType.void;
@@ -248,7 +248,7 @@ var native = {
     throw new Error("Deprecated. Use new JSCallback(options, fn) instead");
   }
 }, cFunctionI = 0, cFunctionRegistry, read = ffi.read;
-$_BunCommonJSModule_$.module.exports = {
+module.exports = {
   CFunction,
   CString,
   FFIType,
@@ -263,3 +263,4 @@ $_BunCommonJSModule_$.module.exports = {
   toBuffer,
   viewSource
 };
+})()

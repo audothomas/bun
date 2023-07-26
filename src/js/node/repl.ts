@@ -18,8 +18,7 @@ function start() {
   throwNotImplemented("node:repl");
 }
 
-module.exports = {
-  [Symbol.for("CommonJS")]: 0,
+$exports = {
   lines: [],
   context: globalThis,
   historyIndex: -1,
@@ -76,3 +75,5 @@ module.exports = {
     },
   ),
 };
+
+export {};

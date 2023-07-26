@@ -1,4 +1,4 @@
-"use strict";var spawn = function(file, args, options) {
+(()=>{"use strict";var {module}=$_BunCommonJSModule_$;var spawn = function(file, args, options) {
   options = normalizeSpawnArguments(file, args, options), validateTimeout(options.timeout), validateAbortSignal(options.signal, "options.signal");
   const killSignal2 = sanitizeKillSignal(options.killSignal), child = new ChildProcess;
   if (debug("spawn", options), child.spawn(options), options.timeout > 0) {
@@ -445,9 +445,9 @@ var validateFunction = function(value, name) {
   return new TypeError(`The value "${value}" is invalid for option "${name}"`);
 }, ERR_INVALID_ARG_VALUE = function(name, value, reason) {
   return new Error(`The value "${value}" is invalid for argument '${name}'. Reason: ${reason}`);
-}, $$REQUIRE$$ = $_BunCommonJSModule_$.require, EventEmitter = $$REQUIRE$$("node:events"), StreamModule = $$REQUIRE$$("node:stream"), {
+}, EventEmitter = module.require("node:events"), StreamModule = module.require("node:stream"), {
   constants: { signals }
-} = $$REQUIRE$$("node:os"), { promisify } = $$REQUIRE$$("node:util"), { ArrayBuffer, Uint8Array, String, Object, Buffer, Promise: Promise2 } = globalThis[Symbol.for("Bun.lazy")]("primordials"), ObjectCreate = Object.create, ObjectAssign = Object.assign, ObjectDefineProperty = Object.defineProperty, BufferConcat = Buffer.concat, BufferIsEncoding = Buffer.isEncoding, kEmptyObject = ObjectCreate(null), ArrayPrototypePush = Array.prototype.push, ArrayPrototypeJoin = Array.prototype.join, ArrayPrototypeMap = Array.prototype.map, ArrayPrototypeIncludes = Array.prototype.includes, ArrayPrototypeSlice = Array.prototype.slice, ArrayPrototypeUnshift = Array.prototype.unshift, ArrayIsArray = Array.isArray, ArrayBufferIsView = ArrayBuffer.isView, NumberIsInteger = Number.isInteger;
+} = module.require("node:os"), { promisify } = module.require("node:util"), { ArrayBuffer, Uint8Array, String, Object, Buffer, Promise: Promise2 } = globalThis[Symbol.for("Bun.lazy")]("primordials"), ObjectCreate = Object.create, ObjectAssign = Object.assign, ObjectDefineProperty = Object.defineProperty, BufferConcat = Buffer.concat, BufferIsEncoding = Buffer.isEncoding, kEmptyObject = ObjectCreate(null), ArrayPrototypePush = Array.prototype.push, ArrayPrototypeJoin = Array.prototype.join, ArrayPrototypeMap = Array.prototype.map, ArrayPrototypeIncludes = Array.prototype.includes, ArrayPrototypeSlice = Array.prototype.slice, ArrayPrototypeUnshift = Array.prototype.unshift, ArrayIsArray = Array.isArray, ArrayBufferIsView = ArrayBuffer.isView, NumberIsInteger = Number.isInteger;
 var StringPrototypeToUpperCase = String.prototype.toUpperCase, StringPrototypeIncludes = String.prototype.includes, StringPrototypeSlice = String.prototype.slice, Uint8ArrayPrototypeIncludes = Uint8Array.prototype.includes, MAX_BUFFER = 1048576, __DEBUG__ = process.env.DEBUG || !1, __TRACK_STDIO__ = process.env.DEBUG_STDIO, debug = __DEBUG__ ? console.log : () => {
 };
 if (__TRACK_STDIO__)
@@ -685,7 +685,7 @@ class SystemError extends Error {
     return "SystemError";
   }
 }
-$_BunCommonJSModule_$.module.exports = {
+module.exports = {
   ChildProcess,
   spawn,
   execFile,
@@ -695,3 +695,4 @@ $_BunCommonJSModule_$.module.exports = {
   execFileSync,
   execSync
 };
+})()

@@ -301,7 +301,7 @@ Undici.buildConnector =
 
 Undici.fetch = fetch;
 
-module.exports = {
+$exports = {
   fetch,
   Response,
   Headers,
@@ -327,3 +327,5 @@ module.exports = {
   Agent,
   Undici,
 };
+
+export {};

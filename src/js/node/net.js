@@ -882,7 +882,7 @@ function createServer(options, connectionListener) {
   return new Server(options, connectionListener);
 }
 
-module.exports = {
+$exports = {
   createServer,
   Server,
   createConnection,
@@ -893,3 +893,5 @@ module.exports = {
   Socket,
   [Symbol.for("::bunternal::")]: SocketClass,
 };
+
+export {};

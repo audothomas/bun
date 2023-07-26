@@ -7,10 +7,29 @@
 When you change any of those folders, run this to bundle and minify them:
 
 ```bash
-$ make esm
+$ make js
 ```
 
-These modules are bundled into the binary, but in debug mode they are loaded from the filesystem, so you do not need to rerun `make dev`. If you want to override the modules in a release build, you can set `BUN_OVERRIDE_MODULE_PATH` to the path to the repo:
+They are almost in CommonJS format, but they are bundled and preprocessed.
+
+```ts
+// `require` is only able to load other builtins by full name.
+// Relative imports are not allowed
+const hello = require("node:http");
+// Exception is shared.ts
+const shared = require("$shared");
+
+// Instead of module.exports, use $exports
+$exports = {
+  hello: 2,
+  world: 3,
+};
+
+// This is needed to make TS happy. It is removed during bundling.
+export {};
+```
+
+Theses bundles are embedded into the binary, but in debug mode they are also loaded from the filesystem, so you do not need to rerun `make dev`. If you want to override the modules in a release build, you can set `BUN_OVERRIDE_MODULE_PATH` to the path to the repo:
 
 ```bash
 $ BUN_OVERRIDE_MODULE_PATH=/path/to/bun-repo bun ...

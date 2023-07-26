@@ -1256,6 +1256,7 @@ function CallTracker() {
   throw new Error("CallTracker is not supported yet");
 }
 
-assert_module[Symbol.for("CommonJS")] = 0;
 assert_module["CallTracker"] = CallTracker;
-module.exports = assert_module;
+$exports = assert_module;
+
+export {};

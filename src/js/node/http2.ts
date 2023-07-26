@@ -280,7 +280,7 @@ function Http2ServerResponse() {
   throwNotImplemented("node:http2 Http2ServerResponse", 887);
 }
 
-module.exports = {
+$exports = {
   constants,
   createServer,
   createSecureServer,
@@ -303,3 +303,5 @@ hideFromStack([
   getPackedSettings,
   getUnpackedSettings,
 ]);
+
+export {};

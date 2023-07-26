@@ -1,4 +1,4 @@
-"use strict";$_BunCommonJSModule_$.module.exports = {
+(()=>{"use strict";var {module}=$_BunCommonJSModule_$;module.exports = {
   ReadableStream,
   ReadableStreamDefaultReader,
   ReadableStreamBYOBReader,
@@ -13,3 +13,4 @@
   ByteLengthQueuingStrategy,
   CountQueuingStrategy
 };
+})()

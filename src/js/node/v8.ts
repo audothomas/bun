@@ -85,7 +85,7 @@ const promiseHooks = {
     isBuildingSnapshot: () => notimpl("isBuildingSnapshot"),
   };
 
-module.exports = {
+$exports = {
   cachedDataVersionTag,
   getHeapSnapshot,
   getHeapStatistics,
@@ -124,3 +124,5 @@ hideFromStack(
   DefaultSerializer,
   GCProfiler,
 );
+
+export {};

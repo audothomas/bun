@@ -1,4 +1,4 @@
-"use strict";var family = function() {
+(()=>{"use strict";var {module}=$_BunCommonJSModule_$;var family = function() {
   return Promise.resolve(familySync());
 }, familySync = function() {
   return null;
@@ -11,7 +11,7 @@
 }, isNonGlibcLinux = function() {
   return Promise.resolve(isNonGlibcLinuxSync());
 }, GLIBC = "glibc", MUSL = "musl";
-$_BunCommonJSModule_$.module.exports = {
+module.exports = {
   GLIBC,
   MUSL,
   family,
@@ -21,3 +21,4 @@ $_BunCommonJSModule_$.module.exports = {
   version,
   versionAsync
 };
+})()

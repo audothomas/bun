@@ -1,4 +1,4 @@
-"use strict";var lookup = function(domain, options, callback) {
+(()=>{"use strict";var {module}=$_BunCommonJSModule_$;var lookup = function(domain, options, callback) {
   if (typeof options == "function")
     callback = options;
   if (typeof callback != "function")
@@ -407,7 +407,7 @@ var {
 };
 for (let key of ["resolveAny", "reverse"])
   promises[key] = () => Promise.resolve(void 0);
-$_BunCommonJSModule_$.module.exports = {
+module.exports = {
   ADDRCONFIG: 0,
   ALL: 1,
   V4MAPPED: 2,
@@ -456,3 +456,4 @@ $_BunCommonJSModule_$.module.exports = {
   resolveNaptr,
   promises
 };
+})()

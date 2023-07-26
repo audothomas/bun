@@ -1,4 +1,4 @@
-"use strict";var getArrayBufferOrView = function(buffer, name, encoding) {
+(()=>{"use strict";var {module}=$_BunCommonJSModule_$;var getArrayBufferOrView = function(buffer, name, encoding) {
   if (isAnyArrayBuffer(buffer))
     return buffer;
   if (typeof buffer === "string") {
@@ -13,10 +13,10 @@
   return buffer;
 }, getCurves = function() {
   return harcoded_curves;
-}, $$REQUIRE$$ = $_BunCommonJSModule_$.require;
+};
 var __defProp = Object.defineProperty;
 var __getOwnPropNames = Object.getOwnPropertyNames;
-var BufferModule = $$REQUIRE$$("node:buffer"), StreamModule = $$REQUIRE$$("node:stream"), StringDecoder = $$REQUIRE$$("node:string_decoder").StringDecoder, MAX_STRING_LENGTH = 536870888, Buffer = globalThis.Buffer, EMPTY_BUFFER = Buffer.alloc(0), { isAnyArrayBuffer, isArrayBufferView } = $$REQUIRE$$("node:util/types"), crypto = globalThis.crypto, globalCrypto = crypto, __commonJS = (cb, mod) => function() {
+var BufferModule = module.require("node:buffer"), StreamModule = module.require("node:stream"), StringDecoder = module.require("node:string_decoder").StringDecoder, MAX_STRING_LENGTH = 536870888, Buffer = globalThis.Buffer, EMPTY_BUFFER = Buffer.alloc(0), { isAnyArrayBuffer, isArrayBufferView } = module.require("node:util/types"), crypto = globalThis.crypto, globalCrypto = crypto, __commonJS = (cb, mod) => function() {
   return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
 }, __export = (target, all) => {
   for (var name in all)
@@ -149,7 +149,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       return digest;
     }, HashBase.prototype._digest = function() {
       throw new Error("_digest is not implemented");
-    }, $_BunCommonJSModule_$.module.exports = HashBase;
+    }, module.exports = HashBase;
   }
 }), require_md5 = __commonJS({
   "node_modules/md5.js/index.js"(exports, module) {
@@ -182,7 +182,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     function fnI(a, b, c, d, m, k, s) {
       return rotl(a + (c ^ (b | ~d)) + m + k | 0, s) + b | 0;
     }
-    $_BunCommonJSModule_$.module.exports = MD5;
+    module.exports = MD5;
   }
 }), require_ripemd160 = __commonJS({
   "node_modules/ripemd160/index.js"(exports, module) {
@@ -546,7 +546,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     function fn5(a, b, c, d, e, m, k, s) {
       return rotl(a + (b ^ (c | ~d)) + m + k | 0, s) + e | 0;
     }
-    $_BunCommonJSModule_$.module.exports = RIPEMD160;
+    module.exports = RIPEMD160;
   }
 }), require_hash = __commonJS({
   "node_modules/sha.js/hash.js"(exports, module) {
@@ -577,7 +577,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       return enc ? hash.toString(enc) : hash;
     }, Hash.prototype._update = function() {
       throw new Error("_update must be implemented by subclass");
-    }, $_BunCommonJSModule_$.module.exports = Hash;
+    }, module.exports = Hash;
   }
 }), require_sha = __commonJS({
   "node_modules/sha.js/sha.js"(exports, module) {
@@ -610,7 +610,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     }, Sha.prototype._hash = function() {
       var H = Buffer2.allocUnsafe(20);
       return H.writeInt32BE(this._a | 0, 0), H.writeInt32BE(this._b | 0, 4), H.writeInt32BE(this._c | 0, 8), H.writeInt32BE(this._d | 0, 12), H.writeInt32BE(this._e | 0, 16), H;
-    }, $_BunCommonJSModule_$.module.exports = Sha;
+    }, module.exports = Sha;
   }
 }), require_sha1 = __commonJS({
   "node_modules/sha.js/sha1.js"(exports, module) {
@@ -646,7 +646,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     }, Sha1.prototype._hash = function() {
       var H = Buffer2.allocUnsafe(20);
       return H.writeInt32BE(this._a | 0, 0), H.writeInt32BE(this._b | 0, 4), H.writeInt32BE(this._c | 0, 8), H.writeInt32BE(this._d | 0, 12), H.writeInt32BE(this._e | 0, 16), H;
-    }, $_BunCommonJSModule_$.module.exports = Sha1;
+    }, module.exports = Sha1;
   }
 }), require_sha256 = __commonJS({
   "node_modules/sha.js/sha256.js"(exports, module) {
@@ -753,7 +753,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     }, Sha256.prototype._hash = function() {
       var H = Buffer2.allocUnsafe(32);
       return H.writeInt32BE(this._a, 0), H.writeInt32BE(this._b, 4), H.writeInt32BE(this._c, 8), H.writeInt32BE(this._d, 12), H.writeInt32BE(this._e, 16), H.writeInt32BE(this._f, 20), H.writeInt32BE(this._g, 24), H.writeInt32BE(this._h, 28), H;
-    }, $_BunCommonJSModule_$.module.exports = Sha256;
+    }, module.exports = Sha256;
   }
 }), require_sha224 = __commonJS({
   "node_modules/sha.js/sha224.js"(exports, module) {
@@ -766,7 +766,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     }, Sha224.prototype._hash = function() {
       var H = Buffer2.allocUnsafe(28);
       return H.writeInt32BE(this._a, 0), H.writeInt32BE(this._b, 4), H.writeInt32BE(this._c, 8), H.writeInt32BE(this._d, 12), H.writeInt32BE(this._e, 16), H.writeInt32BE(this._f, 20), H.writeInt32BE(this._g, 24), H;
-    }, $_BunCommonJSModule_$.module.exports = Sha224;
+    }, module.exports = Sha224;
   }
 }), require_sha512 = __commonJS({
   "node_modules/sha.js/sha512.js"(exports, module) {
@@ -988,7 +988,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
         H.writeInt32BE(h, offset), H.writeInt32BE(l, offset + 4);
       }
       return writeInt64BE(this._ah, this._al, 0), writeInt64BE(this._bh, this._bl, 8), writeInt64BE(this._ch, this._cl, 16), writeInt64BE(this._dh, this._dl, 24), writeInt64BE(this._eh, this._el, 32), writeInt64BE(this._fh, this._fl, 40), writeInt64BE(this._gh, this._gl, 48), writeInt64BE(this._hh, this._hl, 56), H;
-    }, $_BunCommonJSModule_$.module.exports = Sha512;
+    }, module.exports = Sha512;
   }
 }), require_sha384 = __commonJS({
   "node_modules/sha.js/sha384.js"(exports, module) {
@@ -1004,7 +1004,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
         H.writeInt32BE(h, offset), H.writeInt32BE(l, offset + 4);
       }
       return writeInt64BE(this._ah, this._al, 0), writeInt64BE(this._bh, this._bl, 8), writeInt64BE(this._ch, this._cl, 16), writeInt64BE(this._dh, this._dl, 24), writeInt64BE(this._eh, this._el, 32), writeInt64BE(this._fh, this._fl, 40), H;
-    }, $_BunCommonJSModule_$.module.exports = Sha384;
+    }, module.exports = Sha384;
   }
 }), require_sha2 = __commonJS({
   "node_modules/sha.js/index.js"(exports, module) {
@@ -1059,7 +1059,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
         throw new Error("can't switch encodings");
       var out = this._decoder.write(value);
       return fin && (out += this._decoder.end()), out;
-    }, $_BunCommonJSModule_$.module.exports = CipherBase;
+    }, module.exports = CipherBase;
   }
 }), require_browser2 = __commonJS({
   "node_modules/create-hash/browser.js"(exports, module) {
@@ -1182,9 +1182,9 @@ Use Chrome, Firefox or Internet Explorer 11`);
         enumerable: !1,
         configurable: !0
       });
-    $_BunCommonJSModule_$.module.exports = function createHash(algorithm) {
+    module.exports = function createHash(algorithm) {
       return new LazyHash(algorithm);
-    }, $_BunCommonJSModule_$.module.exports.createHash = $_BunCommonJSModule_$.module.exports, $_BunCommonJSModule_$.module.exports.Hash = LazyHash;
+    }, module.exports.createHash = module.exports, module.exports.Hash = LazyHash;
   }
 }), require_legacy = __commonJS({
   "node_modules/create-hmac/legacy.js"(exports, module) {
@@ -1200,12 +1200,12 @@ Use Chrome, Firefox or Internet Explorer 11`);
     }, Hmac.prototype._final = function() {
       var h = this._alg(Buffer2.concat(this._hash));
       return this._alg(Buffer2.concat([this._opad, h]));
-    }, $_BunCommonJSModule_$.module.exports = Hmac;
+    }, module.exports = Hmac;
   }
 }), require_md52 = __commonJS({
   "node_modules/create-hash/md5.js"(exports, module) {
     var MD5 = require_md5();
-    $_BunCommonJSModule_$.module.exports = function(buffer) {
+    module.exports = function(buffer) {
       return new MD5().update(buffer).digest();
     };
   }
@@ -1229,13 +1229,13 @@ Use Chrome, Firefox or Internet Explorer 11`);
     }, Hmac.prototype._final = function() {
       var h = this._hash.digest(), hash = this._alg === "rmd160" ? new RIPEMD160 : sha(this._alg);
       return hash.update(this._opad).update(h).digest();
-    }, $_BunCommonJSModule_$.module.exports = function(alg, key) {
+    }, module.exports = function(alg, key) {
       return alg = alg.toLowerCase(), alg === "rmd160" || alg === "ripemd160" ? new Hmac("rmd160", key) : alg === "md5" ? new Legacy(md5, key) : new Hmac(alg, key);
     };
   }
 }), require_algorithms = __commonJS({
   "node_modules/browserify-sign/browser/algorithms.json"(exports, module) {
-    $_BunCommonJSModule_$.module.exports = {
+    module.exports = {
       sha224WithRSAEncryption: {
         sign: "rsa",
         hash: "sha224",
@@ -1390,12 +1390,12 @@ Use Chrome, Firefox or Internet Explorer 11`);
   }
 }), require_algos = __commonJS({
   "node_modules/browserify-sign/algos.js"(exports, module) {
-    $_BunCommonJSModule_$.module.exports = require_algorithms();
+    module.exports = require_algorithms();
   }
 }), require_precondition = __commonJS({
   "node_modules/pbkdf2/lib/precondition.js"(exports, module) {
     var MAX_ALLOC = Math.pow(2, 30) - 1;
-    $_BunCommonJSModule_$.module.exports = function(iterations, keylen) {
+    module.exports = function(iterations, keylen) {
       if (typeof iterations != "number")
         throw new TypeError("Iterations not a number");
       if (iterations < 0)
@@ -1411,12 +1411,12 @@ Use Chrome, Firefox or Internet Explorer 11`);
     var defaultEncoding;
     global.process && global.process.browser ? defaultEncoding = "utf-8" : global.process && global.process.version ? (pVersionMajor = parseInt(process.version.split(".")[0].slice(1), 10), defaultEncoding = pVersionMajor >= 6 ? "utf-8" : "binary") : defaultEncoding = "utf-8";
     var pVersionMajor;
-    $_BunCommonJSModule_$.module.exports = defaultEncoding;
+    module.exports = defaultEncoding;
   }
 }), require_to_buffer = __commonJS({
   "node_modules/pbkdf2/lib/to-buffer.js"(exports, module) {
     var Buffer2 = require_safe_buffer().Buffer;
-    $_BunCommonJSModule_$.module.exports = function(thing, encoding, name) {
+    module.exports = function(thing, encoding, name) {
       if (Buffer2.isBuffer(thing))
         return thing;
       if (typeof thing == "string")
@@ -1475,7 +1475,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       }
       return DK;
     }
-    $_BunCommonJSModule_$.module.exports = pbkdf2;
+    module.exports = pbkdf2;
   }
 }), require_async = __commonJS({
   "node_modules/pbkdf2/lib/async.js"(exports, module) {
@@ -1532,7 +1532,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
         });
       });
     }
-    $_BunCommonJSModule_$.module.exports = function(password, salt, iterations, keylen, digest, callback) {
+    module.exports = function(password, salt, iterations, keylen, digest, callback) {
       typeof digest == "function" && (callback = digest, digest = void 0), digest = digest || "sha1";
       var algo = toBrowser[digest.toLowerCase()];
       if (!algo || typeof global.Promise != "function") {
@@ -2246,7 +2246,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
   }
 }), require_minimalistic_assert = __commonJS({
   "node_modules/minimalistic-assert/index.js"(exports, module) {
-    $_BunCommonJSModule_$.module.exports = assert;
+    module.exports = assert;
     function assert(val, msg) {
       if (!val)
         throw new Error(msg || "Assertion failed");
@@ -2262,7 +2262,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     function Cipher(options) {
       this.options = options, this.type = this.options.type, this.blockSize = 8, this._init(), this.buffer = new Array(this.blockSize), this.bufferOff = 0;
     }
-    $_BunCommonJSModule_$.module.exports = Cipher, Cipher.prototype._init = function() {
+    module.exports = Cipher, Cipher.prototype._init = function() {
     }, Cipher.prototype.update = function(data) {
       return data.length === 0 ? [] : this.type === "decrypt" ? this._updateDecrypt(data) : this._updateEncrypt(data);
     }, Cipher.prototype._buffer = function(data, off) {
@@ -2318,7 +2318,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       var state = new DESState;
       this._desState = state, this.deriveKeys(state, options.key);
     }
-    inherits(DES, Cipher), $_BunCommonJSModule_$.module.exports = DES, DES.create = function(options) {
+    inherits(DES, Cipher), module.exports = DES, DES.create = function(options) {
       return new DES(options);
     };
     var shiftTable = [1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1];
@@ -2421,7 +2421,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       var state = new EDEState(this.type, this.options.key);
       this._edeState = state;
     }
-    inherits(EDE, Cipher), $_BunCommonJSModule_$.module.exports = EDE, EDE.create = function(options) {
+    inherits(EDE, Cipher), module.exports = EDE, EDE.create = function(options) {
       return new EDE(options);
     }, EDE.prototype._update = function(inp, inOff, out, outOff) {
       var state = this._edeState;
@@ -2442,7 +2442,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       "des-cbc": des.CBC.instantiate(des.DES),
       "des-ecb": des.DES
     };
-    modes.des = modes["des-cbc"], modes.des3 = modes["des-ede3-cbc"], $_BunCommonJSModule_$.module.exports = DES, inherits(DES, CipherBase);
+    modes.des = modes["des-cbc"], modes.des3 = modes["des-ede3-cbc"], module.exports = DES, inherits(DES, CipherBase);
     function DES(opts) {
       CipherBase.call(this);
       var modeName = opts.mode.toLowerCase(), mode = modes[modeName], type;
@@ -2472,7 +2472,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
   }
 }), require_buffer_xor = __commonJS({
   "node_modules/buffer-xor/index.js"(exports, module) {
-    $_BunCommonJSModule_$.module.exports = function(a, b) {
+    module.exports = function(a, b) {
       for (var length = Math.min(a.length, b.length), buffer = new Buffer(length), i = 0;i < length; ++i)
         buffer[i] = a[i] ^ b[i];
       return buffer;
@@ -2566,7 +2566,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
           break;
         }
     }
-    $_BunCommonJSModule_$.module.exports = incr32;
+    module.exports = incr32;
   }
 }), require_ctr = __commonJS({
   "node_modules/browserify-aes/modes/ctr.js"(exports) {
@@ -2589,7 +2589,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
   }
 }), require_list = __commonJS({
   "node_modules/browserify-aes/modes/list.json"(exports, module) {
-    $_BunCommonJSModule_$.module.exports = {
+    module.exports = {
       "aes-128-ecb": {
         cipher: "AES",
         key: 128,
@@ -2796,7 +2796,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     for (key in modes)
       modes[key].module = modeModules[modes[key].mode];
     var key;
-    $_BunCommonJSModule_$.module.exports = modes;
+    module.exports = modes;
   }
 }), require_aes = __commonJS({
   "node_modules/browserify-aes/aes.js"(exports, module) {
@@ -2860,7 +2860,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       return buf.writeUInt32BE(out[0], 0), buf.writeUInt32BE(out[3], 4), buf.writeUInt32BE(out[2], 8), buf.writeUInt32BE(out[1], 12), buf;
     }, AES.prototype.scrub = function() {
       scrubVec(this._keySchedule), scrubVec(this._invKeySchedule), scrubVec(this._key);
-    }, $_BunCommonJSModule_$.module.exports.AES = AES;
+    }, module.exports.AES = AES;
   }
 }), require_ghash = __commonJS({
   "node_modules/browserify-aes/ghash.js"(exports, module) {
@@ -2892,7 +2892,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
         chunk = this.cache.slice(0, 16), this.cache = this.cache.slice(16), this.ghash(chunk);
     }, GHASH.prototype.final = function(abl, bl) {
       return this.cache.length && this.ghash(Buffer2.concat([this.cache, ZEROES], 16)), this.ghash(fromArray([0, abl, 0, bl])), this.state;
-    }, $_BunCommonJSModule_$.module.exports = GHASH;
+    }, module.exports = GHASH;
   }
 }), require_authCipher = __commonJS({
   "node_modules/browserify-aes/authCipher.js"(exports, module) {
@@ -2948,7 +2948,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       if (this._called)
         throw new Error("Attempting to set AAD in unsupported state");
       this._ghash.update(buf), this._alen += buf.length;
-    }, $_BunCommonJSModule_$.module.exports = StreamCipher;
+    }, module.exports = StreamCipher;
   }
 }), require_streamCipher = __commonJS({
   "node_modules/browserify-aes/streamCipher.js"(exports, module) {
@@ -2960,7 +2960,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       return this._mode.encrypt(this, chunk, this._decrypt);
     }, StreamCipher.prototype._final = function() {
       this._cipher.scrub();
-    }, $_BunCommonJSModule_$.module.exports = StreamCipher;
+    }, module.exports = StreamCipher;
   }
 }), require_evp_bytestokey = __commonJS({
   "node_modules/evp_bytestokey/index.js"(exports, module) {
@@ -2983,7 +2983,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       }
       return tmp.fill(0), { key, iv };
     }
-    $_BunCommonJSModule_$.module.exports = EVP_BytesToKey;
+    module.exports = EVP_BytesToKey;
   }
 }), require_encrypter = __commonJS({
   "node_modules/browserify-aes/encrypter.js"(exports) {
@@ -5500,13 +5500,13 @@ Use Chrome, Firefox or Internet Explorer 11`);
 }), require_brorand = __commonJS({
   "node_modules/brorand/index.js"(exports, module) {
     var r;
-    $_BunCommonJSModule_$.module.exports = function(len) {
+    module.exports = function(len) {
       return r || (r = new Rand(null)), r.generate(len);
     };
     function Rand(rand) {
       this.rand = rand;
     }
-    $_BunCommonJSModule_$.module.exports.Rand = Rand, Rand.prototype.generate = function(len) {
+    module.exports.Rand = Rand, Rand.prototype.generate = function(len) {
       return this._rand(len);
     }, Rand.prototype._rand = function(n) {
       var out = new Buffer(n);
@@ -5519,7 +5519,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     function MillerRabin(rand) {
       this.rand = rand || new brorand.Rand;
     }
-    $_BunCommonJSModule_$.module.exports = MillerRabin, MillerRabin.create = function(rand) {
+    module.exports = MillerRabin, MillerRabin.create = function(rand) {
       return new MillerRabin(rand);
     }, MillerRabin.prototype._randbelow = function(n) {
       var len = n.bitLength(), min_bytes = Math.ceil(len / 8);
@@ -5578,7 +5578,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
 }), require_generatePrime = __commonJS({
   "node_modules/diffie-hellman/lib/generatePrime.js"(exports, module) {
     var randomBytes = require_browser();
-    $_BunCommonJSModule_$.module.exports = findPrime, findPrime.simpleSieve = simpleSieve, findPrime.fermatTest = fermatTest;
+    module.exports = findPrime, findPrime.simpleSieve = simpleSieve, findPrime.fermatTest = fermatTest;
     var BN = require_bn(), TWENTYFOUR = new BN(24), MillerRabin = require_mr(), millerRabin = new MillerRabin, ONE = new BN(1), TWO = new BN(2), FIVE = new BN(5), SIXTEEN = new BN(16), EIGHT = new BN(8), TEN = new BN(10), THREE = new BN(3), SEVEN = new BN(7), ELEVEN = new BN(11), FOUR = new BN(4), TWELVE = new BN(12), primes = null;
     function _getPrimes() {
       if (primes !== null)
@@ -5623,7 +5623,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
   }
 }), require_primes = __commonJS({
   "node_modules/diffie-hellman/lib/primes.json"(exports, module) {
-    $_BunCommonJSModule_$.module.exports = {
+    module.exports = {
       modp1: {
         gen: "02",
         prime: "ffffffffffffffffc90fdaa22168c234c4c6628b80dc1cd129024e088a67cc74020bbea63b139b22514a08798e3404ddef9519b3cd3a431b302b0a6df25f14374fe1356d6d51c245e485b576625e7ec6f44c42e9a63a3620ffffffffffffffff"
@@ -5661,7 +5661,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
 }), require_dh = __commonJS({
   "node_modules/diffie-hellman/lib/dh.js"(exports, module) {
     var BN = require_bn(), MillerRabin = require_mr(), millerRabin = new MillerRabin, TWENTYFOUR = new BN(24), ELEVEN = new BN(11), TEN = new BN(10), THREE = new BN(3), SEVEN = new BN(7), primes = require_generatePrime(), randomBytes = require_browser();
-    $_BunCommonJSModule_$.module.exports = DH;
+    module.exports = DH;
     function setPublicKey(pub, enc) {
       return enc = enc || "utf8", Buffer.isBuffer(pub) || (pub = new Buffer(pub, enc)), this._pub = new BN(pub), this;
     }
@@ -6942,11 +6942,11 @@ Use Chrome, Firefox or Internet Explorer 11`);
       var blinds = blind(priv), len = priv.modulus.byteLength(), blinded = new BN(msg).mul(blinds.blinder).umod(priv.modulus), c1 = blinded.toRed(BN.mont(priv.prime1)), c2 = blinded.toRed(BN.mont(priv.prime2)), qinv = priv.coefficient, p = priv.prime1, q = priv.prime2, m1 = c1.redPow(priv.exponent1).fromRed(), m2 = c2.redPow(priv.exponent2).fromRed(), h = m1.isub(m2).imul(qinv).umod(p).imul(q);
       return m2.iadd(h).imul(blinds.unblinder).umod(priv.modulus).toArrayLike(Buffer, "be", len);
     }
-    crt.getr = getr, $_BunCommonJSModule_$.module.exports = crt;
+    crt.getr = getr, module.exports = crt;
   }
 }), require_package = __commonJS({
   "node_modules/elliptic/package.json"(exports, module) {
-    $_BunCommonJSModule_$.module.exports = {
+    module.exports = {
       name: "elliptic",
       version: "6.5.4",
       description: "EC cryptography",
@@ -8236,7 +8236,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       var adjustCount = this.n && this.p.div(this.n);
       !adjustCount || adjustCount.cmpn(100) > 0 ? this.redN = null : (this._maxwellTrick = !0, this.redN = this.n.toRed(this.red));
     }
-    $_BunCommonJSModule_$.module.exports = BaseCurve, BaseCurve.prototype.point = function() {
+    module.exports = BaseCurve, BaseCurve.prototype.point = function() {
       throw new Error("Not implemented");
     }, BaseCurve.prototype.validate = function() {
       throw new Error("Not implemented");
@@ -8384,7 +8384,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     function ShortCurve(conf) {
       Base.call(this, "short", conf), this.a = new BN(conf.a, 16).toRed(this.red), this.b = new BN(conf.b, 16).toRed(this.red), this.tinv = this.two.redInvm(), this.zeroA = this.a.fromRed().cmpn(0) === 0, this.threeA = this.a.fromRed().sub(this.p).cmpn(-3) === 0, this.endo = this._getEndomorphism(conf), this._endoWnafT1 = new Array(4), this._endoWnafT2 = new Array(4);
     }
-    inherits(ShortCurve, Base), $_BunCommonJSModule_$.module.exports = ShortCurve, ShortCurve.prototype._getEndomorphism = function(conf) {
+    inherits(ShortCurve, Base), module.exports = ShortCurve, ShortCurve.prototype._getEndomorphism = function(conf) {
       if (!(!this.zeroA || !this.g || !this.n || this.p.modn(3) !== 1)) {
         var beta, lambda;
         if (conf.beta)
@@ -8734,7 +8734,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     function MontCurve(conf) {
       Base.call(this, "mont", conf), this.a = new BN(conf.a, 16).toRed(this.red), this.b = new BN(conf.b, 16).toRed(this.red), this.i4 = new BN(4).toRed(this.red).redInvm(), this.two = new BN(2).toRed(this.red), this.a24 = this.i4.redMul(this.a.redAdd(this.two));
     }
-    inherits(MontCurve, Base), $_BunCommonJSModule_$.module.exports = MontCurve, MontCurve.prototype.validate = function(point) {
+    inherits(MontCurve, Base), module.exports = MontCurve, MontCurve.prototype.validate = function(point) {
       var x = point.normalize().x, x2 = x.redSqr(), rhs = x2.redMul(x).redAdd(x2.redMul(this.a)).redAdd(x), y = rhs.redSqrt();
       return y.redSqr().cmp(rhs) === 0;
     };
@@ -8788,7 +8788,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     function EdwardsCurve(conf) {
       this.twisted = (conf.a | 0) !== 1, this.mOneA = this.twisted && (conf.a | 0) === -1, this.extended = this.mOneA, Base.call(this, "edwards", conf), this.a = new BN(conf.a, 16).umod(this.red.m), this.a = this.a.toRed(this.red), this.c = new BN(conf.c, 16).toRed(this.red), this.c2 = this.c.redSqr(), this.d = new BN(conf.d, 16).toRed(this.red), this.dd = this.d.redAdd(this.d), assert(!this.twisted || this.c.fromRed().cmpn(1) === 0), this.oneC = (conf.c | 0) === 1;
     }
-    inherits(EdwardsCurve, Base), $_BunCommonJSModule_$.module.exports = EdwardsCurve, EdwardsCurve.prototype._mulA = function(num) {
+    inherits(EdwardsCurve, Base), module.exports = EdwardsCurve, EdwardsCurve.prototype._mulA = function(num) {
       return this.mOneA ? num.redNeg() : this.a.redMul(num);
     }, EdwardsCurve.prototype._mulC = function(num) {
       return this.oneC ? num : this.c.redMul(num);
@@ -9131,7 +9131,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
         return new SHA1;
       BlockHash.call(this), this.h = [1732584193, 4023233417, 2562383102, 271733878, 3285377520], this.W = new Array(80);
     }
-    utils.inherits(SHA1, BlockHash), $_BunCommonJSModule_$.module.exports = SHA1, SHA1.blockSize = 512, SHA1.outSize = 160, SHA1.hmacStrength = 80, SHA1.padLength = 64, SHA1.prototype._update = function(msg, start) {
+    utils.inherits(SHA1, BlockHash), module.exports = SHA1, SHA1.blockSize = 512, SHA1.outSize = 160, SHA1.hmacStrength = 80, SHA1.padLength = 64, SHA1.prototype._update = function(msg, start) {
       for (var W = this.W, i = 0;i < 16; i++)
         W[i] = msg[start + i];
       for (;i < W.length; i++)
@@ -9219,7 +9219,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
         return new SHA256;
       BlockHash.call(this), this.h = [1779033703, 3144134277, 1013904242, 2773480762, 1359893119, 2600822924, 528734635, 1541459225], this.k = sha256_K, this.W = new Array(64);
     }
-    utils.inherits(SHA256, BlockHash), $_BunCommonJSModule_$.module.exports = SHA256, SHA256.blockSize = 512, SHA256.outSize = 256, SHA256.hmacStrength = 192, SHA256.padLength = 64, SHA256.prototype._update = function(msg, start) {
+    utils.inherits(SHA256, BlockHash), module.exports = SHA256, SHA256.blockSize = 512, SHA256.outSize = 256, SHA256.hmacStrength = 192, SHA256.padLength = 64, SHA256.prototype._update = function(msg, start) {
       for (var W = this.W, i = 0;i < 16; i++)
         W[i] = msg[start + i];
       for (;i < W.length; i++)
@@ -9242,7 +9242,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
         return new SHA224;
       SHA256.call(this), this.h = [3238371032, 914150663, 812702999, 4144912697, 4290775857, 1750603025, 1694076839, 3204075428];
     }
-    utils.inherits(SHA224, SHA256), $_BunCommonJSModule_$.module.exports = SHA224, SHA224.blockSize = 512, SHA224.outSize = 224, SHA224.hmacStrength = 192, SHA224.padLength = 64, SHA224.prototype._digest = function(enc) {
+    utils.inherits(SHA224, SHA256), module.exports = SHA224, SHA224.blockSize = 512, SHA224.outSize = 224, SHA224.hmacStrength = 192, SHA224.padLength = 64, SHA224.prototype._digest = function(enc) {
       return enc === "hex" ? utils.toHex32(this.h.slice(0, 7), "big") : utils.split32(this.h.slice(0, 7), "big");
     };
   }
@@ -9432,7 +9432,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
         327033209
       ], this.k = sha512_K, this.W = new Array(160);
     }
-    utils.inherits(SHA512, BlockHash), $_BunCommonJSModule_$.module.exports = SHA512, SHA512.blockSize = 1024, SHA512.outSize = 512, SHA512.hmacStrength = 192, SHA512.padLength = 128, SHA512.prototype._prepareBlock = function(msg, start) {
+    utils.inherits(SHA512, BlockHash), module.exports = SHA512, SHA512.blockSize = 1024, SHA512.outSize = 512, SHA512.hmacStrength = 192, SHA512.padLength = 128, SHA512.prototype._prepareBlock = function(msg, start) {
       for (var W = this.W, i = 0;i < 32; i++)
         W[i] = msg[start + i];
       for (;i < W.length; i += 2) {
@@ -9527,7 +9527,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
         3204075428
       ];
     }
-    utils.inherits(SHA384, SHA512), $_BunCommonJSModule_$.module.exports = SHA384, SHA384.blockSize = 1024, SHA384.outSize = 384, SHA384.hmacStrength = 192, SHA384.padLength = 128, SHA384.prototype._digest = function(enc) {
+    utils.inherits(SHA384, SHA512), module.exports = SHA384, SHA384.blockSize = 1024, SHA384.outSize = 384, SHA384.hmacStrength = 192, SHA384.padLength = 128, SHA384.prototype._digest = function(enc) {
       return enc === "hex" ? utils.toHex32(this.h.slice(0, 12), "big") : utils.split32(this.h.slice(0, 12), "big");
     };
   }
@@ -9895,7 +9895,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
         return new Hmac(hash, key, enc);
       this.Hash = hash, this.blockSize = hash.blockSize / 8, this.outSize = hash.outSize / 8, this.inner = null, this.outer = null, this._init(utils.toArray(key, enc));
     }
-    $_BunCommonJSModule_$.module.exports = Hmac, Hmac.prototype._init = function(key) {
+    module.exports = Hmac, Hmac.prototype._init = function(key) {
       key.length > this.blockSize && (key = new this.Hash().update(key).digest()), assert(key.length <= this.blockSize);
       for (var i = key.length;i < this.blockSize; i++)
         key.push(0);
@@ -9917,7 +9917,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
   }
 }), require_secp256k1 = __commonJS({
   "node_modules/elliptic/lib/elliptic/precomputed/secp256k1.js"(exports, module) {
-    $_BunCommonJSModule_$.module.exports = {
+    module.exports = {
       doubles: {
         step: 4,
         points: [
@@ -10854,7 +10854,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       var entropy = utils.toArray(options.entropy, options.entropyEnc || "hex"), nonce = utils.toArray(options.nonce, options.nonceEnc || "hex"), pers = utils.toArray(options.pers, options.persEnc || "hex");
       assert(entropy.length >= this.minEntropy / 8, "Not enough entropy. Minimum is: " + this.minEntropy + " bits"), this._init(entropy, nonce, pers);
     }
-    $_BunCommonJSModule_$.module.exports = HmacDRBG, HmacDRBG.prototype._init = function(entropy, nonce, pers) {
+    module.exports = HmacDRBG, HmacDRBG.prototype._init = function(entropy, nonce, pers) {
       var seed = entropy.concat(nonce).concat(pers);
       this.K = new Array(this.outLen / 8), this.V = new Array(this.outLen / 8);
       for (var i = 0;i < this.V.length; i++)
@@ -10883,7 +10883,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     function KeyPair(ec, options) {
       this.ec = ec, this.priv = null, this.pub = null, options.priv && this._importPrivate(options.priv, options.privEnc), options.pub && this._importPublic(options.pub, options.pubEnc);
     }
-    $_BunCommonJSModule_$.module.exports = KeyPair, KeyPair.fromPublic = function(ec, pub, enc) {
+    module.exports = KeyPair, KeyPair.fromPublic = function(ec, pub, enc) {
       return pub instanceof KeyPair ? pub : new KeyPair(ec, {
         pub,
         pubEnc: enc
@@ -10926,7 +10926,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
         return options;
       this._importDER(options, enc) || (assert(options.r && options.s, "Signature without r or s"), this.r = new BN(options.r, 16), this.s = new BN(options.s, 16), options.recoveryParam === void 0 ? this.recoveryParam = null : this.recoveryParam = options.recoveryParam);
     }
-    $_BunCommonJSModule_$.module.exports = Signature;
+    module.exports = Signature;
     function Position() {
       this.place = 0;
     }
@@ -11004,7 +11004,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
         return new EC(options);
       typeof options == "string" && (assert(Object.prototype.hasOwnProperty.call(curves, options), "Unknown curve " + options), options = curves[options]), options instanceof curves.PresetCurve && (options = { curve: options }), this.curve = options.curve.curve, this.n = this.curve.n, this.nh = this.n.ushrn(1), this.g = this.curve.g, this.g = options.curve.g, this.g.precompute(options.curve.n.bitLength() + 1), this.hash = options.hash || options.curve.hash;
     }
-    $_BunCommonJSModule_$.module.exports = EC, EC.prototype.keyPair = function(options) {
+    module.exports = EC, EC.prototype.keyPair = function(options) {
       return new KeyPair(this, options);
     }, EC.prototype.keyFromPrivate = function(priv, enc) {
       return KeyPair.fromPrivate(this, priv, enc);
@@ -11115,7 +11115,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       return assert(this._secret, "KeyPair is public only"), utils.encode(this.secret(), enc);
     }, KeyPair.prototype.getPublic = function(enc) {
       return utils.encode(this.pubBytes(), enc);
-    }, $_BunCommonJSModule_$.module.exports = KeyPair;
+    }, module.exports = KeyPair;
   }
 }), require_signature2 = __commonJS({
   "node_modules/elliptic/lib/elliptic/eddsa/signature.js"(exports, module) {
@@ -11138,7 +11138,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       return this.Rencoded().concat(this.Sencoded());
     }, Signature.prototype.toHex = function() {
       return utils.encode(this.toBytes(), "hex").toUpperCase();
-    }, $_BunCommonJSModule_$.module.exports = Signature;
+    }, module.exports = Signature;
   }
 }), require_eddsa = __commonJS({
   "node_modules/elliptic/lib/elliptic/eddsa/index.js"(exports, module) {
@@ -11148,7 +11148,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
         return new EDDSA(curve);
       curve = curves[curve].curve, this.curve = curve, this.g = curve.g, this.g.precompute(curve.n.bitLength() + 1), this.pointClass = curve.point().constructor, this.encodingLength = Math.ceil(curve.n.bitLength() / 8), this.hash = hash.sha512;
     }
-    $_BunCommonJSModule_$.module.exports = EDDSA, EDDSA.prototype.sign = function(message, secret) {
+    module.exports = EDDSA, EDDSA.prototype.sign = function(message, secret) {
       message = parseBytes(message);
       var key = this.keyFromSecret(secret), r = this.hashInt(key.messagePrefix(), message), R = this.g.mul(r), Rencoded = this.encodePoint(R), s_ = this.hashInt(Rencoded, key.pubBytes(), message).mul(key.priv()), S = r.add(s_).umod(this.curve.n);
       return this.makeSignature({ R, S, Rencoded });
@@ -12363,7 +12363,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       }
     safer.constants || (safer.constants = {
       MAX_LENGTH: safer.kMaxLength
-    }, safer.kStringMaxLength && (safer.constants.MAX_STRING_LENGTH = safer.kStringMaxLength)), $_BunCommonJSModule_$.module.exports = safer;
+    }, safer.kStringMaxLength && (safer.constants.MAX_STRING_LENGTH = safer.kStringMaxLength)), module.exports = safer;
   }
 }), require_reporter = __commonJS({
   "node_modules/asn1.js/lib/asn1/base/reporter.js"(exports) {
@@ -12535,7 +12535,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       let state = {};
       this._baseState = state, state.name = name, state.enc = enc, state.parent = parent || null, state.children = null, state.tag = null, state.args = null, state.reverseArgs = null, state.choice = null, state.optional = !1, state.any = !1, state.obj = !1, state.use = null, state.useDecoder = null, state.key = null, state.default = null, state.explicit = null, state.implicit = null, state.contains = null, state.parent || (state.children = [], this._wrap());
     }
-    $_BunCommonJSModule_$.module.exports = Node;
+    module.exports = Node;
     var stateProps = [
       "enc",
       "parent",
@@ -12839,7 +12839,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     function DEREncoder(entity) {
       this.enc = "der", this.name = entity.name, this.entity = entity, this.tree = new DERNode, this.tree._init(entity.body);
     }
-    $_BunCommonJSModule_$.module.exports = DEREncoder, DEREncoder.prototype.encode = function(data, reporter) {
+    module.exports = DEREncoder, DEREncoder.prototype.encode = function(data, reporter) {
       return this.tree._encode(data, reporter).join();
     };
     function DERNode(parent) {
@@ -12990,7 +12990,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     function PEMEncoder(entity) {
       DEREncoder.call(this, entity), this.enc = "pem";
     }
-    inherits(PEMEncoder, DEREncoder), $_BunCommonJSModule_$.module.exports = PEMEncoder, PEMEncoder.prototype.encode = function(data, options) {
+    inherits(PEMEncoder, DEREncoder), module.exports = PEMEncoder, PEMEncoder.prototype.encode = function(data, options) {
       let p = DEREncoder.prototype.encode.call(this, data).toString("base64"), out = ["-----BEGIN " + options.label + "-----"];
       for (let i = 0;i < p.length; i += 64)
         out.push(p.slice(i, i + 64));
@@ -13009,7 +13009,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     function DERDecoder(entity) {
       this.enc = "der", this.name = entity.name, this.entity = entity, this.tree = new DERNode, this.tree._init(entity.body);
     }
-    $_BunCommonJSModule_$.module.exports = DERDecoder, DERDecoder.prototype.decode = function(data, options) {
+    module.exports = DERDecoder, DERDecoder.prototype.decode = function(data, options) {
       return DecoderBuffer.isDecoderBuffer(data) || (data = new DecoderBuffer(data, options)), this.tree._decode(data, options);
     };
     function DERNode(parent) {
@@ -13166,7 +13166,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     function PEMDecoder(entity) {
       DERDecoder.call(this, entity), this.enc = "pem";
     }
-    inherits(PEMDecoder, DERDecoder), $_BunCommonJSModule_$.module.exports = PEMDecoder, PEMDecoder.prototype.decode = function(data, options) {
+    inherits(PEMDecoder, DERDecoder), module.exports = PEMDecoder, PEMDecoder.prototype.decode = function(data, options) {
       let lines = data.toString().split(/[\r\n]+/g), label = options.label.toUpperCase(), re = /^-----(BEGIN|END) ([^-]+)-----$/, start = -1, end = -1;
       for (let i = 0;i < lines.length; i++) {
         let match = lines[i].match(re);
@@ -13274,7 +13274,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     }), X509Certificate = asn.define("X509Certificate", function() {
       this.seq().obj(this.key("tbsCertificate").use(TBSCertificate), this.key("signatureAlgorithm").use(AlgorithmIdentifier), this.key("signatureValue").bitstr());
     });
-    $_BunCommonJSModule_$.module.exports = X509Certificate;
+    module.exports = X509Certificate;
   }
 }), require_asn12 = __commonJS({
   "node_modules/parse-asn1/asn1.js"(exports) {
@@ -13323,7 +13323,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
   }
 }), require_aesid = __commonJS({
   "node_modules/parse-asn1/aesid.json"(exports, module) {
-    $_BunCommonJSModule_$.module.exports = {
+    module.exports = {
       "2.16.840.1.101.3.4.1.1": "aes-128-ecb",
       "2.16.840.1.101.3.4.1.2": "aes-128-cbc",
       "2.16.840.1.101.3.4.1.3": "aes-128-ofb",
@@ -13341,7 +13341,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
 }), require_fixProc = __commonJS({
   "node_modules/parse-asn1/fixProc.js"(exports, module) {
     var findProc = /Proc-Type: 4,ENCRYPTED[\n\r]+DEK-Info: AES-((?:128)|(?:192)|(?:256))-CBC,([0-9A-H]+)[\n\r]+([0-9A-z\n\r+/=]+)[\n\r]+/m, startRegex = /^-----BEGIN ((?:.*? KEY)|CERTIFICATE)-----/m, fullRegex = /^-----BEGIN ((?:.*? KEY)|CERTIFICATE)-----([0-9A-z\n\r+/=]+)-----END \1-----$/m, evp = require_evp_bytestokey(), ciphers = require_browser5(), Buffer2 = require_safe_buffer().Buffer;
-    $_BunCommonJSModule_$.module.exports = function(okey, password) {
+    module.exports = function(okey, password) {
       var key = okey.toString(), match = key.match(findProc), decrypted;
       if (match) {
         var suite = "aes" + match[1], iv = Buffer2.from(match[2], "hex"), cipherText = Buffer2.from(match[3].replace(/[\r\n]/g, ""), "base64"), cipherKey = evp(password, iv.slice(0, 8), parseInt(match[1], 10)).key, out = [], cipher = ciphers.createDecipheriv(suite, cipherKey, iv);
@@ -13360,7 +13360,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
 }), require_parse_asn1 = __commonJS({
   "node_modules/parse-asn1/index.js"(exports, module) {
     var asn1 = require_asn12(), aesid = require_aesid(), fixProc = require_fixProc(), ciphers = require_browser5(), compat = require_browser4(), Buffer2 = require_safe_buffer().Buffer;
-    $_BunCommonJSModule_$.module.exports = parseKeys;
+    module.exports = parseKeys;
     function parseKeys(buffer) {
       var password;
       typeof buffer == "object" && !Buffer2.isBuffer(buffer) && (password = buffer.passphrase, buffer = buffer.key), typeof buffer == "string" && (buffer = Buffer2.from(buffer));
@@ -13430,7 +13430,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
   }
 }), require_curves2 = __commonJS({
   "node_modules/browserify-sign/browser/curves.json"(exports, module) {
-    $_BunCommonJSModule_$.module.exports = {
+    module.exports = {
       "1.3.132.0.10": "secp256k1",
       "1.3.132.0.33": "p224",
       "1.2.840.10045.3.1.1": "p192",
@@ -13515,7 +13515,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     function makeR(g, k, p, q) {
       return g.toRed(BN.mont(p)).redPow(k).fromRed().mod(q);
     }
-    $_BunCommonJSModule_$.module.exports = sign, $_BunCommonJSModule_$.module.exports.getKey = getKey, $_BunCommonJSModule_$.module.exports.makeKey = makeKey;
+    module.exports = sign, module.exports.getKey = getKey, module.exports.makeKey = makeKey;
   }
 }), require_verify = __commonJS({
   "node_modules/browserify-sign/browser/verify.js"(exports, module) {
@@ -13565,7 +13565,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       if (b.cmp(q) >= q)
         throw new Error("invalid sig");
     }
-    $_BunCommonJSModule_$.module.exports = verify;
+    module.exports = verify;
   }
 }), require_browser8 = __commonJS({
   "node_modules/browserify-sign/browser/index.js"(exports, module) {
@@ -13611,7 +13611,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     function createVerify(algorithm) {
       return new Verify(algorithm);
     }
-    $_BunCommonJSModule_$.module.exports = {
+    module.exports = {
       Sign: createSign,
       Verify: createVerify,
       createSign,
@@ -14770,7 +14770,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
 }), require_browser9 = __commonJS({
   "node_modules/create-ecdh/browser.js"(exports, module) {
     var elliptic = require_elliptic(), BN = require_bn6();
-    $_BunCommonJSModule_$.module.exports = function(curve) {
+    module.exports = function(curve) {
       return new ECDH(curve);
     };
     var aliases = {
@@ -14840,7 +14840,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
 }), require_mgf = __commonJS({
   "node_modules/public-encrypt/mgf.js"(exports, module) {
     var createHash = require_browser2(), Buffer2 = require_safe_buffer().Buffer;
-    $_BunCommonJSModule_$.module.exports = function(seed, len) {
+    module.exports = function(seed, len) {
       for (var t = Buffer2.alloc(0), i = 0, c;t.length < len; )
         c = i2ops(i++), t = Buffer2.concat([t, createHash("sha1").update(seed).update(c).digest()]);
       return t.slice(0, len);
@@ -14852,7 +14852,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
   }
 }), require_xor = __commonJS({
   "node_modules/public-encrypt/xor.js"(exports, module) {
-    $_BunCommonJSModule_$.module.exports = function(a, b) {
+    module.exports = function(a, b) {
       for (var len = a.length, i = -1;++i < len; )
         a[i] ^= b[i];
       return a;
@@ -16013,12 +16013,12 @@ Use Chrome, Firefox or Internet Explorer 11`);
     function withPublic(paddedMsg, key) {
       return Buffer2.from(paddedMsg.toRed(BN.mont(key.modulus)).redPow(new BN(key.publicExponent)).fromRed().toArray());
     }
-    $_BunCommonJSModule_$.module.exports = withPublic;
+    module.exports = withPublic;
   }
 }), require_publicEncrypt = __commonJS({
   "node_modules/public-encrypt/publicEncrypt.js"(exports, module) {
     var parseKeys = require_parse_asn1(), randomBytes = require_browser(), createHash = require_browser2(), mgf = require_mgf(), xor = require_xor(), BN = require_bn7(), withPublic = require_withPublic(), crt = require_browserify_rsa(), Buffer2 = require_safe_buffer().Buffer;
-    $_BunCommonJSModule_$.module.exports = function(publicKey, msg, reverse) {
+    module.exports = function(publicKey, msg, reverse) {
       var padding;
       publicKey.padding ? padding = publicKey.padding : reverse ? padding = 1 : padding = 4;
       var key = parseKeys(publicKey), paddedMsg;
@@ -16056,7 +16056,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
 }), require_privateDecrypt = __commonJS({
   "node_modules/public-encrypt/privateDecrypt.js"(exports, module) {
     var parseKeys = require_parse_asn1(), mgf = require_mgf(), xor = require_xor(), BN = require_bn7(), crt = require_browserify_rsa(), createHash = require_browser2(), withPublic = require_withPublic(), Buffer2 = require_safe_buffer().Buffer;
-    $_BunCommonJSModule_$.module.exports = function(privateKey, enc, reverse) {
+    module.exports = function(privateKey, enc, reverse) {
       var padding;
       privateKey.padding ? padding = privateKey.padding : reverse ? padding = 1 : padding = 4;
       var key = parseKeys(privateKey), k = key.modulus.byteLength();
@@ -16263,5 +16263,6 @@ __export(crypto_exports, {
   webcrypto: () => webcrypto,
   subtle: () => webcrypto.subtle
 });
-$_BunCommonJSModule_$.module.exports = crypto_exports;
+module.exports = crypto_exports;
 /*! safe-buffer. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
+})()

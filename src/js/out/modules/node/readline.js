@@ -1,4 +1,4 @@
-"use strict";var stripVTControlCharacters = function(str) {
+(()=>{"use strict";var {module}=$_BunCommonJSModule_$;var stripVTControlCharacters = function(str) {
   return validateString(str, "str"), RegExpPrototypeSymbolReplace.call(ansi, str, "");
 }, promisify = function(original) {
   if (validateFunction(original, "original"), original[kCustomPromisifiedSymbol]) {
@@ -594,7 +594,7 @@ var commonPrefix = function(strings) {
 }, createInterface = function(input, output, completer, terminal) {
   return new Interface(input, output, completer, terminal);
 };
-var $$REQUIRE$$ = $_BunCommonJSModule_$.require, { Array, RegExp, String, Bun } = globalThis[Symbol.for("Bun.lazy")]("primordials"), EventEmitter = $$REQUIRE$$("node:events"), { StringDecoder } = $$REQUIRE$$("node:string_decoder"), isWritable, { inspect } = Bun, debug = process.env.BUN_JS_DEBUG ? console.log : () => {
+var { Array, RegExp, String, Bun } = globalThis[Symbol.for("Bun.lazy")]("primordials"), EventEmitter = module.require("node:events"), { StringDecoder } = module.require("node:string_decoder"), isWritable, { inspect } = Bun, debug = process.env.BUN_JS_DEBUG ? console.log : () => {
 }, SymbolAsyncIterator = Symbol.asyncIterator, SymbolIterator = Symbol.iterator, SymbolFor = Symbol.for, SymbolReplace = Symbol.replace, ArrayFrom = Array.from, ArrayIsArray = Array.isArray, ArrayPrototypeFilter = Array.prototype.filter, ArrayPrototypeSort = Array.prototype.sort, ArrayPrototypeIndexOf = Array.prototype.indexOf, ArrayPrototypeJoin = Array.prototype.join, ArrayPrototypeMap = Array.prototype.map, ArrayPrototypePop = Array.prototype.pop, ArrayPrototypePush = Array.prototype.push, ArrayPrototypeSlice = Array.prototype.slice, ArrayPrototypeSplice = Array.prototype.splice, ArrayPrototypeReverse = Array.prototype.reverse, ArrayPrototypeShift = Array.prototype.shift, ArrayPrototypeUnshift = Array.prototype.unshift, RegExpPrototypeExec = RegExp.prototype.exec, RegExpPrototypeSymbolReplace = RegExp.prototype[SymbolReplace], StringFromCharCode = String.fromCharCode, StringPrototypeCharCodeAt = String.prototype.charCodeAt, StringPrototypeCodePointAt = String.prototype.codePointAt, StringPrototypeSlice = String.prototype.slice, StringPrototypeToLowerCase = String.prototype.toLowerCase, StringPrototypeEndsWith = String.prototype.endsWith, StringPrototypeRepeat = String.prototype.repeat, StringPrototypeStartsWith = String.prototype.startsWith, StringPrototypeTrim = String.prototype.trim, StringPrototypeNormalize = String.prototype.normalize, NumberIsNaN = Number.isNaN, NumberIsFinite = Number.isFinite, NumberIsInteger = Number.isInteger, NumberMAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER, NumberMIN_SAFE_INTEGER = Number.MIN_SAFE_INTEGER, MathCeil = Math.ceil, MathFloor = Math.floor, MathMax = Math.max, MathMaxApply = Math.max.apply, DateNow = Date.now, FunctionPrototype = Function.prototype, StringPrototype = String.prototype, StringPrototypeSymbolIterator = StringPrototype[SymbolIterator], StringIteratorPrototypeNext = StringPrototypeSymbolIterator.call("").next, ObjectSetPrototypeOf = Object.setPrototypeOf, ObjectDefineProperty = Object.defineProperty, ObjectDefineProperties = Object.defineProperties, ObjectFreeze = Object.freeze;
 var { create: ObjectCreate, keys: ObjectKeys } = Object;
 var createSafeIterator = (factory, next) => {
@@ -1545,7 +1545,7 @@ class Readline {
   #stream;
   #todo = [];
   constructor(stream, options = void 0) {
-    if (isWritable ??= $$REQUIRE$$("node:stream").isWritable, !isWritable(stream))
+    if (isWritable ??= module.require("node:stream").isWritable, !isWritable(stream))
       throw new ERR_INVALID_ARG_TYPE("stream", "Writable", stream);
     if (this.#stream = stream, options?.autoCommit != null)
       validateBoolean(options.autoCommit, "options.autoCommit"), this.#autoCommit = options.autoCommit;
@@ -1628,7 +1628,7 @@ var PromisesInterface = class Interface3 extends _Interface {
     });
   }
 };
-$_BunCommonJSModule_$.module.exports = {
+module.exports = {
   Interface,
   clearLine,
   clearScreenDown,
@@ -1651,3 +1651,4 @@ $_BunCommonJSModule_$.module.exports = {
     }
   }
 };
+})()

@@ -1642,7 +1642,7 @@ pub const ModuleLoader = struct {
                     if (has_bun_plugin) {
                         return ResolvedSource{
                             .allocator = null,
-                            .source_code = String.static("// auto-generated plugin stub\nexport default undefined\n"),
+                            .source_code = String.static("module.exports=undefined"),
                             .specifier = input_specifier,
                             .source_url = ZigString.init(path.text),
                             // // TODO: change hash to a bitfield
@@ -2181,7 +2181,7 @@ pub const ModuleLoader = struct {
                             .specifier = bun.String.init(bun.asByteSlice(JSC.VirtualMachine.main_file_name)),
                             .source_url = ZigString.init(bun.asByteSlice(JSC.VirtualMachine.main_file_name)),
                             .hash = 0,
-                            .tag = .@"bun:main",
+                            .tag = .ESM,
                         };
                     }
                     defer jsc_vm.transpiled_count += 1;
@@ -2276,7 +2276,7 @@ pub const ModuleLoader = struct {
                         .specifier = specifier,
                         .source_url = ZigString.init(bun.asByteSlice(JSC.VirtualMachine.main_file_name)),
                         .hash = 0,
-                        .tag = .@"bun:main",
+                        .tag = .ESM,
                     };
                 },
                 .@"node:buffer" => return jsSyntheticModule(.@"node:buffer", specifier),
@@ -2287,10 +2287,12 @@ pub const ModuleLoader = struct {
                 .@"node:util/types" => return jsSyntheticModule(.@"node:util/types", specifier),
                 .@"bun:events_native" => return jsSyntheticModule(.@"bun:events_native", specifier),
                 .@"node:constants" => return jsSyntheticModule(.@"node:constants", specifier),
+
+                // The following two modules have injected constants. These require rerunning `make dev` to update.
                 .@"node:fs/promises" => {
                     return ResolvedSource{
                         .allocator = null,
-                        .source_code = bun.String.static(comptime JSC.Node.fs.constants_string ++ @embedFile("../js/out/modules/node/fs.promises.js")),
+                        .source_code = bun.String.static(comptime "(()=>{\"use strict\";" ++ JSC.Node.fs.constants_string ++ @embedFile("../js/out/modules/node/fs.promises.js")[19..]),
                         .specifier = specifier,
                         .source_url = ZigString.init("node:fs/promises"),
                         .hash = 0,
@@ -2301,10 +2303,10 @@ pub const ModuleLoader = struct {
                     return ResolvedSource{
                         .allocator = null,
                         .source_code = bun.String.static(
-                            comptime "export const FFIType=" ++
+                            comptime ("(()=>{\"use strict\";var FFIType=" ++
                                 JSC.FFI.ABIType.map_to_js_object ++
-                                ";export const suffix='" ++ shared_library_suffix ++ "';" ++
-                                @embedFile("../js/out/modules/bun/ffi.js"),
+                                ",suffix='" ++ shared_library_suffix ++ "';" ++
+                                @embedFile("../js/out/modules/bun/ffi.js")[19..]),
                         ),
                         .specifier = specifier,
                         .source_url = ZigString.init("bun:ffi"),
@@ -2376,11 +2378,7 @@ pub const ModuleLoader = struct {
             return ResolvedSource{
                 .allocator = null,
                 .source_code = bun.String.static(
-                    \\var masqueradesAsUndefined=globalThis[Symbol.for("Bun.lazy")]("masqueradesAsUndefined");
-                    \\masqueradesAsUndefined[Symbol.for("CommonJS")]=0;
-                    \\masqueradesAsUndefined.default=masqueradesAsUndefined;
-                    \\export default masqueradesAsUndefined;
-                    \\
+                    \\$_BunCommonJSModule_$.module.exports=globalThis[Symbol.for("Bun.lazy")]("masqueradesAsUndefined")
                 ),
                 .specifier = specifier,
                 .source_url = specifier.toZigString(),

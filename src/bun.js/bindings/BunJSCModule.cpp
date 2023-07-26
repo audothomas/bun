@@ -604,10 +604,10 @@ JSC::JSObject* createJSCModule(JSC::JSGlobalObject* globalObject)
 
     {
         JSC::ObjectInitializationScope initializationScope(vm);
-        object = JSC::constructEmptyObject(globalObject, globalObject->objectPrototype(), 23);
+        object = JSC::constructEmptyObject(globalObject, globalObject->objectPrototype(), 33);
         object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "callerSourceOrigin"_s), 1, functionCallerSourceOrigin, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
-        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "describe"_s), 1, functionDescribe, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
-        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "describeArray"_s), 1, functionDescribeArray, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
+        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "jscDescribe"_s), 1, functionDescribe, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
+        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "jscDescribeArray"_s), 1, functionDescribeArray, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
         object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "drainMicrotasks"_s), 1, functionDrainMicrotasks, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
         object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "edenGC"_s), 1, functionEdenGC, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
         object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "fullGC"_s), 1, functionFullGC, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
@@ -635,6 +635,10 @@ JSC::JSObject* createJSCModule(JSC::JSGlobalObject* globalObject)
         object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "setTimeZone"_s), 0, functionSetTimeZone, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
         object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "serialize"_s), 0, functionSerialize, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
         object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "deserialize"_s), 0, functionDeserialize, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete | 0);
+        // Deprecated
+        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "describe"_s), 1, functionDescribe, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete || JSC::PropertyAttribute::DontEnum | 0);
+        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "describeArray"_s), 1, functionDescribeArray, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete || JSC::PropertyAttribute::DontEnum | 0);
+        object->putDirectNativeFunction(vm, globalObject, JSC::Identifier::fromString(vm, "setTimezone"_s), 0, functionSetTimeZone, ImplementationVisibility::Public, NoIntrinsic, JSC::PropertyAttribute::ReadOnly | JSC::PropertyAttribute::DontDelete || JSC::PropertyAttribute::DontEnum | 0);
     }
 
     return object;

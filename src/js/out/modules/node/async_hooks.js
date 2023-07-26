@@ -1,4 +1,4 @@
-"use strict";var createWarning = function(message) {
+(()=>{"use strict";var {module}=$_BunCommonJSModule_$;var createWarning = function(message) {
   let warned = !1;
   var wrapped = function() {
     if (warned)
@@ -207,7 +207,7 @@ var createHookNotImpl = createWarning("async_hooks.createHook is not implemented
   VERIFYREQUEST: 56,
   INSPECTORJSBINDING: 57
 };
-$_BunCommonJSModule_$.module.exports = {
+module.exports = {
   AsyncLocalStorage,
   createHook,
   executionAsyncId,
@@ -216,3 +216,4 @@ $_BunCommonJSModule_$.module.exports = {
   asyncWrapProviders,
   AsyncResource
 };
+})()

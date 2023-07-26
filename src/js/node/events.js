@@ -336,42 +336,6 @@ function listenerCount(emitter, type) {
   return emitter.listenerCount(type);
 }
 
-Object.defineProperty(EventEmitter, "captureRejections", {
-  get() {
-    return EventEmitterPrototype[kCapture];
-  },
-  set(value) {
-    validateBoolean(value, "EventEmitter.captureRejections");
-
-    EventEmitterPrototype[kCapture] = value;
-  },
-  enumerable: true,
-});
-Object.defineProperties(EventEmitter, {
-  defaultMaxListeners: {
-    enumerable: true,
-    get: () => {
-      return defaultMaxListeners;
-    },
-    set: arg => {
-      validateNumber(arg, "defaultMaxListeners", 0);
-      defaultMaxListeners = arg;
-    },
-  },
-  kMaxEventTargetListeners: {
-    value: kMaxEventTargetListeners,
-    enumerable: false,
-    configurable: false,
-    writable: false,
-  },
-  kMaxEventTargetListenersWarned: {
-    value: kMaxEventTargetListenersWarned,
-    enumerable: false,
-    configurable: false,
-    writable: false,
-  },
-});
-
 function eventTargetAgnosticRemoveListener(emitter, name, listener, flags) {
   if (typeof emitter.removeListener === "function") {
     emitter.removeListener(name, listener);
@@ -461,21 +425,55 @@ class EventEmitterAsyncResource extends EventEmitter {
   }
 }
 
-module.exports = Object.assign(EventEmitter, {
+$exports = Object.assign(EventEmitter, {
   once,
   on,
   getEventListeners,
+  getMaxListeners,
   setMaxListeners,
-  listenerCount,
-  EventEmitterAsyncResource,
+  EventEmitter,
   usingDomains: false,
-  init: EventEmitter,
+  captureRejectionSymbol,
+  EventEmitterAsyncResource,
   errorMonitor: kErrorMonitor,
-  once: once,
-  on: on,
-  getEventListeners: getEventListeners,
-  setMaxListeners: setMaxListeners,
-  listenerCount: listenerCount,
-  EventEmitter: EventEmitter,
-  captureRejectionSymbol: captureRejectionSymbol,
+  setMaxListeners,
+  init: EventEmitter,
+  listenerCount,
 });
+Object.defineProperties(EventEmitter, {
+  captureRejections: {
+    get() {
+      return EventEmitterPrototype[kCapture];
+    },
+    set(value) {
+      validateBoolean(value, "EventEmitter.captureRejections");
+
+      EventEmitterPrototype[kCapture] = value;
+    },
+    enumerable: true,
+  },
+  defaultMaxListeners: {
+    enumerable: true,
+    get: () => {
+      return defaultMaxListeners;
+    },
+    set: arg => {
+      validateNumber(arg, "defaultMaxListeners", 0);
+      defaultMaxListeners = arg;
+    },
+  },
+  kMaxEventTargetListeners: {
+    value: kMaxEventTargetListeners,
+    enumerable: false,
+    configurable: false,
+    writable: false,
+  },
+  kMaxEventTargetListenersWarned: {
+    value: kMaxEventTargetListenersWarned,
+    enumerable: false,
+    configurable: false,
+    writable: false,
+  },
+});
+
+export {};

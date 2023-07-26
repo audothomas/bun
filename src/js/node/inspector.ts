@@ -33,7 +33,7 @@ const console = {
   },
 };
 
-module.exports = {
+$exports = {
   console,
   open,
   close,
@@ -43,3 +43,5 @@ module.exports = {
 };
 
 hideFromStack(open, close, url, waitForDebugger, Session.prototype.constructor);
+
+export {};

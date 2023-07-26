@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 var lazyCpus = function({ cpus }) {
   return () => {
     const array = new Array(navigator.hardwareConcurrency);
@@ -54,6 +55,9 @@ var lazyCpus = function({ cpus }) {
 =======
 "use strict";var bound = function(obj) {
 >>>>>>> 0678fef5a (sadffdsa)
+=======
+(()=>{"use strict";var {module}=$_BunCommonJSModule_$;var bound = function(obj) {
+>>>>>>> 540e6e522 (stuff)
   return {
     arch: obj.arch.bind(obj),
     cpus: lazyCpus(obj),
@@ -90,4 +94,5 @@ var lazyCpus = function({ cpus }) {
     return path;
   }, tmpdir();
 };
-$_BunCommonJSModule_$.module.exports = bound(Bun._Os());
+module.exports = bound(Bun._Os());
+})()

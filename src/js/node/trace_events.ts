@@ -26,7 +26,9 @@ function getEnabledCategories() {
   return "";
 }
 
-module.exports = {
+$exports = {
   createTracing,
   getEnabledCategories,
 };
+
+export {};

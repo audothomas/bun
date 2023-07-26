@@ -1039,8 +1039,7 @@ Object.defineProperties(fs, {
 realpath.native = realpath;
 realpathSync.native = realpathSync;
 
-module.exports = {
-  [Symbol.for("CommonJS")]: 0,
+$exports = {
   access,
   accessSync,
   appendFile,
@@ -1138,3 +1137,5 @@ module.exports = {
   //   return getLazyReadStream();
   // },
 };
+
+export {};

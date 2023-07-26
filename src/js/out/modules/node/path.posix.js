@@ -1,1 +1,2 @@
-"use strict";$_BunCommonJSModule_$.module.exports = $_BunCommonJSModule_$.require("node:path").posix;
+(()=>{"use strict";var {module}=$_BunCommonJSModule_$;module.exports = module.require("node:path").posix;
+})()

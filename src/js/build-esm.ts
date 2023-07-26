@@ -46,18 +46,15 @@ const entrypoints = ["./bun", "./node", "./thirdparty"]
   .map(file => {
     const base = path.relative(import.meta.dir, file);
     fs.mkdirSync(path.join(TMP_DIR, path.dirname(base)), { recursive: true });
-    var usesRequire = 0;
-    var contents = fs.readFileSync(file, "utf8");
-
-    if (!contents.match(/export\s*{\s*}/)) {
-      console.warn(`[warn] Should add "export {};" to ${file} to make the ts lang server not complain.`);
-
-      fs.writeFileSync(file, contents + "\n\nexport {};\n");
-    }
+    var usesShared = false;
+    var contents = fs.readFileSync(file, "utf8").replace(/export\s*{\s*};/g, "");
 
     contents = contents
       .replace(/require\(["']([^"']+)["']\)/g, (str, specifier) => {
-        if (specifier === "$shared") return str;
+        if (specifier === "$shared") {
+          usesShared = true;
+          return "$shared";
+        }
         if (specifier.startsWith(".")) {
           console.error(`Do not use relative requires here: ${file}`);
           preprocessorError = true;
@@ -69,10 +66,9 @@ const entrypoints = ["./bun", "./node", "./thirdparty"]
           preprocessorError = true;
           return "";
         }
-        usesRequire++;
-        return '$$REQUIRE$$("' + specifier + '")';
+        return '$module.require("' + specifier + '")';
       })
-      .replace(/([\b\s^])module.exports\b/g, "$1$_BunCommonJSModule_$.module.exports");
+      .replace(/\$exports\b/g, "$module.exports");
 
     var nonStringCode = contents.replace(/"[^"]*"|'[^']*'|`[^`]*`/g, "").replace(/\/\/.*?\n/g, "");
     var match;
@@ -88,18 +84,16 @@ const entrypoints = ["./bun", "./node", "./thirdparty"]
       console.error(`Do not use ESM imports in "${file}". Use require() instead.`);
     }
 
-    if (!nonStringCode.includes("module.exports")) {
+    if (!nonStringCode.includes("$module.exports")) {
       preprocessorError = true;
-      console.error(`Expected "${file}" to have a module.exports`);
+      console.error(`Expected "${file}" to have \"$exports\"`);
     }
 
-    if (usesRequire > 1) {
-      contents = `var $$REQUIRE$$=$_BunCommonJSModule_$.require;${contents}`;
-    } else {
-      contents = contents.replace(/\$\$REQUIRE\$\$/g, "$_BunCommonJSModule_$.require");
+    if (usesShared) {
+      contents = `import * as $shared from "$shared";\n${contents}`;
     }
 
-    if (!preprocessorError) fs.writeFileSync(path.join(TMP_DIR, base), contents);
+    fs.writeFileSync(path.join(TMP_DIR, base), contents);
 
     return path.join(TMP_DIR, base);
   });
@@ -184,11 +178,21 @@ for (const [build, outdir] of [
     fs.mkdirSync(path.join(outdir, path.dirname(output.path)), { recursive: true });
 
     if (output.kind === "entry-point" || output.kind === "chunk") {
+      const text = await output.text();
+      if (text.includes("export default r")) {
+        console.error(
+          `Build ${output.path} got bundled as CJS->ESM. The cause of this is likely including "var exports" or "module.exports" instead of "$exports"`,
+        );
+        process.exit(1);
+      }
+      // Must be an IIFE, or else `var` will add to global scope. lol.
       const transformedOutput =
-        '"use strict";' +
-        (await output.text())
+        '(()=>{"use strict";var {module}=$_BunCommonJSModule_$;' +
+        text
           .replace(/^(\/\/.*?\n)+/g, "")
-          .replace(/\$\$BUN_LAZY\$\$/g, 'globalThis[Symbol.for("Bun.lazy")]');
+          .replace(/\$\$BUN_LAZY\$\$/g, 'globalThis[Symbol.for("Bun.lazy")]')
+          .replace(/\$module/g, "module") +
+        "})()";
 
       if (transformedOutput.includes("$bundleError")) {
         // attempt to find the string that was passed to $bundleError

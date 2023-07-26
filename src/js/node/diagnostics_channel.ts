@@ -24,7 +24,7 @@ function unsubscribe() {
   throwNotImplemented("node:diagnostics_channel", 2688);
 }
 
-module.exports = {
+$exports = {
   channel,
   hasSubscribers,
   subscribe,
@@ -33,3 +33,5 @@ module.exports = {
 };
 
 hideFromStack([channel, hasSubscribers, subscribe, unsubscribe, Channel]);
+
+export {};

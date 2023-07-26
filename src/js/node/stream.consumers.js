@@ -11,10 +11,12 @@ const buffer = async readableStream => {
 
 const blob = Bun.readableStreamToBlob;
 
-module.exports = {
+$exports = {
   arrayBuffer,
   text,
   json,
   buffer,
   blob,
 };
+
+export {};

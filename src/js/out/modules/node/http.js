@@ -1,4 +1,4 @@
-"use strict";var checkInvalidHeaderChar = function(val) {
+(()=>{"use strict";var {module}=$_BunCommonJSModule_$;var checkInvalidHeaderChar = function(val) {
   return RegExpPrototypeExec.call(headerCharRegex, val) !== null;
 }, isIPv6 = function(input) {
   return new RegExp("^((?:(?:[0-9a-fA-F]{1,4}):){7}(?:(?:[0-9a-fA-F]{1,4})|:)|(?:(?:[0-9a-fA-F]{1,4}):){6}(?:((?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])[.]){3}(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])|:(?:[0-9a-fA-F]{1,4})|:)|(?:(?:[0-9a-fA-F]{1,4}):){5}(?::((?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])[.]){3}(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])|(:(?:[0-9a-fA-F]{1,4})){1,2}|:)|(?:(?:[0-9a-fA-F]{1,4}):){4}(?:(:(?:[0-9a-fA-F]{1,4})){0,1}:((?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])[.]){3}(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])|(:(?:[0-9a-fA-F]{1,4})){1,3}|:)|(?:(?:[0-9a-fA-F]{1,4}):){3}(?:(:(?:[0-9a-fA-F]{1,4})){0,2}:((?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])[.]){3}(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])|(:(?:[0-9a-fA-F]{1,4})){1,4}|:)|(?:(?:[0-9a-fA-F]{1,4}):){2}(?:(:(?:[0-9a-fA-F]{1,4})){0,3}:((?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])[.]){3}(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])|(:(?:[0-9a-fA-F]{1,4})){1,5}|:)|(?:(?:[0-9a-fA-F]{1,4}):){1}(?:(:(?:[0-9a-fA-F]{1,4})){0,4}:((?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])[.]){3}(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])|(:(?:[0-9a-fA-F]{1,4})){1,6}|:)|(?::((?::(?:[0-9a-fA-F]{1,4})){0,5}:((?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])[.]){3}(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])|(?::(?:[0-9a-fA-F]{1,4})){1,7}|:)))(%[0-9a-zA-Z-.:]{1,})?$").test(input);
@@ -101,7 +101,7 @@ var _writeHead = function(statusCode, reason, obj, response) {
 }, get = function(url, options, cb) {
   const req = request(url, options, cb);
   return req.end(), req;
-}, $$REQUIRE$$ = $_BunCommonJSModule_$.require, EventEmitter = $$REQUIRE$$("node:events"), { Readable, Writable, Duplex } = $$REQUIRE$$("node:stream"), { isTypedArray } = $$REQUIRE$$("node:util/types"), headerCharRegex = /[^\t\x20-\x7e\x80-\xff]/, validateHeaderName = (name, label) => {
+}, EventEmitter = module.require("node:events"), { Readable, Writable, Duplex } = module.require("node:stream"), { isTypedArray } = module.require("node:util/types"), headerCharRegex = /[^\t\x20-\x7e\x80-\xff]/, validateHeaderName = (name, label) => {
   if (typeof name !== "string" || !name || !checkIsHttpToken(name))
     throw new Error("ERR_INVALID_HTTP_TOKEN");
 }, validateHeaderValue = (name, value) => {
@@ -1100,7 +1100,7 @@ var tokenRegExp = /^[\^_`a-zA-Z\-0-9!#$%&'*+.|~]+$/, METHODS = [
   510: "Not Extended",
   511: "Network Authentication Required"
 }, globalAgent = new Agent;
-$_BunCommonJSModule_$.module.exports = {
+module.exports = {
   Agent,
   Server,
   METHODS,
@@ -1120,3 +1120,4 @@ $_BunCommonJSModule_$.module.exports = {
   ClientRequest,
   OutgoingMessage
 };
+})()

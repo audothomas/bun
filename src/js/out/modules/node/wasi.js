@@ -1,4 +1,4 @@
-"use strict";var $$REQUIRE$$ = $_BunCommonJSModule_$.require, nodeFsConstants = constants, __getOwnPropNames = Object.getOwnPropertyNames, __commonJS = (cb, mod) => function __require2() {
+(()=>{"use strict";var {module}=$_BunCommonJSModule_$;var nodeFsConstants = constants, __getOwnPropNames = Object.getOwnPropertyNames, __commonJS = (cb, mod) => function __require2() {
   return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
 }, require_types = __commonJS({
   "node_modules/wasi-js/dist/types.js"(exports) {
@@ -248,9 +248,9 @@
           process.kill(process.pid, signal);
         },
         randomFillSync: (array) => crypto.getRandomValues(array),
-        isTTY: (fd) => $$REQUIRE$$("node:tty").isatty(fd),
+        isTTY: (fd) => module.require("node:tty").isatty(fd),
         fs: Bun.fs(),
-        path: $$REQUIRE$$("node:path")
+        path: module.require("node:path")
       };
       return defaultConfig = {
         args: [],
@@ -1094,4 +1094,5 @@
     exports.default = WASI;
   }
 });
-$_BunCommonJSModule_$.module.exports = require_wasi();
+module.exports = require_wasi();
+})()

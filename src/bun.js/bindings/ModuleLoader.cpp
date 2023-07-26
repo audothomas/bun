@@ -431,7 +431,7 @@ JSValue fetchCommonJSModule(
         }
 
         default: {
-            target->evaluate(globalObject, Bun::toWTFString(*specifier).isolatedCopy(), res->result.value);
+            target->evaluate(globalObject, Bun::toWTFString(*specifier).isolatedCopy(), res->result.value, true);
             RETURN_IF_EXCEPTION(scope, {});
             RELEASE_AND_RETURN(scope, target);
         }
@@ -624,7 +624,7 @@ static JSValue fetchSourceCode(
             return rejectOrResolve(JSSourceCode::create(vm, WTFMove(source)));
         }
         default: {
-            auto created = Bun::createCommonJSModule(globalObject, res->result.value);
+            auto created = Bun::createCommonJSModule(globalObject, res->result.value, true);
 
             if (created.has_value()) {
                 return rejectOrResolve(JSSourceCode::create(vm, WTFMove(created.value())));

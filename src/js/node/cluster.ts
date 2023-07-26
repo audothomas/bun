@@ -42,4 +42,6 @@ class Cluster extends EventEmitter {
   }
 }
 
-module.exports = new Cluster();
+$exports = new Cluster();
+
+export {};

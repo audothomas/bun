@@ -1881,7 +1881,7 @@ function get(url, options, cb) {
 }
 
 var globalAgent = new Agent();
-module.exports = {
+$exports = {
   Agent,
   Server,
   METHODS,
@@ -1901,3 +1901,5 @@ module.exports = {
   ClientRequest,
   OutgoingMessage,
 };
+
+export {};

@@ -51,7 +51,6 @@ export function getStdioWriteStream(fd_, getWindowSize) {
   var require = path => {
     var existing = $requireMap.get(path);
     if (existing) return existing.exports;
-
     return $internalRequire(path);
   };
   var module = { path: "node:process", require };
@@ -213,7 +212,7 @@ export function getStdioWriteStream(fd_, getWindowSize) {
     return new StdioWriteStream(fd_);
   }
 
-  var { EventEmitter } = require("node:events");
+  var EventEmitter = require("node:events");
 
   function isFastEncoding(encoding) {
     if (!encoding) return true;
@@ -224,6 +223,7 @@ export function getStdioWriteStream(fd_, getWindowSize) {
 
   var readline;
   var windowSizeArray = [0, 0];
+  console.log("b", EventEmitter);
 
   var FastStdioWriteStreamInternal = class StdioWriteStream extends EventEmitter {
     #fd;
@@ -451,6 +451,7 @@ export function getStdioWriteStream(fd_, getWindowSize) {
       return this;
     }
   };
+  console.log("a", FastStdioWriteStreamInternal);
   if (getWindowSize(fd_, windowSizeArray)) {
     var WriteStream = class WriteStream extends FastStdioWriteStreamInternal {
       get isTTY() {
@@ -502,11 +503,10 @@ export function getStdinStream(fd_) {
   var require = path => {
     var existing = $requireMap.get(path);
     if (existing) return existing.exports;
-
+    console.log("calling $internalRequire", path);
     return $internalRequire(path);
   };
 
-  var module = { path: "node:process", require: require };
   var { Duplex, eos, destroy } = require("node:stream");
 
   var StdinStream = class StdinStream extends Duplex {

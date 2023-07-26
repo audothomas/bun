@@ -824,7 +824,7 @@ const lazy = $lazy;
 const pathToFileURL = lazy("pathToFileURL");
 const fileURLToPath = lazy("fileURLToPath");
 
-module.exports = {
+$exports = {
   parse: urlParse,
   resolve: urlResolve,
   resolveObject: urlResolveObject,
@@ -836,3 +836,5 @@ module.exports = {
   fileURLToPath,
   urlToHttpOptions,
 };
+
+export {};

@@ -17,8 +17,10 @@ function get(input, options, cb) {
   return req;
 }
 
-module.exports = {
+$exports = {
   ...http,
   get,
   request,
 };
+
+export {};

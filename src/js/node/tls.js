@@ -684,7 +684,7 @@ function convertALPNProtocols(protocols, out) {
   }
 }
 var rootCertificates = $lazy("rootCertificates");
-module.exports = {
+$exports = {
   CLIENT_RENEG_LIMIT,
   CLIENT_RENEG_WINDOW,
   connect,
@@ -705,3 +705,5 @@ module.exports = {
   checkServerIdentity,
   rootCertificates,
 };
+
+export {};

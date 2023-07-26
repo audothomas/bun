@@ -820,10 +820,11 @@ void RequireResolveFunctionPrototype::finishCreation(JSC::VM& vm)
 bool JSCommonJSModule::evaluate(
     Zig::GlobalObject* globalObject,
     const WTF::String& key,
-    ResolvedSource source)
+    ResolvedSource source,
+    bool isBuiltIn)
 {
     auto& vm = globalObject->vm();
-    auto sourceProvider = Zig::SourceProvider::create(jsCast<Zig::GlobalObject*>(globalObject), source, JSC::SourceProviderSourceType::Program);
+    auto sourceProvider = Zig::SourceProvider::create(jsCast<Zig::GlobalObject*>(globalObject), source, JSC::SourceProviderSourceType::Program, isBuiltIn);
     this->ignoreESModuleAnnotation = source.tag == ResolvedSourceTagPackageJSONTypeModule;
     JSC::SourceCode rawInputSource(
         WTFMove(sourceProvider));
@@ -854,7 +855,8 @@ bool JSCommonJSModule::evaluate(
 
 std::optional<JSC::SourceCode> createCommonJSModule(
     Zig::GlobalObject* globalObject,
-    ResolvedSource source)
+    ResolvedSource source,
+    bool isBuiltIn)
 {
     JSCommonJSModule* moduleObject;
     WTF::String sourceURL = toStringCopy(source.source_url);
@@ -862,7 +864,7 @@ std::optional<JSC::SourceCode> createCommonJSModule(
     JSValue specifierValue = Bun::toJS(globalObject, source.specifier);
     JSValue entry = globalObject->requireMap()->get(globalObject, specifierValue);
 
-    auto sourceProvider = Zig::SourceProvider::create(jsCast<Zig::GlobalObject*>(globalObject), source, JSC::SourceProviderSourceType::Program);
+    auto sourceProvider = Zig::SourceProvider::create(jsCast<Zig::GlobalObject*>(globalObject), source, JSC::SourceProviderSourceType::Program, isBuiltIn);
     bool ignoreESModuleAnnotation = source.tag == ResolvedSourceTagPackageJSONTypeModule;
     SourceOrigin sourceOrigin = sourceProvider->sourceOrigin();
 

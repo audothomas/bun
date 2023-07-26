@@ -29,7 +29,7 @@ class PerformanceEntry {
   }
 }
 
-module.exports = {
+$exports = {
   performance,
   // performance: {
   //   clearMarks: [Function: clearMarks],
@@ -57,3 +57,5 @@ module.exports = {
   // monitorEventLoopDelay: [Function: monitorEventLoopDelay],
   // createHistogram: [Function: createHistogram],
 };
+
+export {};

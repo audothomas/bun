@@ -1,4 +1,4 @@
-module.exports = function depd(namespace) {
+$exports = function depd(namespace) {
   if (!namespace) {
     throw new TypeError("argument namespace is required");
   }
@@ -30,3 +30,5 @@ function wrapproperty(obj, prop, message) {
     throw new TypeError("property must be configurable");
   }
 }
+
+export {};

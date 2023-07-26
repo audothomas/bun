@@ -1,4 +1,4 @@
-"use strict";var emitWarning = function(type, message) {
+(()=>{"use strict";var {module}=$_BunCommonJSModule_$;var emitWarning = function(type, message) {
   if (emittedWarnings.has(type))
     return;
   emittedWarnings.add(type), console.warn("[bun] Warning:", message);
@@ -46,7 +46,7 @@
     Error.captureStackTrace(err, abortHandshakeOrEmitwsClientError), server.emit("wsClientError", err, socket, req);
   } else
     abortHandshake(response, code, message);
-}, $$REQUIRE$$ = $_BunCommonJSModule_$.require, EventEmitter = $$REQUIRE$$("node:events"), http = $$REQUIRE$$("node:http"), kBunInternals = Symbol.for("::bunternal::"), readyStates = ["CONNECTING", "OPEN", "CLOSING", "CLOSED"], encoder = new TextEncoder, eventIds = {
+}, EventEmitter = module.require("node:events"), http = module.require("node:http"), kBunInternals = Symbol.for("::bunternal::"), readyStates = ["CONNECTING", "OPEN", "CLOSING", "CLOSED"], encoder = new TextEncoder, eventIds = {
   open: 1,
   close: 2,
   message: 3,
@@ -714,7 +714,7 @@ class Receiver {
 var createWebSocketStream = (ws) => {
   throw new Error("Not supported yet in Bun");
 };
-$_BunCommonJSModule_$.module.exports = Object.assign(BunWebSocket, {
+module.exports = Object.assign(BunWebSocket, {
   createWebSocketStream,
   Receiver,
   Sender,
@@ -722,3 +722,4 @@ $_BunCommonJSModule_$.module.exports = Object.assign(BunWebSocket, {
   Server: WebSocketServer,
   WebSocketServer
 });
+})()

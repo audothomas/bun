@@ -1,4 +1,4 @@
-"use strict";var callbackify = function(fsFunction, args) {
+(()=>{"use strict";var {module}=$_BunCommonJSModule_$;var callbackify = function(fsFunction, args) {
   try {
     const result = fsFunction.apply(fs, args.slice(0, args.length - 1)), callback = args[args.length - 1];
     if (typeof callback === "function")
@@ -12,7 +12,7 @@
   return new ReadStream(path, options);
 }, createWriteStream = function(path, options) {
   return new WriteStream(path, options);
-}, $$REQUIRE$$ = $_BunCommonJSModule_$.require, ReadStream, WriteStream, EventEmitter = $$REQUIRE$$("node:events"), { direct, isPromise, isCallable } = globalThis[Symbol.for("Bun.lazy")]("primordials"), promises = $$REQUIRE$$("node:fs/promises"), Stream = $$REQUIRE$$("node:stream"), fs = Bun.fs(), debug = process.env.DEBUG ? console.log : () => {
+}, ReadStream, WriteStream, EventEmitter = module.require("node:events"), { direct, isPromise, isCallable } = globalThis[Symbol.for("Bun.lazy")]("primordials"), promises = module.require("node:fs/promises"), Stream = module.require("node:stream"), fs = Bun.fs(), debug = process.env.DEBUG ? console.log : () => {
 };
 
 class FSWatcher extends EventEmitter {
@@ -584,8 +584,7 @@ Object.defineProperties(fs, {
 });
 realpath.native = realpath;
 realpathSync.native = realpathSync;
-$_BunCommonJSModule_$.module.exports = {
-  [Symbol.for("CommonJS")]: 0,
+module.exports = {
   access,
   accessSync,
   appendFile,
@@ -677,3 +676,4 @@ $_BunCommonJSModule_$.module.exports = {
     WriteStreamClass
   }
 };
+})()

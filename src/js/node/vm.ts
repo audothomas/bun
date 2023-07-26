@@ -16,7 +16,7 @@ function measureMemory() {
   throwNotImplemented("node:vm measureMemory", 401);
 }
 
-module.exports = {
+$exports = {
   createContext,
   runInContext,
   runInNewContext,
@@ -26,3 +26,5 @@ module.exports = {
   measureMemory,
   Script,
 };
+
+export {};

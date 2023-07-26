@@ -1,4 +1,4 @@
-"use strict";var $$REQUIRE$$ = $_BunCommonJSModule_$.require, assert = $$REQUIRE$$("node:assert"), BufferModule = $$REQUIRE$$("node:buffer"), StreamModule = $$REQUIRE$$("node:stream"), Util = $$REQUIRE$$("node:util"), __getOwnPropNames = Object.getOwnPropertyNames, __commonJS = (cb, mod) => function __require() {
+(()=>{"use strict";var {module}=$_BunCommonJSModule_$;var assert = module.require("node:assert"), BufferModule = module.require("node:buffer"), StreamModule = module.require("node:stream"), Util = module.require("node:util"), __getOwnPropNames = Object.getOwnPropertyNames, __commonJS = (cb, mod) => function __require() {
   return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
 }, require_zstream = __commonJS({
   "node_modules/pako/lib/zlib/zstream.js"(exports, module2) {
@@ -2167,7 +2167,7 @@
   }
 }), require_lib = __commonJS({
   "node_modules/browserify-zlib/lib/index.js"(exports) {
-    var Buffer2 = BufferModule.Buffer, Transform = StreamModule.Transform, binding = require_binding(), util = Util, assert2 = assert2.ok, kMaxLength = BufferModule.kMaxLength, kRangeErrorMessage = "Cannot create final Buffer. It would be larger than 0x" + kMaxLength.toString(16) + " bytes";
+    var Buffer2 = BufferModule.Buffer, Transform = StreamModule.Transform, binding = require_binding(), util = Util, kMaxLength = BufferModule.kMaxLength, kRangeErrorMessage = "Cannot create final Buffer. It would be larger than 0x" + kMaxLength.toString(16) + " bytes";
     binding.Z_MIN_WINDOWBITS = 8, binding.Z_MAX_WINDOWBITS = 15, binding.Z_DEFAULT_WINDOWBITS = 15, binding.Z_MIN_CHUNK = 64, binding.Z_MAX_CHUNK = Infinity, binding.Z_DEFAULT_CHUNK = 16384, binding.Z_MIN_MEMLEVEL = 1, binding.Z_MAX_MEMLEVEL = 9, binding.Z_DEFAULT_MEMLEVEL = 8, binding.Z_MIN_LEVEL = -1, binding.Z_MAX_LEVEL = 9, binding.Z_DEFAULT_LEVEL = binding.Z_DEFAULT_COMPRESSION;
     var bkeys = Object.keys(binding);
     for (bk = 0;bk < bkeys.length; bk++)
@@ -2378,7 +2378,7 @@
       if (this._level !== level || this._strategy !== strategy) {
         var self = this;
         this.flush(binding.Z_SYNC_FLUSH, function() {
-          if (assert2(self._handle, "zlib binding closed"), self._handle.params(level, strategy), !self._hadError) {
+          if (assert(self._handle, "zlib binding closed"), self._handle.params(level, strategy), !self._hadError) {
             if (self._level = level, self._strategy = strategy, callback)
               callback();
           }
@@ -2386,7 +2386,7 @@
       } else
         process.nextTick(callback);
     }, Zlib.prototype.reset = function() {
-      return assert2(this._handle, "zlib binding closed"), this._handle.reset();
+      return assert(this._handle, "zlib binding closed"), this._handle.reset();
     }, Zlib.prototype._flush = function(callback) {
       this._transform(Buffer2.alloc(0), "", callback);
     }, Zlib.prototype.flush = function(kind, callback) {
@@ -2436,7 +2436,7 @@
         var buffers = [], nread = 0, error;
         this.on("error", function(er) {
           error = er;
-        }), assert2(this._handle, "zlib binding closed");
+        }), assert(this._handle, "zlib binding closed");
         do
           var res = this._handle.writeSync(flushFlag, chunk, inOff, availInBefore, this._buffer, this._offset, availOutBefore);
         while (!this._hadError && callback(res[0], res[1]));
@@ -2447,7 +2447,7 @@
         var buf = Buffer2.concat(buffers, nread);
         return _close(this), buf;
       }
-      assert2(this._handle, "zlib binding closed");
+      assert(this._handle, "zlib binding closed");
       var req = this._handle.write(flushFlag, chunk, inOff, availInBefore, this._buffer, this._offset, availOutBefore);
       req.buffer = chunk, req.callback = callback;
       function callback(availInAfter, availOutAfter) {
@@ -2456,7 +2456,7 @@
         if (self._hadError)
           return;
         var have = availOutBefore - availOutAfter;
-        if (assert2(have >= 0, "have should not go down"), have > 0) {
+        if (assert(have >= 0, "have should not go down"), have > 0) {
           var out = self._buffer.slice(self._offset, self._offset + have);
           if (self._offset += have, async)
             self.push(out);
@@ -2479,4 +2479,5 @@
     }, util.inherits(Deflate, Zlib), util.inherits(Inflate, Zlib), util.inherits(Gzip, Zlib), util.inherits(Gunzip, Zlib), util.inherits(DeflateRaw, Zlib), util.inherits(InflateRaw, Zlib), util.inherits(Unzip, Zlib);
   }
 });
-$_BunCommonJSModule_$.module.exports = require_lib();
+module.exports = require_lib();
+})()

@@ -1,2 +1,1 @@
-import * as path from "path";
-console.log(path.resolve.call(undefined, "a", "b"));
+console.log(require("node:zlib"));

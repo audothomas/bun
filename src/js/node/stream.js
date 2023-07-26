@@ -35,7 +35,7 @@ var debug = __DEBUG__
   : () => {};
 
 var { isPromise, isCallable, direct, Object } = $lazy("primordials");
-const EE = require("bun:events_native");
+const { EventEmitter: EE } = require("bun:events_native");
 const StringDecoder = require("node:string_decoder").StringDecoder;
 
 var __defProp = Object.defineProperty;
@@ -5159,47 +5159,6 @@ var require_stream = __commonJS({
   },
 });
 
-// node_modules/readable-stream/lib/ours/index.js
-var require_ours = __commonJS({
-  "node_modules/readable-stream/lib/ours/index.js"(exports, module) {
-    "use strict";
-    const CustomStream = require_stream();
-    const promises = require_promises();
-    const originalDestroy = CustomStream.Readable.destroy;
-    module.exports = CustomStream;
-    module.exports._uint8ArrayToBuffer = CustomStream._uint8ArrayToBuffer;
-    module.exports._isUint8Array = CustomStream._isUint8Array;
-    module.exports.isDisturbed = CustomStream.isDisturbed;
-    module.exports.isErrored = CustomStream.isErrored;
-    module.exports.isWritable = CustomStream.isWritable;
-    module.exports.isReadable = CustomStream.isReadable;
-    module.exports.Readable = CustomStream.Readable;
-    module.exports.Writable = CustomStream.Writable;
-    module.exports.Duplex = CustomStream.Duplex;
-    module.exports.Transform = CustomStream.Transform;
-    module.exports.PassThrough = CustomStream.PassThrough;
-    module.exports.addAbortSignal = CustomStream.addAbortSignal;
-    module.exports.finished = CustomStream.finished;
-    module.exports.destroy = CustomStream.destroy;
-    module.exports.destroy = originalDestroy;
-    module.exports.pipeline = CustomStream.pipeline;
-    module.exports.compose = CustomStream.compose;
-
-    module.exports._getNativeReadableStreamPrototype = getNativeReadableStreamPrototype;
-    module.exports.NativeWritable = NativeWritable;
-
-    Object.defineProperty(CustomStream, "promises", {
-      configurable: true,
-      enumerable: true,
-      get() {
-        return promises;
-      },
-    });
-    module.exports.Stream = CustomStream.Stream;
-    module.exports.default = module.exports;
-  },
-});
-
 /**
  * Bun native stream wrapper
  *
@@ -5577,8 +5536,22 @@ var NativeWritable = class NativeWritable extends Writable {
   }
 };
 
-var exports = require_ours();
+const exports = require_stream();
+const promises = require_promises();
+const originalDestroy = exports.Readable.destroy;
+exports._getNativeReadableStreamPrototype = getNativeReadableStreamPrototype;
+exports.NativeWritable = NativeWritable;
+Object.defineProperty(exports, "promises", {
+  configurable: true,
+  enumerable: true,
+  get() {
+    return promises;
+  },
+});
+
 exports[Symbol.for("::bunternal::")] = { _ReadableFromWeb, _ReadableFromWebForUndici };
-exports.eos = stream_exports["eos"] = require_end_of_stream;
-exports.promises = Stream.promises;
-module.exports = exports;
+exports.eos = require_end_of_stream();
+
+$exports = exports;
+
+export {};

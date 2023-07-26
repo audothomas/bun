@@ -634,7 +634,7 @@ for (const key of ["resolveAny", "reverse"]) {
   promises[key] = () => Promise.resolve(undefined);
 }
 
-module.exports = {
+$exports = {
   // these are wrong
   ADDRCONFIG: 0,
   ALL: 1,
@@ -687,3 +687,5 @@ module.exports = {
   resolveNaptr,
   promises,
 };
+
+export {};

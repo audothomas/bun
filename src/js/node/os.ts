@@ -105,4 +105,6 @@ function bound(obj) {
   };
 }
 
-module.exports = bound(Bun._Os());
+$exports = bound(Bun._Os());
+
+export {};

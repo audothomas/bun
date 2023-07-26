@@ -3915,7 +3915,6 @@ var require_lib = __commonJS({
     var Transform = StreamModule.Transform;
     var binding = require_binding();
     var util = Util;
-    var assert = assert.ok;
     var kMaxLength = BufferModule.kMaxLength;
     var kRangeErrorMessage =
       "Cannot create final Buffer. It would be larger than 0x" + kMaxLength.toString(16) + " bytes";
@@ -4409,4 +4408,6 @@ var require_lib = __commonJS({
 });
 
 // zlib.js
-module.exports = require_lib();
+$exports = require_lib();
+
+export {};

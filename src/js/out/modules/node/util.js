@@ -1,35 +1,4 @@
-"use strict";var __defProp = Object.defineProperty;
-var { getOwnPropertyNames: __getOwnPropNames, getOwnPropertyDescriptor: __getOwnPropDesc } = Object, __hasOwnProp = Object.prototype.hasOwnProperty;
-var __toCommonJS = (from) => {
-  const moduleCache = __toCommonJS.moduleCache ??= new WeakMap;
-  var cached = moduleCache.get(from);
-  if (cached)
-    return cached;
-  var to = __defProp({}, "__esModule", { value: !0 }), desc = { enumerable: !1 };
-  if (from && typeof from === "object" || typeof from === "function") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key))
-        __defProp(to, key, {
-          get: () => from[key],
-          enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable
-        });
-  }
-  return moduleCache.set(from, to), to;
-};
-var __commonJS = (cb, mod) => () => (mod || cb((mod = { exports: {} }).exports, mod), mod.exports);
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, {
-      get: all[name],
-      enumerable: !0,
-      configurable: !0,
-      set: (newValue) => all[name] = () => newValue
-    });
-};
-var __esm = (fn, res) => () => (fn && (res = fn(fn = 0)), res);
-
-// src/js/out/tmp/node/util.js
-var inherits = function(ctor, superCtor) {
+(()=>{"use strict";var {module}=$_BunCommonJSModule_$;var inherits = function(ctor, superCtor) {
   if (superCtor)
     ctor.super_ = superCtor, ctor.prototype = Object.create(superCtor.prototype, {
       constructor: {
@@ -39,7 +8,7 @@ var inherits = function(ctor, superCtor) {
         configurable: !0
       }
     });
-}, { isArray, isObject, isUndefinedOrNull } = globalThis[Symbol.for("Bun.lazy")]("primordials"), UtilTypes = $_BunCommonJSModule_$.require("node:util/types"), Exports = $_BunCommonJSModule_$.module.exports, inspect = function(obj, opts) {
+}, { isArray, isObject, isUndefinedOrNull } = globalThis[Symbol.for("Bun.lazy")]("primordials"), UtilTypes = module.require("node:util/types"), exports = module.exports, inspect = function(obj, opts) {
   var ctx = {
     seen: [],
     stylize: stylizeNoColor
@@ -51,7 +20,7 @@ var inherits = function(ctor, superCtor) {
   if (isBoolean(opts))
     ctx.showHidden = opts;
   else if (opts)
-    Exports._extend(ctx, opts);
+    exports._extend(ctx, opts);
   if (isUndefined(ctx.showHidden))
     ctx.showHidden = !1;
   if (isUndefined(ctx.depth))
@@ -77,7 +46,7 @@ var inherits = function(ctor, superCtor) {
     hash[val] = !0;
   }), hash;
 }, formatValue = function(ctx, value, recurseTimes) {
-  if (ctx.customInspect && value && isFunction(value.inspect) && value.inspect !== Exports.inspect && !(value.constructor && value.constructor.prototype === value)) {
+  if (ctx.customInspect && value && isFunction(value.inspect) && value.inspect !== exports.inspect && !(value.constructor && value.constructor.prototype === value)) {
     var ret = value.inspect(recurseTimes, ctx);
     if (!isString(ret))
       ret = formatValue(ctx, ret, recurseTimes);
@@ -257,13 +226,13 @@ var inherits = function(ctor, superCtor) {
     });
   }
   return Object.setPrototypeOf(callbackified, Object.getPrototypeOf(original)), Object.defineProperties(callbackified, getOwnPropertyDescriptors(original)), callbackified;
-}, Exports = {}, getOwnPropertyDescriptors = Object.getOwnPropertyDescriptors || function getOwnPropertyDescriptors2(obj) {
+}, getOwnPropertyDescriptors = Object.getOwnPropertyDescriptors || function getOwnPropertyDescriptors2(obj) {
   var keys = Object.keys(obj), descriptors = {};
   for (var i = 0;i < keys.length; i++)
     descriptors[keys[i]] = Object.getOwnPropertyDescriptor(obj, keys[i]);
   return descriptors;
 }, formatRegExp = /%[sdj%]/g;
-var $format = function(f) {
+exports.format = function(f) {
   if (!isString(f)) {
     var objects = [];
     for (var i = 0;i < arguments.length; i++)
@@ -296,12 +265,13 @@ var $format = function(f) {
     else
       str += " " + inspect(x);
   return str;
-}, $deprecate = function(fn, msg) {
+};
+exports.deprecate = function(fn, msg) {
   if (typeof process !== "undefined" && process.noDeprecation === !0)
     return fn;
   if (typeof process === "undefined")
     return function() {
-      return Exports.deprecate(fn, msg).apply(this, arguments);
+      return exports.deprecate(fn, msg).apply(this, arguments);
     };
   var warned = !1;
   function deprecated() {
@@ -322,19 +292,20 @@ var debugs = {}, debugEnvRegex = /^$/;
 if (process.env.NODE_DEBUG)
   debugEnv = process.env.NODE_DEBUG, debugEnv = debugEnv.replace(/[|\\{}()[\]^$+?.]/g, "\\$&").replace(/\*/g, ".*").replace(/,/g, "$|^").toUpperCase(), debugEnvRegex = new RegExp("^" + debugEnv + "$", "i");
 var debugEnv;
-var $debuglog = function(set) {
+exports.debuglog = function(set) {
   if (set = set.toUpperCase(), !debugs[set])
     if (debugEnvRegex.test(set)) {
       var pid = process.pid;
       debugs[set] = function() {
-        var msg = Exports.format.apply(Exports, arguments);
+        var msg = exports.format.apply(exports, arguments);
         console.error("%s %d: %s", set, pid, msg);
       };
     } else
       debugs[set] = function() {
       };
   return debugs[set];
-}, $inspect = inspect;
+};
+exports.inspect = inspect;
 inspect.colors = {
   bold: [1, 22],
   italic: [3, 23],
@@ -360,15 +331,31 @@ inspect.styles = {
   date: "magenta",
   regexp: "red"
 };
-var $types = UtilTypes, $isArray = isArray, $isBoolean = isBoolean, $isNull = isNull, $isNullOrUndefined = isUndefinedOrNull, $isNumber = isNumber, $isString = isString, $isSymbol = isSymbol, $isUndefined = isUndefined, $isRegExp = UtilTypes.isRegExp, $isObject = isObject, $isDate = UtilTypes.isDate, $isError = isError;
-Exports.types.isNativeError = isError;
-var $isFunction = isFunction, $isPrimitive = isPrimitive, $isBuffer = function isBuffer(arg) {
+exports.types = UtilTypes;
+exports.isArray = isArray;
+exports.isBoolean = isBoolean;
+exports.isNull = isNull;
+exports.isNullOrUndefined = isUndefinedOrNull;
+exports.isNumber = isNumber;
+exports.isString = isString;
+exports.isSymbol = isSymbol;
+exports.isUndefined = isUndefined;
+exports.isRegExp = UtilTypes.isRegExp;
+exports.isObject = isObject;
+exports.isDate = UtilTypes.isDate;
+exports.isError = isError;
+exports.types.isNativeError = isError;
+exports.isFunction = isFunction;
+exports.isPrimitive = isPrimitive;
+exports.isBuffer = function isBuffer(arg) {
   return arg instanceof Buffer;
 };
 var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-var $log = function() {
-  console.log("%s - %s", timestamp(), Exports.format.apply(Exports, arguments));
-}, $inherits = inherits, $_extend = function(origin, add) {
+exports.log = function() {
+  console.log("%s - %s", timestamp(), exports.format.apply(exports, arguments));
+};
+exports.inherits = inherits;
+exports._extend = function(origin, add) {
   if (!add || !isObject(add))
     return origin;
   var keys = Object.keys(add), i = keys.length;
@@ -377,7 +364,7 @@ var $log = function() {
   return origin;
 };
 var kCustomPromisifiedSymbol = typeof Symbol !== "undefined" ? Symbol("util.promisify.custom") : void 0;
-var $promisify = function promisify(original) {
+exports.promisify = function promisify(original) {
   if (typeof original !== "function")
     throw new TypeError('The "original" argument must be of type Function');
   if (kCustomPromisifiedSymbol && original[kCustomPromisifiedSymbol]) {
@@ -419,32 +406,6 @@ var $promisify = function promisify(original) {
     });
   return Object.defineProperties(fn, getOwnPropertyDescriptors(original));
 };
-Exports.promisify.custom = kCustomPromisifiedSymbol;
-var $callbackify = callbackify;
-export {
-  $types as types,
-  $promisify as promisify,
-  $log as log,
-  $isUndefined as isUndefined,
-  $isSymbol as isSymbol,
-  $isString as isString,
-  $isRegExp as isRegExp,
-  $isPrimitive as isPrimitive,
-  $isObject as isObject,
-  $isNumber as isNumber,
-  $isNullOrUndefined as isNullOrUndefined,
-  $isNull as isNull,
-  $isFunction as isFunction,
-  $isError as isError,
-  $isDate as isDate,
-  $isBuffer as isBuffer,
-  $isBoolean as isBoolean,
-  $isArray as isArray,
-  $inspect as inspect,
-  $inherits as inherits,
-  $format as format,
-  $deprecate as deprecate,
-  $debuglog as debuglog,
-  $callbackify as callbackify,
-  $_extend as _extend
-};
+exports.promisify.custom = kCustomPromisifiedSymbol;
+exports.callbackify = callbackify;
+})()

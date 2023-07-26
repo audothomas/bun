@@ -1726,7 +1726,7 @@ class SystemError extends Error {
   }
 }
 
-module.exports = {
+$exports = {
   ChildProcess,
   spawn,
   execFile,
@@ -1736,3 +1736,5 @@ module.exports = {
   execFileSync,
   execSync,
 };
+
+export {};

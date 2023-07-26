@@ -3100,7 +3100,7 @@ var PromisesInterface = class Interface extends _Interface {
 // ----------------------------------------------------------------------------
 // Exports
 // ----------------------------------------------------------------------------
-module.exports = {
+$exports = {
   Interface,
   clearLine,
   clearScreenDown,
@@ -3124,3 +3124,5 @@ module.exports = {
     },
   },
 };
+
+export {};

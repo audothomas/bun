@@ -1,4 +1,4 @@
-"use strict";var notImplemented = function() {
+(()=>{"use strict";var {module}=$_BunCommonJSModule_$;var notImplemented = function() {
   throw new Error("Not implemented in bun");
 };
 async function request(url, options = {
@@ -78,7 +78,7 @@ var stream = function() {
   throw new Error("Not implemented in bun");
 }, Undici = function() {
   throw new Error("Not implemented in bun");
-}, $$REQUIRE$$ = $_BunCommonJSModule_$.require, { Object } = globalThis[Symbol.for("Bun.lazy")]("primordials"), EventEmitter = $$REQUIRE$$("node:events"), StreamModule = $$REQUIRE$$("node:stream"), { Readable } = StreamModule, { _ReadableFromWebForUndici: ReadableFromWeb } = StreamModule[Symbol.for("::bunternal::")], ObjectCreate = Object.create, kEmptyObject = ObjectCreate(null), fetch = Bun.fetch, Response = globalThis.Response, Headers = globalThis.Headers, Request = globalThis.Request, URLSearchParams = globalThis.URLSearchParams, URL = globalThis.URL;
+}, { Object } = globalThis[Symbol.for("Bun.lazy")]("primordials"), EventEmitter = module.require("node:events"), StreamModule = module.require("node:stream"), { Readable } = StreamModule, { _ReadableFromWebForUndici: ReadableFromWeb } = StreamModule[Symbol.for("::bunternal::")], ObjectCreate = Object.create, kEmptyObject = ObjectCreate(null), fetch = Bun.fetch, Response = globalThis.Response, Headers = globalThis.Headers, Request = globalThis.Request, URLSearchParams = globalThis.URLSearchParams, URL = globalThis.URL;
 
 class File extends Blob {
 }
@@ -170,7 +170,7 @@ Undici.Client = Client;
 Undici.Agent = Agent;
 Undici.buildConnector = Undici.errors = Undici.setGlobalDispatcher = Undici.getGlobalDispatcher = Undici.request = Undici.stream = Undici.pipeline = Undici.connect = Undici.upgrade = Undici.MockClient = Undici.MockPool = Undici.MockAgent = Undici.mockErrors = notImplemented;
 Undici.fetch = fetch;
-$_BunCommonJSModule_$.module.exports = {
+module.exports = {
   fetch,
   Response,
   Headers,
@@ -196,3 +196,4 @@ $_BunCommonJSModule_$.module.exports = {
   Agent,
   Undici
 };
+})()

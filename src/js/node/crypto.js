@@ -23866,5 +23866,7 @@ __export(crypto_exports, {
   subtle: () => webcrypto.subtle,
 });
 
-module.exports = crypto_exports;
+$exports = crypto_exports;
 /*! safe-buffer. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
+
+export {};

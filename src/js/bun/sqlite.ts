@@ -424,10 +424,12 @@ const wrapTransaction = (fn, db, { begin, commit, rollback, savepoint, release, 
     }
   };
 
-module.exports = {
+$exports = {
   __esModule: true,
   Database,
   Statement,
   constants,
   default: Database,
 };
+
+export {};

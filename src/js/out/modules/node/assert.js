@@ -1,6 +1,6 @@
-"use strict";var CallTracker = function() {
+(()=>{"use strict";var {module}=$_BunCommonJSModule_$;var CallTracker = function() {
   throw new Error("CallTracker is not supported yet");
-}, { Bun } = globalThis[Symbol.for("Bun.lazy")]("primordials"), util = $_BunCommonJSModule_$.require("node:util"), isDeepEqual = Bun.deepEquals, __commonJS = (cb, mod) => function() {
+}, { Bun } = globalThis[Symbol.for("Bun.lazy")]("primordials"), util = module.require("node:util"), isDeepEqual = Bun.deepEquals, __commonJS = (cb, mod) => function() {
   return mod || (0, cb[Object.keys(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
 }, require_errors = __commonJS({
   "assert/build/internal/errors.js"(exports, module2) {
@@ -763,6 +763,6 @@ should equal
     }), assert.strict.strict = assert.strict;
   }
 }), assert_module = require_assert();
-assert_module[Symbol.for("CommonJS")] = 0;
 assert_module.CallTracker = CallTracker;
-$_BunCommonJSModule_$.module.exports = assert_module;
+module.exports = assert_module;
+})()
