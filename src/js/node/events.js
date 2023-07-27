@@ -425,21 +425,6 @@ class EventEmitterAsyncResource extends EventEmitter {
   }
 }
 
-$exports = Object.assign(EventEmitter, {
-  once,
-  on,
-  getEventListeners,
-  // getMaxListeners,
-  setMaxListeners,
-  EventEmitter,
-  usingDomains: false,
-  captureRejectionSymbol,
-  EventEmitterAsyncResource,
-  errorMonitor: kErrorMonitor,
-  setMaxListeners,
-  init: EventEmitter,
-  listenerCount,
-});
 Object.defineProperties(EventEmitter, {
   captureRejections: {
     get() {
@@ -474,6 +459,21 @@ Object.defineProperties(EventEmitter, {
     configurable: false,
     writable: false,
   },
+});
+$exports = Object.assign(EventEmitter, {
+  once,
+  on,
+  getEventListeners,
+  // getMaxListeners,
+  setMaxListeners,
+  EventEmitter,
+  usingDomains: false,
+  captureRejectionSymbol,
+  EventEmitterAsyncResource,
+  errorMonitor: kErrorMonitor,
+  setMaxListeners,
+  init: EventEmitter,
+  listenerCount,
 });
 
 export {};

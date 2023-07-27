@@ -1,4 +1,4 @@
-import { LoaderKeys } from "../../../api/schema";
+import { LoaderKeys } from "../../api/schema";
 
 // This is a list of extra syntax replacements to do. Kind of like macros
 // These are only run on code itself, not string contents or comments.
@@ -7,6 +7,7 @@ export const replacements: ReplacementRule[] = [
   { from: /\bthrow new RangeError\b/g, to: "$throwRangeError" },
   { from: /\bthrow new OutOfMemoryError\b/g, to: "$throwOutOfMemoryError" },
   { from: /\bnew TypeError\b/g, to: "$makeTypeError" },
+  { from: /\bexport\s+=/g, to: "var $exports =" },
 ];
 
 // These rules are run on the entire file, including within strings.
@@ -82,7 +83,7 @@ export interface ReplacementRule {
 
 /** Applies source code replacements as defined in `replacements` */
 export function applyReplacements(src: string) {
-  let result = src.replace(/\$([a-zA-Z0-9_]+)\b/gm, `__intrinsic__$1`);
+  let result = src.replace(/([^a-zA-Z0-9_\$])\$([a-zA-Z0-9_]+[^a-zA-Z0-9_\$])/gm, `$1__intrinsic__$2`);
   for (const replacement of replacements) {
     result = result.replace(replacement.from, replacement.to.replaceAll("$", "__intrinsic__"));
   }

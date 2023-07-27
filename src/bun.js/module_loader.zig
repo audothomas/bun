@@ -2280,6 +2280,7 @@ pub const ModuleLoader = struct {
                     };
                 },
 
+                // Native modules
                 .@"node:buffer" => return jsSyntheticModule(.@"node:buffer", specifier),
                 .@"node:string_decoder" => return jsSyntheticModule(.@"node:string_decoder", specifier),
                 .@"node:module" => return jsSyntheticModule(.@"node:module", specifier),
@@ -2290,7 +2291,7 @@ pub const ModuleLoader = struct {
                 .@"node:constants" => return jsSyntheticModule(.@"node:constants", specifier),
                 .@"bun:jsc" => return jsSyntheticModule(.@"bun:jsc", specifier),
 
-                // The following two modules have injected constants. These require rerunning `make dev` to update.
+                // TODO:
                 .@"node:fs/promises" => {
                     return ResolvedSource{
                         .allocator = null,
@@ -2316,52 +2317,51 @@ pub const ModuleLoader = struct {
                     };
                 },
 
-                .@"bun:sqlite" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"bun:sqlite", "bun/sqlite.js", specifier),
+                // These are defined in src/js/*
+                .@"bun:sqlite" => return jsSyntheticModule(.@"bun:sqlite"),
+                .@"node:assert" => return jsSyntheticModule(.@"node:assert"),
+                .@"node:assert/strict" => return jsSyntheticModule(.@"node:assert/strict"),
+                .@"node:async_hooks" => return jsSyntheticModule(.@"node:async_hooks"),
+                .@"node:child_process" => return jsSyntheticModule(.@"node:child_process"),
+                .@"node:cluster" => return jsSyntheticModule(.@"node:cluster"),
+                .@"node:crypto" => return jsSyntheticModule(.@"node:crypto"),
+                .@"node:dgram" => return jsSyntheticModule(.@"node:dgram"),
+                .@"node:diagnostics_channel" => return jsSyntheticModule(.@"node:diagnostics_channel"),
+                .@"node:dns" => return jsSyntheticModule(.@"node:dns"),
+                .@"node:dns/promises" => return jsSyntheticModule(.@"node:dns/promises"),
+                .@"node:events" => return jsSyntheticModule(.@"node:child_process"),
+                .@"node:fs" => return jsSyntheticModule(.@"node:fs"),
+                .@"node:http" => return jsSyntheticModule(.@"node:http"),
+                .@"node:http2" => return jsSyntheticModule(.@"node:http2"),
+                .@"node:https" => return jsSyntheticModule(.@"node:https"),
+                .@"node:inspector" => return jsSyntheticModule(.@"node:inspector"),
+                .@"node:net" => return jsSyntheticModule(.@"node:net"),
+                .@"node:os" => return jsSyntheticModule(.@"node:os"),
+                .@"node:path" => return jsSyntheticModule(.@"node:path"),
+                .@"node:path/posix" => return jsSyntheticModule(.@"node:path/posix"),
+                .@"node:path/win32" => return jsSyntheticModule(.@"node:path/win32"),
+                .@"node:perf_hooks" => return jsSyntheticModule(.@"node:perf_hooks"),
+                .@"node:readline" => return jsSyntheticModule(.@"node:readline"),
+                .@"node:readline/promises" => return jsSyntheticModule(.@"node:readline/promises"),
+                .@"node:repl" => return jsSyntheticModule(.@"node:repl"),
+                .@"node:stream" => return jsSyntheticModule(.@"node:stream"),
+                .@"node:stream/consumers" => return jsSyntheticModule(.@"node:stream/consumers"),
+                .@"node:stream/promises" => return jsSyntheticModule(.@"node:stream/promises"),
+                .@"node:stream/web" => return jsSyntheticModule(.@"node:stream/web"),
+                .@"node:timers" => return jsSyntheticModule(.@"node:timers"),
+                .@"node:timers/promises" => return jsSyntheticModule(.@"node:timers/promises"),
+                .@"node:tls" => return jsSyntheticModule(.@"node:tls"),
+                .@"node:trace_events" => return jsSyntheticModule(.@"node:trace_events"),
+                .@"node:url" => return jsSyntheticModule(.@"node:url"),
+                .@"node:util" => return jsSyntheticModule(.@"node:util"),
+                .@"node:v8" => return jsSyntheticModule(.@"node:v8"),
+                .@"node:vm" => return jsSyntheticModule(.@"node:vm"),
+                .@"node:wasi" => return jsSyntheticModule(.@"node:wasi"),
+                .@"node:zlib" => return jsSyntheticModule(.@"node:zlib"),
 
-                .@"node:assert" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:assert", "node/assert.js", specifier),
-                .@"node:assert/strict" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:assert/strict", "node/assert.strict.js", specifier),
-                .@"node:async_hooks" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:async_hooks", "node/async_hooks.js", specifier),
-                .@"node:child_process" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:child_process", "node/child_process.js", specifier),
-                .@"node:crypto" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:crypto", "node/crypto.js", specifier),
-                .@"node:dns" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:dns", "node/dns.js", specifier),
-                .@"node:dns/promises" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:dns/promises", "node/dns.promises.js", specifier),
-                .@"node:events" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:child_process", "node/events.js", specifier),
-                .@"node:fs" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:fs", "node/fs.js", specifier),
-                .@"node:http" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:http", "node/http.js", specifier),
-                .@"node:https" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:https", "node/https.js", specifier),
-                .@"node:net" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:net", "node/net.js", specifier),
-                .@"node:os" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:os", "node/os.js", specifier),
-                .@"node:path" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:path", "node/path.js", specifier),
-                .@"node:path/posix" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:path/posix", "node/path.posix.js", specifier),
-                .@"node:path/win32" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:path/win32", "node/path.win32.js", specifier),
-                .@"node:perf_hooks" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:perf_hooks", "node/perf_hooks.js", specifier),
-                .@"node:readline" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:readline", "node/readline.js", specifier),
-                .@"node:readline/promises" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:readline/promises", "node/readline.promises.js", specifier),
-                .@"node:stream" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:stream", "node/stream.js", specifier),
-                .@"node:stream/consumers" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:stream/consumers", "node/stream.consumers.js", specifier),
-                .@"node:stream/promises" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:stream/promises", "node/stream.promises.js", specifier),
-                .@"node:stream/web" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:stream/web", "node/stream.web.js", specifier),
-                .@"node:timers" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:timers", "node/timers.js", specifier),
-                .@"node:timers/promises" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:timers/promises", "node/timers.promises.js", specifier),
-                .@"node:tls" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:tls", "node/tls.js", specifier),
-                .@"node:url" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:url", "node/url.js", specifier),
-                .@"node:util" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:util", "node/util.js", specifier),
-                .@"node:vm" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:vm", "node/vm.js", specifier),
-                .@"node:wasi" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:wasi", "node/wasi.js", specifier),
-                .@"node:zlib" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:zlib", "node/zlib.js", specifier),
-
-                .@"detect-libc" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"detect-libc", if (Environment.isLinux) "thirdparty/detect-libc.linux.js" else "thirdparty/detect-libc.js", specifier),
-                .undici => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .undici, "thirdparty/undici.js", specifier),
-                .ws => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .ws, "thirdparty/ws.js", specifier),
-
-                .@"node:cluster" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:cluster", "node/cluster.js", specifier),
-                .@"node:dgram" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:dgram", "node/dgram.js", specifier),
-                .@"node:diagnostics_channel" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:diagnostics_channel", "node/diagnostics_channel.js", specifier),
-                .@"node:http2" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:http2", "node/http2.js", specifier),
-                .@"node:inspector" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:inspector", "node/inspector.js", specifier),
-                .@"node:repl" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:repl", "node/repl.js", specifier),
-                .@"node:trace_events" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:trace_events", "node/trace_events.js", specifier),
-                .@"node:v8" => return jsResolvedSource(jsc_vm, jsc_vm.load_builtins_from_path, .@"node:v8", "node/v8.js", specifier),
+                .@"detect-libc" => return jsSyntheticModule(.@"detect-libc", specifier),
+                .undici => return jsSyntheticModule(.undici),
+                .ws => return jsSyntheticModule(.ws),
             }
         } else if (specifier.hasPrefixComptime(js_ast.Macro.namespaceWithColon)) {
             const spec = specifier.toUTF8(bun.default_allocator);
@@ -2765,17 +2765,3 @@ pub const DisabledModule = bun.ComptimeStringMap(
         .{"node:worker_threads"},
     },
 );
-
-fn jsResolvedSource(vm: *JSC.VirtualMachine, builtins: []const u8, comptime module: HardcodedModule, comptime input: []const u8, specifier: bun.String) ResolvedSource {
-    // We use RefCountedResolvedSource because we want a stable StringImpl*
-    // pointer so that the SourceProviderCache has the maximum hit rate
-    return vm.refCountedResolvedSource(
-        jsModuleFromFile(builtins, input),
-        specifier,
-        @tagName(module),
-        null,
-
-        // we never want to free these
-        true,
-    );
-}

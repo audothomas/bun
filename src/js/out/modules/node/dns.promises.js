@@ -1,2 +1,1 @@
-(()=>{"use strict";var {module}=$_BunCommonJSModule_$;module.exports = module.require("node:dns").promises;
-})()
+(function (){"use strict";return @requireId(11).promises})

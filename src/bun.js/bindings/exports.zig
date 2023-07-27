@@ -227,6 +227,7 @@ pub const ResolvedSource = extern struct {
         wasm = 2,
         object = 3,
         file = 4,
+
         ESM = 2000,
 
         // Native Modules

@@ -1,3 +1,3 @@
-const reqd = import.meta.require('')
-const hi = await import('path');
-console.log(reqd);
+//
+const x = $vm.createBuiltin("(function (x) { return @requireId(x); })");
+console.log(x(30));

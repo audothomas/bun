@@ -1,5 +1,5 @@
-#include "_NativeModule.h"
 #include "../bindings/JSBuffer.h"
+#include "_NativeModule.h"
 #include "simdutf.h"
 
 namespace Zig {
@@ -132,12 +132,11 @@ JSC_DEFINE_HOST_FUNCTION(jsFunctionNotImplemented,
   return JSValue::encode(jsUndefined());
 }
 
-DEFINE_NATIVE_MODULE(Buffer)
-{
+DEFINE_NATIVE_MODULE(NodeBuffer) {
   INIT_NATIVE_MODULE(12);
 
   put(JSC::Identifier::fromString(vm, "Buffer"_s),
-                 globalObject->JSBufferConstructor());
+      globalObject->JSBufferConstructor());
 
   auto *slowBuffer = JSC::JSFunction::create(
       vm, globalObject, 0, "SlowBuffer"_s, WebCore::constructSlowBuffer,
@@ -158,13 +157,13 @@ DEFINE_NATIVE_MODULE(Buffer)
   put(JSC::Identifier::fromString(vm, "File"_s), blobValue);
 
   put(JSC::Identifier::fromString(vm, "INSPECT_MAX_BYTES"_s),
-                 JSC::jsNumber(50));
+      JSC::jsNumber(50));
 
   put(JSC::Identifier::fromString(vm, "kMaxLength"_s),
-                 JSC::jsNumber(4294967296LL));
+      JSC::jsNumber(4294967296LL));
 
   put(JSC::Identifier::fromString(vm, "kStringMaxLength"_s),
-                 JSC::jsNumber(536870888));
+      JSC::jsNumber(536870888));
 
   JSC::JSObject *constants = JSC::constructEmptyObject(
       lexicalGlobalObject, globalObject->objectPrototype(), 2);
@@ -196,22 +195,19 @@ DEFINE_NATIVE_MODULE(Buffer)
       InternalFunction::createFunctionThatMasqueradesAsUndefined(
           vm, globalObject, 1, "resolveObjectURL"_s, jsFunctionNotImplemented);
 
-  put(JSC::Identifier::fromString(vm, "resolveObjectURL"_s),
-                 resolveObjectURL);
+  put(JSC::Identifier::fromString(vm, "resolveObjectURL"_s), resolveObjectURL);
 
   put(JSC::Identifier::fromString(vm, "isAscii"_s),
-                 JSC::JSFunction::create(vm, globalObject, 1, "isAscii"_s,
-                                         jsBufferConstructorFunction_isAscii,
-                                         ImplementationVisibility::Public,
-                                         NoIntrinsic,
-                                         jsBufferConstructorFunction_isUtf8));
+      JSC::JSFunction::create(vm, globalObject, 1, "isAscii"_s,
+                              jsBufferConstructorFunction_isAscii,
+                              ImplementationVisibility::Public, NoIntrinsic,
+                              jsBufferConstructorFunction_isUtf8));
 
   put(JSC::Identifier::fromString(vm, "isUtf8"_s),
-                 JSC::JSFunction::create(vm, globalObject, 1, "isUtf8"_s,
-                                         jsBufferConstructorFunction_isUtf8,
-                                         ImplementationVisibility::Public,
-                                         NoIntrinsic,
-                                         jsBufferConstructorFunction_isUtf8));
+      JSC::JSFunction::create(vm, globalObject, 1, "isUtf8"_s,
+                              jsBufferConstructorFunction_isUtf8,
+                              ImplementationVisibility::Public, NoIntrinsic,
+                              jsBufferConstructorFunction_isUtf8));
 }
 
 } // namespace Zig

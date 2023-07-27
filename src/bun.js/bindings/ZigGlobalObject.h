@@ -42,6 +42,7 @@ class DOMWrapperWorld;
 #include "DOMConstructors.h"
 #include "BunPlugin.h"
 #include "JSMockFunction.h"
+#include "InternalModuleRegistry.h"
 
 namespace Bun {
 class GlobalScope;
@@ -441,6 +442,7 @@ public:
     void* napiInstanceDataFinalizerHint = nullptr;
 
     Bun::JSMockModule mockModule;
+    Bun::InternalModuleRegistry internalModuleRegistry;
 
 #include "ZigGeneratedClasses+lazyStructureHeader.h"
 

@@ -36,8 +36,7 @@ JSC_DEFINE_CUSTOM_SETTER(jsFunctionProcessModuleCommonJSSetter,
       ->putDirect(vm, propertyName, JSValue::decode(encodedValue), 0);
 }
 
-DEFINE_NATIVE_MODULE(Process)
-{
+DEFINE_NATIVE_MODULE(NodeProcess) {
   JSC::VM &vm = lexicalGlobalObject->vm();
   GlobalObject *globalObject =
       reinterpret_cast<GlobalObject *>(lexicalGlobalObject);

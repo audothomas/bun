@@ -1,4 +1,4 @@
-export class NotImplementedError extends Error {
+class NotImplementedError extends Error {
   code: string;
   constructor(feature: string, issue?: number) {
     super(
@@ -14,17 +14,23 @@ export class NotImplementedError extends Error {
   }
 }
 
-export function throwNotImplemented(feature: string, issue?: number): never {
+function throwNotImplemented(feature: string, issue?: number): never {
   // in the definition so that it isn't bundled unless used
   hideFromStack(throwNotImplemented);
 
   throw new NotImplementedError(feature, issue);
 }
 
-export function hideFromStack(...fns) {
+function hideFromStack(...fns) {
   for (const fn of fns) {
     Object.defineProperty(fn, "name", {
       value: "::bunternal::",
     });
   }
 }
+
+$exports = {
+  NotImplementedError,
+  throwNotImplemented,
+  hideFromStack,
+};

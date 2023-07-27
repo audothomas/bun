@@ -1,3 +1,6 @@
+import fs from "fs";
+import path from "path";
+
 export function fmtCPPString(str: string) {
   return (
     '"' +
@@ -22,4 +25,20 @@ export function low(str: string) {
   }
 
   return str[0].toLowerCase() + str.slice(1);
+}
+
+export function readdirRecursive(root: string): string[] {
+  const files = fs.readdirSync(root, { withFileTypes: true });
+  return files.flatMap(file => {
+    const fullPath = path.join(root, file.name);
+    return file.isDirectory() ? readdirRecursive(fullPath) : fullPath;
+  });
+}
+
+export function resolveSyncOrNull(specifier: string, from: string) {
+  try {
+    return Bun.resolveSync(specifier, from);
+  } catch {
+    return null;
+  }
 }

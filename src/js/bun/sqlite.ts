@@ -166,7 +166,7 @@ class Statement {
 }
 
 var cachedCount = Symbol.for("Bun.Database.cache.count");
-export class Database {
+class Database {
   constructor(filenameGiven, options) {
     if (typeof filenameGiven === "undefined") {
     } else if (typeof filenameGiven !== "string") {

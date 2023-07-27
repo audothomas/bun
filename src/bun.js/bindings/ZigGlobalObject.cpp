@@ -717,6 +717,7 @@ GlobalObject::GlobalObject(JSC::VM& vm, JSC::Structure* structure)
     , globalEventScope(*new Bun::GlobalScope(m_scriptExecutionContext))
 {
     mockModule = Bun::JSMockModule::create(this);
+    internalModuleRegistry = Bun::InternalModuleRegistry::create();
     globalEventScope.m_context = m_scriptExecutionContext;
 }
 
@@ -731,6 +732,7 @@ GlobalObject::GlobalObject(JSC::VM& vm, JSC::Structure* structure, WebCore::Scri
     , globalEventScope(*new Bun::GlobalScope(m_scriptExecutionContext))
 {
     mockModule = Bun::JSMockModule::create(this);
+    internalModuleRegistry = Bun::InternalModuleRegistry::create();
     globalEventScope.m_context = m_scriptExecutionContext;
 }
 
@@ -4111,6 +4113,7 @@ void GlobalObject::addBuiltinGlobals(JSC::VM& vm)
     putDirectNativeFunction(vm, this, builtinNames.createUninitializedArrayBufferPrivateName(), 1, functionCreateUninitializedArrayBuffer, ImplementationVisibility::Public, NoIntrinsic, PropertyAttribute::DontDelete | PropertyAttribute::ReadOnly | PropertyAttribute::Function);
     putDirectNativeFunction(vm, this, builtinNames.resolveSyncPrivateName(), 1, functionImportMeta__resolveSyncPrivate, ImplementationVisibility::Public, NoIntrinsic, PropertyAttribute::DontDelete | PropertyAttribute::ReadOnly | PropertyAttribute::Function);
     putDirectNativeFunction(vm, this, builtinNames.createAndLoadBuiltinModulePrivateName(), 1, jsFunctionCreateAndLoadBuiltinModule, ImplementationVisibility::Public, NoIntrinsic, PropertyAttribute::DontDelete | PropertyAttribute::ReadOnly | PropertyAttribute::Function);
+    putDirectNativeFunction(vm, this, builtinNames.requireIdPrivateName(), 1, InternalModuleRegistry::jsRequireId, ImplementationVisibility::Public, NoIntrinsic, PropertyAttribute::DontDelete | PropertyAttribute::ReadOnly | PropertyAttribute::Function);
 
     putDirectCustomAccessor(vm, JSC::Identifier::fromString(vm, "process"_s), JSC::CustomGetterSetter::create(vm, property_lazyProcessGetter, property_lazyProcessSetter),
         JSC::PropertyAttribute::CustomAccessor | 0);
@@ -4647,6 +4650,8 @@ void GlobalObject::visitChildrenImpl(JSCell* cell, Visitor& visitor)
     thisObject->m_commonJSFunctionArgumentsStructure.visit(visitor);
     thisObject->m_cachedGlobalObjectStructure.visit(visitor);
     thisObject->m_cachedGlobalProxyStructure.visit(visitor);
+
+    thisObject->internalModuleRegistry.visit(visitor);
 
     thisObject->mockModule.mockFunctionStructure.visit(visitor);
     thisObject->mockModule.mockResultStructure.visit(visitor);

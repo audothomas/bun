@@ -1,2 +1,1 @@
-(()=>{"use strict";var {module}=$_BunCommonJSModule_$;module.exports = module.require("node:assert").strict;
-})()
+(function (){"use strict";return @requireId(3).strict})

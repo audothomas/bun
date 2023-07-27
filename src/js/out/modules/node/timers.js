@@ -1,9 +1,1 @@
-(()=>{"use strict";var {module}=$_BunCommonJSModule_$;module.exports = {
-  setTimeout,
-  clearTimeout,
-  setInterval,
-  setImmediate,
-  clearInterval,
-  clearImmediate
-};
-})()
+(function (){"use strict";return{setTimeout,clearTimeout,setInterval,setImmediate,clearInterval,clearImmediate}})

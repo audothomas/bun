@@ -11,34 +11,40 @@ import { applyReplacements } from "./replacements";
 export function sliceSourceCode(
   contents: string,
   replace: boolean,
-): { result: string; rest: string; usesThis: boolean } {
+  replaceRequire?: (specifier: string) => string,
+): { result: string; rest: string } {
   let bracketCount = 0;
   let i = 0;
   let result = "";
-  let usesThis = false;
   while (contents.length) {
-    // TODO: template literal, regexp
-    // these are important because our replacement logic would replace intrinsics
-    // within these, when it should remain as the literal dollar.
-    // but this isn't used in the codebase
-    i = contents.match(/\/\*|\/\/|'|"|{|}|`/)?.index ?? contents.length;
+    const match = contents.match(/\/\*|\/\/|'|"|{|}|`|\brequire\(|([(,=;]\s*)\/(?!\/|\*)/);
+    i = match?.index ?? contents.length;
     const chunk = replace ? applyReplacements(contents.slice(0, i)) : contents.slice(0, i);
-    if (chunk.includes("this")) usesThis = true;
     result += chunk;
     contents = contents.slice(i);
+    if (match?.[1]) {
+      const { result: result2, rest } = sliceRegularExpressionSourceCode(
+        contents.slice(match?.[1].length + 1),
+        replace,
+      );
+      result += contents.slice(0, match?.[1].length + 1) + result2;
+      contents = rest;
+      continue;
+    }
     if (!contents.length) break;
     if (contents.startsWith("/*")) {
       i = contents.slice(2).indexOf("*/") + 2;
     } else if (contents.startsWith("//")) {
       i = contents.slice(2).indexOf("\n") + 2;
     } else if (contents.startsWith("'")) {
-      i = contents.slice(1).match(/(?<!\\)'/)!.index! + 2;
+      i = getEndOfBasicString(contents.slice(1), "'") + 2;
     } else if (contents.startsWith('"')) {
-      i = contents.slice(1).match(/(?<!\\)"/)!.index! + 2;
+      i = getEndOfBasicString(contents.slice(1), '"') + 2;
     } else if (contents.startsWith("`")) {
       const { result: result2, rest } = sliceTemplateLiteralSourceCode(contents.slice(1), replace);
       result += "`" + result2;
       contents = rest;
+      i = 0;
       continue;
     } else if (contents.startsWith("{")) {
       bracketCount++;
@@ -51,6 +57,20 @@ export function sliceSourceCode(
         break;
       }
       i = 1;
+    } else if (contents.startsWith("require(")) {
+      if (replaceRequire) {
+        const staticSpecifier = contents.match(/\brequire\(["']([^"']+)["']\)/);
+        if (staticSpecifier) {
+          const specifier = staticSpecifier[1];
+          result += replaceRequire(specifier);
+          contents = contents.slice(staticSpecifier[0].length);
+          continue;
+        } else {
+          throw new Error("Require with dynamic specifier not supported here.");
+        }
+      } else {
+        i = 1;
+      }
     } else {
       throw new Error("TODO");
     }
@@ -58,13 +78,12 @@ export function sliceSourceCode(
     contents = contents.slice(i);
   }
 
-  return { result, rest: contents, usesThis };
+  return { result, rest: contents };
 }
 
 function sliceTemplateLiteralSourceCode(contents: string, replace: boolean) {
   let i = 0;
   let result = "";
-  let usesThis = false;
   while (contents.length) {
     i = contents.match(/`|\${/)!.index!;
     result += contents.slice(0, i);
@@ -75,15 +94,47 @@ function sliceTemplateLiteralSourceCode(contents: string, replace: boolean) {
       contents = contents.slice(1);
       break;
     } else if (contents.startsWith("$")) {
-      const { result: result2, rest, usesThis: usesThisVal } = sliceSourceCode(contents.slice(1), replace);
+      const { result: result2, rest } = sliceSourceCode(contents.slice(1), replace);
       result += "$" + result2;
       contents = rest;
-      usesThis ||= usesThisVal;
       continue;
     } else {
       throw new Error("TODO");
     }
   }
 
-  return { result, rest: contents, usesThis };
+  return { result, rest: contents };
+}
+
+function sliceRegularExpressionSourceCode(contents: string, replace: boolean) {
+  let i = 0;
+  let result = "";
+  while (contents.length) {
+    i = contents.match(/\/(?!\/|\*)/)!.index!;
+    result += contents.slice(0, i);
+    contents = contents.slice(i);
+    if (!contents.length) break;
+    if (contents.startsWith("/")) {
+      result += "/";
+      contents = contents.slice(1);
+      break;
+    } else {
+      throw new Error("TODO");
+    }
+  }
+
+  return { result, rest: contents };
+}
+
+function getEndOfBasicString(str: string, quote: "'" | '"') {
+  let i = 0;
+  while (i < str.length) {
+    if (str[i] === "\\") {
+      i++;
+    } else if (str[i] === quote) {
+      return i;
+    }
+    i++;
+  }
+  throw new Error("String did not end");
 }

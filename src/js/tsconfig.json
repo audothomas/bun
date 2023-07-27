@@ -4,15 +4,17 @@
     "module": "ESNext",
     "noEmit": true,
     "paths": {
-      "$shared": ["./shared.ts"]
+      "$shared": ["./internal/shared.ts"], //deprecated
+      "internal/*": ["./internal/*"] //deprecated
     }
   },
   "include": [
+    //
     "node",
     "bun",
+    "internal",
     "thirdparty",
-    "build-*",
-    "shared.ts",
+
     "private.d.ts",
     "../../packages/bun-types/index.d.ts"
   ]

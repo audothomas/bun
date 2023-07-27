@@ -1,2 +1,1 @@
-(()=>{"use strict";var {module}=$_BunCommonJSModule_$;module.exports = module.require("node:stream").promises;
-})()
+(function (){"use strict";return @requireId(30).promises})
