@@ -35,17 +35,9 @@ var Uint8ArrayPrototypeIncludes = Uint8Array.prototype.includes;
 
 const MAX_BUFFER = 1024 * 1024;
 
-// General debug vs tracking stdio streams. Useful for stream debugging in particular
-const __DEBUG__ = process.env.DEBUG || false;
-
-// You can use this env var along with `process.env.DEBUG_TRACK_EE` to debug stdio streams
-// Just set `DEBUG_TRACK_EE=PARENT_STDOUT-0, PARENT_STDOUT-1`, etc. and `DEBUG_STDIO=1` and you will be able to track particular stdio streams
-// TODO: Add ability to track a range of IDs rather than just enumerated ones
-const __TRACK_STDIO__ = process.env.DEBUG_STDIO;
-const debug = __DEBUG__ ? console.log : () => {};
-
-if (__TRACK_STDIO__) {
-  debug("child_process: debug mode on");
+// Pass DEBUG_CHILD_PROCESS=1 to enable debug output
+if ($debug) {
+  $debug("child_process: debug mode on");
   globalThis.__lastId = null;
   globalThis.__getId = () => {
     return globalThis.__lastId !== null ? globalThis.__lastId++ : 0;
@@ -159,7 +151,7 @@ function spawn(file, args, options) {
   const killSignal = sanitizeKillSignal(options.killSignal);
   const child = new ChildProcess();
 
-  debug("spawn", options);
+  $debug("spawn", options);
   child.spawn(options);
 
   if (options.timeout > 0) {
@@ -548,7 +540,7 @@ function spawnSync(file, args, options) {
   const maxBuffer = options.maxBuffer;
   const encoding = options.encoding;
 
-  debug("spawnSync", options);
+  $debug("spawnSync", options);
 
   // Validate the timeout, if present.
   validateTimeout(options.timeout);
@@ -949,11 +941,11 @@ class ChildProcess extends EventEmitter {
   }
 
   #getBunSpawnIo(i, encoding) {
-    if (__DEBUG__ && !this.#handle) {
+    if ($debug && !this.#handle) {
       if (this.#handle === null) {
-        debug("ChildProcess: getBunSpawnIo: this.#handle is null. This means the subprocess already exited");
+        $debug("ChildProcess: getBunSpawnIo: this.#handle is null. This means the subprocess already exited");
       } else {
-        debug("ChildProcess: getBunSpawnIo: this.#handle is undefined");
+        $debug("ChildProcess: getBunSpawnIo: this.#handle is undefined");
       }
     }
 
@@ -1157,7 +1149,7 @@ class ChildProcess extends EventEmitter {
   }
 
   #maybeClose() {
-    debug("Attempting to maybe close...");
+    $debug("Attempting to maybe close...");
     this.#closesGot++;
     if (this.#closesGot === this.#closesNeeded) {
       this.emit("close", this.exitCode, this.signalCode);

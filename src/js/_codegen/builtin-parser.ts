@@ -12,12 +12,17 @@ export function sliceSourceCode(
   contents: string,
   replace: boolean,
   replaceRequire?: (specifier: string) => string,
+  endOnComma = false,
 ): { result: string; rest: string } {
   let bracketCount = 0;
   let i = 0;
   let result = "";
   while (contents.length) {
-    const match = contents.match(/([(,=;:{]\s*)\/[^\/\*]|\/\*|\/\/|['"}`\)]|(?<!\$)\brequire\(/);
+    const match = contents.match(
+      endOnComma && bracketCount <= 1
+        ? /([(,=;:{]\s*)\/[^\/\*]|\/\*|\/\/|['"}`\),]|(?<!\$)\brequire\(/
+        : /([(,=;:{]\s*)\/[^\/\*]|\/\*|\/\/|['"}`\)]|(?<!\$)\brequire\(/,
+    );
     i = match?.index ?? contents.length;
     bracketCount += [...contents.slice(0, i).matchAll(/[({]/g)].length;
     const chunk = replace ? applyReplacements(contents, i) : [contents.slice(0, i), contents.slice(0, i)];
@@ -63,6 +68,13 @@ export function sliceSourceCode(
       bracketCount--;
       if (bracketCount <= 0) {
         result += ")";
+        contents = contents.slice(1);
+        break;
+      }
+      i = 1;
+    } else if (endOnComma && contents.startsWith(",")) {
+      if (bracketCount <= 1) {
+        result += ",";
         contents = contents.slice(1);
         break;
       }

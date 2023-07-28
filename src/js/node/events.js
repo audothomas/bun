@@ -409,7 +409,9 @@ class EventEmitterAsyncResource extends EventEmitter {
   asyncResource;
 
   constructor(options) {
-    if (!AsyncResource) AsyncResource = require("node:async_hooks").AsyncResource;
+    if (!AsyncResource) {
+      AsyncResource = require("node:async_hooks").AsyncResource;
+    }
     var { captureRejections = false, triggerAsyncId, name = new.target.name, requireManualDestroy } = options || {};
     super({ captureRejections });
     this.triggerAsyncId = triggerAsyncId ?? 0;
@@ -469,7 +471,7 @@ Object.assign(EventEmitter, {
   EventEmitter,
   usingDomains: false,
   captureRejectionSymbol,
-  // EventEmitterAsyncResource,
+  EventEmitterAsyncResource,
   errorMonitor: kErrorMonitor,
   setMaxListeners,
   init: EventEmitter,

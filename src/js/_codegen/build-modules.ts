@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import { sliceSourceCode } from "./builtin-parser";
 import { cap, fmtCPPString, readdirRecursive, resolveSyncOrNull } from "./helpers";
-import { createLogClient } from "./log-client";
+import { createAssertClientJS, createLogClientJS } from "./client-js";
 
 let start = performance.now();
 function mark(log: string) {
@@ -130,6 +130,7 @@ const config = ({ platform, debug }: { platform: typeof process.platform; debug?
   root: TMP,
   define: {
     IS_BUN_DEVELOPMENT: String(!!debug),
+    __intrinsic__debug: debug ? "$debug_log_enabled" : "false",
     "process.platform": `"${platform}"`,
   },
 });
@@ -153,44 +154,38 @@ const bundledOutputs = {
   win32: new Map(),
 };
 
-for (const [bundle, outputs] of [
-  [bundled_host, bundledOutputs.host],
-  [bundled_linux, bundledOutputs.linux],
-  [bundled_darwin, bundledOutputs.darwin],
-  [bundled_win32, bundledOutputs.win32],
+for (const [name, bundle, outputs] of [
+  ["modules_dev", bundled_host, bundledOutputs.host],
+  ["modules_linux", bundled_linux, bundledOutputs.linux],
+  ["modules_darwin", bundled_darwin, bundledOutputs.darwin],
+  ["modules_win32", bundled_win32, bundledOutputs.win32],
 ] as const) {
   for (const file of bundle.outputs) {
     const output = await file.text();
     let captured = output.match(/\$\$capture_start\$\$([\s\S]+)\.\$\$capture_end\$\$/)![1];
-    let usesDebug = false;
+    let usesDebug = output.includes("$debug_log");
+    let usesAssert = output.includes("$assert");
     captured =
       captured
         .replace(/^\((async )?function\(/, "($1function (")
-        .replace(/__debug_start\(\s*\[\s*\]\s*,\s*__debug_end__\)\s*,?\s*/g, "")
-        .replace(/__debug_start\(\s*\[/g, () => {
-          usesDebug = true;
-          return "$log(";
-        })
+        .replace(/]\s*,\s*__(debug|assert)_end__\)/g, ")")
         .replace(/]\s*,\s*__debug_end__\)/g, ")")
         .replace(/__intrinsic__lazy\(/g, "globalThis[globalThis.Symbol.for('Bun.lazy')](")
         .replace(/__intrinsic__/g, "@") + "\n";
-    if (usesDebug) {
-      captured = captured.replace(
-        /function\s*\(.*?\)\s*{/,
-        '$&"use strict";' +
-          createLogClient(
-            file.path.replace(".js", ""),
-            idToPublicSpecifierOrEnumName(file.path).replace(/^node:|^bun:/, ""),
-          ),
-      );
-    } else {
-      captured = captured.replace(/function\s*\(.*?\)\s*{/, '$&"use strict";');
-    }
-    const outputPath = path.join(BASE, "out/modules", file.path);
-    if (bundle === bundled_host) {
-      fs.mkdirSync(path.dirname(outputPath), { recursive: true });
-      fs.writeFileSync(outputPath, captured);
-    }
+    captured = captured.replace(
+      /function\s*\(.*?\)\s*{/,
+      '$&"use strict";' +
+        (usesDebug
+          ? createLogClientJS(
+              file.path.replace(".js", ""),
+              idToPublicSpecifierOrEnumName(file.path).replace(/^node:|^bun:/, ""),
+            )
+          : "") +
+        (usesAssert ? createAssertClientJS(idToPublicSpecifierOrEnumName(file.path).replace(/^node:|^bun:/, "")) : ""),
+    );
+    const outputPath = path.join(BASE, "out", name, file.path);
+    fs.mkdirSync(path.dirname(outputPath), { recursive: true });
+    fs.writeFileSync(outputPath, captured);
     outputs.set(file.path.replace(".js", ""), captured);
   }
 }

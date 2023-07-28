@@ -100,6 +100,7 @@ class AsyncLocalStorage {
       set(context);
     }
     try {
+      $debug("Running with context value", get());
       return callback(...args);
     } catch (e) {
       throw e;

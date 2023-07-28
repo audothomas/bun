@@ -37,9 +37,14 @@ V8 has a [similar feature](https://v8.dev/blog/embedded-builtins) to this syntax
 On top of this, we have some special functions that are handled by the bundle preprocessor:
 
 - `require` works, but it must be a string literal that resolves to a module within src/js. This call gets replaced with `$requireId(id)`, which is a special function that skips the module resolver and directly loads the module by it's generated numerical ID.
-- `$debug` is exactly like console.log, but is stripped in release builds. It is disabled by default, requiring you to pass one of: `BUN_DEBUG_MODULE_NAME=1`, `BUN_DEBUG_JS=1`, or `BUN_DEBUG_ALL=1`.
+
+- `$debug` is exactly like console.log, but is stripped in release builds. It is disabled by default, requiring you to pass one of: `BUN_DEBUG_MODULE_NAME=1`, `BUN_DEBUG_JS=1`, or `BUN_DEBUG_ALL=1`. You can also do `if($debug) {}` to check if debug env var is set.
+
+- `IS_BUN_DEVELOPMENT` is inlined to be `true` in all development builds.
+
 - `process.platform` is properly inlined and DCE'd. Do use this to run different code on different platforms.
-- `$bundleError` is like Zig's `@compileError`. It will stop a compile from succeeding.
+
+- `$bundleError()` is like Zig's `@compileError`. It will stop a compile from succeeding.
 
 ## Builtin Modules
 
