@@ -1,4 +1,5 @@
 import { LoaderKeys } from "../../api/schema";
+import { sliceSourceCode } from "./builtin-parser";
 
 // This is a list of extra syntax replacements to do. Kind of like macros
 // These are only run on code itself, not string contents or comments.
@@ -85,12 +86,27 @@ export interface ReplacementRule {
 }
 
 /** Applies source code replacements as defined in `replacements` */
-export function applyReplacements(src: string) {
-  let result = src.replace(/([^a-zA-Z0-9_\$])\$([a-zA-Z0-9_]+\b)/gm, `$1__intrinsic__$2`);
+export function applyReplacements(src: string, length: number) {
+  let slice = src.slice(0, length);
+  let rest = src.slice(length);
+  slice = slice.replace(/([^a-zA-Z0-9_\$])\$([a-zA-Z0-9_]+\b)/gm, `$1__intrinsic__$2`);
   for (const replacement of replacements) {
-    result = result.replace(replacement.from, replacement.to.replaceAll("$", "__intrinsic__"));
+    slice = slice.replace(replacement.from, replacement.to.replaceAll("$", "__intrinsic__"));
   }
-  return result;
+  let match;
+  if ((match = slice.match(/__intrinsic__debug\(/))) {
+    const combined = slice + rest;
+    const innerSlice = sliceSourceCode(combined.slice(match.index + match[0].length), true);
+    return [
+      slice.slice(0, match.index) +
+        "__debug_start(IS_BUN_DEVELOPMENT?[" +
+        innerSlice.result.slice(0, -1) +
+        "]:[],__debug_end__)",
+      combined.slice(match.index + match[0].length + innerSlice.result.length),
+      true,
+    ];
+  }
+  return [slice, rest, false];
 }
 
 /** Applies source code replacements as defined in `globalReplacements` */

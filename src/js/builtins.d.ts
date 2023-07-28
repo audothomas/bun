@@ -1,6 +1,15 @@
 // Typedefs for JSC intrinsics. Instead of @, we use $
 type TODO = any;
 
+/** $debug is a preprocessor macro that works like a templated console.log, and only runs in debug mode if you pass
+ * BUN_DEBUG_JS=<module>
+ *
+ * So to get node stream to log, you pass BUN_DEBUG_JS=stream or BUN_DEBUG_JS=node:stream
+ *
+ * This only works in debug builds, the log fn is completely removed in release builds.
+ */
+declare function $debug(...args: any[]): void;
+
 /** Place this directly above a function declaration (like a decorator) to make it a getter. */
 declare const $getter: never;
 /** Assign to this directly above a function declaration (like a decorator) to override the function's display name. */

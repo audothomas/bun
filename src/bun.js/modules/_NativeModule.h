@@ -25,7 +25,6 @@
 
 #define BUN_FOREACH_NATIVE_MODULE(macro) \
     macro("bun:jsc"_s, BunJSC) \
-    macro("internal:events"_s, InternalEvents) \
     macro("node:buffer"_s, NodeBuffer) \
     macro("node:constants"_s, NodeConstants) \
     macro("node:module"_s, NodeModule) \

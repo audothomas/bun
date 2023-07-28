@@ -17,12 +17,17 @@ export function sliceSourceCode(
   let i = 0;
   let result = "";
   while (contents.length) {
-    const match = contents.match(/\/\*|\/\/|'|"|{|}|`|(?<!\$)\brequire\(|([(,=;]\s*)\/(?!\/|\*)/);
+    const match = contents.match(/([(,=;:{]\s*)\/[^\/\*]|\/\*|\/\/|['"}`\)]|(?<!\$)\brequire\(/);
     i = match?.index ?? contents.length;
-    const chunk = replace ? applyReplacements(contents.slice(0, i)) : contents.slice(0, i);
-    result += chunk;
-    contents = contents.slice(i);
+    bracketCount += [...contents.slice(0, i).matchAll(/[({]/g)].length;
+    const chunk = replace ? applyReplacements(contents, i) : [contents.slice(0, i), contents.slice(0, i)];
+    result += chunk[0];
+    contents = chunk[1] as string;
+    if (chunk[2]) continue;
     if (match?.[1]) {
+      if (match[1].startsWith("(") || match[1].startsWith(",")) {
+        bracketCount++;
+      }
       const { result: result2, rest } = sliceRegularExpressionSourceCode(
         contents.slice(match?.[1].length + 1),
         replace,
@@ -46,13 +51,18 @@ export function sliceSourceCode(
       contents = rest;
       i = 0;
       continue;
-    } else if (contents.startsWith("{")) {
-      bracketCount++;
-      i = 1;
     } else if (contents.startsWith("}")) {
       bracketCount--;
       if (bracketCount <= 0) {
         result += "}";
+        contents = contents.slice(1);
+        break;
+      }
+      i = 1;
+    } else if (contents.startsWith(")")) {
+      bracketCount--;
+      if (bracketCount <= 0) {
+        result += ")";
         contents = contents.slice(1);
         break;
       }
@@ -110,7 +120,7 @@ function sliceRegularExpressionSourceCode(contents: string, replace: boolean) {
   let i = 0;
   let result = "";
   while (contents.length) {
-    i = contents.match(/\/(?!\/|\*)/)!.index!;
+    i = contents.match(/\/(?!\/|\*)|\\|\[/)!.index!;
     result += contents.slice(0, i);
     contents = contents.slice(i);
     if (!contents.length) break;
@@ -118,6 +128,18 @@ function sliceRegularExpressionSourceCode(contents: string, replace: boolean) {
       result += "/";
       contents = contents.slice(1);
       break;
+    } else if (contents.startsWith("\\")) {
+      result += "\\";
+      contents = contents.slice(1);
+      if (!contents.length) break;
+      result += contents[0];
+      contents = contents.slice(1);
+      continue;
+    } else if (contents.startsWith("[")) {
+      let end = contents.match(/(?<!\\)]/)!.index!;
+      result += contents.slice(0, end + 1);
+      contents = contents.slice(end + 1);
+      continue;
     } else {
       throw new Error("TODO");
     }

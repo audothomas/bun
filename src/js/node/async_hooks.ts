@@ -28,6 +28,7 @@ function get(): ReadonlyArray<any> | undefined {
 }
 
 function set(contextValue: ReadonlyArray<any> | undefined) {
+  $debug("set async context to", contextValue);
   return $putInternalField($asyncContext, 0, contextValue);
 }
 

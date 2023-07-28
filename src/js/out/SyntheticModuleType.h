@@ -59,14 +59,13 @@ enum SyntheticModuleType : uint64_t {
     ThirdpartyWS = 559,
     
     // Native modules are assigned IDs in the range 1024 and up
-    NodeBuffer = 1024,
-    NodeProcess = 1025,
-    BunEventsNative = 1026,
-    NodeStringDecoder = 1027,
-    NodeModule = 1028,
-    NodeTTY = 1029,
-    NodeUtilTypes = 1030,
-    NodeConstants = 1031,
-    BunJSC = 1032,
+    BunJSC = 48,
+    NodeBuffer = 49,
+    NodeConstants = 50,
+    NodeModule = 51,
+    NodeProcess = 52,
+    NodeStringDecoder = 53,
+    NodeTTY = 54,
+    NodeUtilTypes = 55,
 };
 

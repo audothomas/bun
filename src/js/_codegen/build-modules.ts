@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import { sliceSourceCode } from "./builtin-parser";
 import { cap, fmtCPPString, readdirRecursive, resolveSyncOrNull } from "./helpers";
+import { createLogClient } from "./log-client";
 
 let start = performance.now();
 function mark(log: string) {
@@ -38,13 +39,14 @@ if (!nativeModuleDefine) {
     "Could not find BUN_FOREACH_NATIVE_MODULE in _NativeModule.h. Knowing native module IDs is a part of the codegen process.",
   );
 }
+let nextNativeModuleId = moduleList.length;
 const nativeModuleIds: Record<string, number> = {};
 const nativeModuleEnums: Record<string, string> = {};
 const nativeModuleEnumToId: Record<string, number> = {};
-for (const [_, idString, enumValue, numericId] of nativeModuleDefine[0].matchAll(/macro\((.*?),(.*?),(.*?)\)/g)) {
+for (const [_, idString, enumValue] of nativeModuleDefine[0].matchAll(/macro\((.*?),(.*?)\)/g)) {
   const processedIdString = JSON.parse(idString.trim().replace(/_s$/, ""));
   const processedEnumValue = enumValue.trim();
-  const processedNumericId = parseInt(numericId.trim());
+  const processedNumericId = nextNativeModuleId++;
   nativeModuleIds[processedIdString] = processedNumericId;
   nativeModuleEnums[processedIdString] = processedEnumValue;
   nativeModuleEnumToId[processedEnumValue] = processedNumericId;
@@ -122,36 +124,75 @@ return __intrinsic__exports;
 
 mark("Preprocess modules");
 
-const bundled = await Bun.build({
+const config = ({ platform, debug }: { platform: typeof process.platform; debug?: boolean }) => ({
   entrypoints: bundledEntryPoints,
-  minify: { syntax: true, whitespace: false },
+  minify: { syntax: true, whitespace: !debug },
   root: TMP,
   define: {
-    IS_BUN_DEVELOPMENT: "false",
+    IS_BUN_DEVELOPMENT: String(!!debug),
+    "process.platform": `"${platform}"`,
   },
 });
-if (!bundled.success) {
-  console.error(bundled.logs);
-  process.exit(1);
+const bundled_host = await Bun.build(config({ platform: process.platform, debug: true }));
+const bundled_linux = await Bun.build(config({ platform: "linux" }));
+const bundled_darwin = await Bun.build(config({ platform: "darwin" }));
+const bundled_win32 = await Bun.build(config({ platform: "win32" }));
+for (const bundled of [bundled_host /*, bundled_linux, bundled_darwin, bundled_win32*/]) {
+  if (!bundled.success) {
+    console.error(bundled.logs);
+    process.exit(1);
+  }
 }
 
 mark("Bundle modules");
 
-const bundledOutputs = new Map();
+const bundledOutputs = {
+  host: new Map(),
+  linux: new Map(),
+  darwin: new Map(),
+  win32: new Map(),
+};
 
-for (const file of bundled.outputs) {
-  const output = await file.text();
-  const captured = output.match(/\$\$capture_start\$\$([\s\S]+)\.\$\$capture_end\$\$/)![1];
-  const finalReplacement =
-    captured
-      .replace(/function\s*\(.*?\)\s*{/, '$&"use strict";')
-      .replace(/^\((async )?function\(/, "($1function (")
-      .replace(/__intrinsic__lazy\(/g, "globalThis[globalThis.Symbol.for('Bun.lazy')](")
-      .replace(/__intrinsic__/g, "@") + "\n";
-  const outputPath = path.join(BASE, "out/modules", file.path);
-  fs.mkdirSync(path.dirname(outputPath), { recursive: true });
-  fs.writeFileSync(outputPath, finalReplacement);
-  bundledOutputs.set(file.path.replace(".js", ""), finalReplacement);
+for (const [bundle, outputs] of [
+  [bundled_host, bundledOutputs.host],
+  [bundled_linux, bundledOutputs.linux],
+  [bundled_darwin, bundledOutputs.darwin],
+  [bundled_win32, bundledOutputs.win32],
+] as const) {
+  for (const file of bundle.outputs) {
+    const output = await file.text();
+    let captured = output.match(/\$\$capture_start\$\$([\s\S]+)\.\$\$capture_end\$\$/)![1];
+    let usesDebug = false;
+    captured =
+      captured
+        .replace(/^\((async )?function\(/, "($1function (")
+        .replace(/__debug_start\(\s*\[\s*\]\s*,\s*__debug_end__\)\s*,?\s*/g, "")
+        .replace(/__debug_start\(\s*\[/g, () => {
+          usesDebug = true;
+          return "$log(";
+        })
+        .replace(/]\s*,\s*__debug_end__\)/g, ")")
+        .replace(/__intrinsic__lazy\(/g, "globalThis[globalThis.Symbol.for('Bun.lazy')](")
+        .replace(/__intrinsic__/g, "@") + "\n";
+    if (usesDebug) {
+      captured = captured.replace(
+        /function\s*\(.*?\)\s*{/,
+        '$&"use strict";' +
+          createLogClient(
+            file.path.replace(".js", ""),
+            idToPublicSpecifierOrEnumName(file.path).replace(/^node:|^bun:/, ""),
+          ),
+      );
+    } else {
+      captured = captured.replace(/function\s*\(.*?\)\s*{/, '$&"use strict";');
+    }
+    const outputPath = path.join(BASE, "out/modules", file.path);
+    if (bundle === bundled_host) {
+      fs.mkdirSync(path.dirname(outputPath), { recursive: true });
+      fs.writeFileSync(outputPath, captured);
+    }
+    outputs.set(file.path.replace(".js", ""), captured);
+  }
 }
 
 mark("Postprocesss modules");
@@ -199,17 +240,23 @@ fs.writeFileSync(
 // This code slice is used in InternalModuleRegistry.cpp. It calls initLater a ton of times with inlined code.
 // It expects a macro defined in InternalModuleRegistry.cpp
 fs.writeFileSync(
-  path.join(BASE, "out/InternalModuleRegistry+initInternalModules.h"),
-  moduleList
+  path.join(BASE, "out/InternalModuleRegistry+create.h"),
+  `${moduleList
     .map((id, n) => {
-      return `registry.m_internalModule[${n}].initLater([](const JSC::LazyProperty<JSC::JSGlobalObject, JSC::JSCell>::Initializer& init) {
+      return `registry->m_internalModule[${n}].initLater([](const JSC::LazyProperty<JSC::JSGlobalObject, JSC::JSCell>::Initializer& init) {
     INTERNAL_MODULE_REGISTRY_GENERATE(init, "${idToPublicSpecifierOrEnumName(id)}"_s, ${JSON.stringify(
         path.join(BASE, "out/modules", id.replace(/\.[mc]?[tj]s$/, ".js")),
       )}_s, InternalModuleRegistryConstants::${idToEnumName(id)}Code);
 });
 `;
     })
-    .join(""),
+    .join("")}
+${moduleList
+  .map((id, n) => {
+    return `registry->m_internalFields[${n}].set(vm, this, jsUndefined())
+`;
+  })
+  .join("")}`,
 );
 
 // This code slice is used in InternalModuleRegistry.cpp and calls .visit for each module.
@@ -231,14 +278,32 @@ fs.writeFileSync(
 namespace Bun {
 namespace InternalModuleRegistryConstants {
 
-// The reasoning behind excluding these definitions in debug mode, and forcing dynamic loading
-// is so that rebuilds in C++ in debug mode do not depend on the JS contents, and theoretically
-// faster compile times. I don't know how much impact this has.
-#if !BUN_DEBUG
+#if __APPLE__
 ${moduleList
   .map(
     (id, n) =>
-      `static constexpr ASCIILiteral ${idToEnumName(id)}Code = ${fmtCPPString(bundledOutputs.get(id.slice(0, -3)))}_s;`,
+      `static constexpr ASCIILiteral ${idToEnumName(id)}Code = ${fmtCPPString(
+        bundledOutputs.darwin.get(id.slice(0, -3)),
+      )}_s;`,
+  )
+  .join("\n")}
+#elif _WIN32
+${moduleList
+  .map(
+    (id, n) =>
+      `static constexpr ASCIILiteral ${idToEnumName(id)}Code = ${fmtCPPString(
+        bundledOutputs.win32.get(id.slice(0, -3)),
+      )}_s;`,
+  )
+  .join("\n")}
+#else
+// Not 100% accurate, but basically inlining linux on non-windows non-mac platforms.
+${moduleList
+  .map(
+    (id, n) =>
+      `static constexpr ASCIILiteral ${idToEnumName(id)}Code = ${fmtCPPString(
+        bundledOutputs.linux.get(id.slice(0, -3)),
+      )}_s;`,
   )
   .join("\n")}
 #endif

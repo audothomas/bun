@@ -46,37 +46,46 @@ namespace Bun {
 void initializeInternalModuleFromDisk(
     const JSC::LazyProperty<JSC::JSGlobalObject, JSC::JSCell>::Initializer& init,
     WTF::String moduleId,
-    WTF::String file)
+    WTF::String file,
+    WTF::String source)
 {
     if (auto contents = WTF::FileSystemImpl::readEntireFile(file)) {
         auto string = WTF::String::fromUTF8(contents.value());
         INTERNAL_MODULE_REGISTRY_GENERATE_(init, string);
     } else {
-        printf("\n"
-               "FileNotFound: \"%s\".\n"
-               "\n"
-               "error: bun-debug failed to load bundled version of \"%s\" (was it deleted?)\n"
-               "\n"
-               "In the development build of Bun, all JavaScript code is loaded from disk to\n"
-               "allow to allow a faster iteration cycle. You can run `make js` to regenerate\n"
-               "these files. This should have automatically happened when you ran `make dev`\n"
-               "\n",
-            file.utf8().data(),
+        printf("bun-debug failed to load bundled version of \"%s\" (was it deleted?)\n" file.utf8().data(),
             moduleId.utf8().data());
-        abort();
+        INTERNAL_MODULE_REGISTRY_GENERATE_(init, source);
     }
 }
 #define INTERNAL_MODULE_REGISTRY_GENERATE(init, moduleId, filename, SOURCE) \
-    initializeInternalModuleFromDisk(init, moduleId, filename)
+    initializeInternalModuleFromDisk(init, moduleId, filename, SOURCE)
 #else
 #define INTERNAL_MODULE_REGISTRY_GENERATE(init, moduleId, filename, SOURCE) \
     INTERNAL_MODULE_REGISTRY_GENERATE_(init, SOURCE)
 #endif
 
-InternalModuleRegistry InternalModuleRegistry::create()
+const ClassInfo InternalModuleRegistry::s_info = { "InternalModuleRegistry"_s, &Base::s_info, nullptr, nullptr, CREATE_METHOD_TABLE(InternalModuleRegistry) };
+
+InternalModuleRegistry::InternalModuleRegistry(VM& vm, Structure* structure)
+    : Base(vm, structure)
 {
-    InternalModuleRegistry registry;
-#include "../../../src/js/out/InternalModuleRegistry+initInternalModules.h"
+}
+
+template<typename Visitor>
+void InternalModuleRegistry::visitChildrenImpl(JSCell* cell, Visitor& visitor)
+{
+    auto* thisObject = jsCast<InternalModuleRegistry*>(cell);
+    ASSERT_GC_OBJECT_INHERITS(thisObject, info());
+    Base::visitChildren(thisObject, visitor);
+}
+
+DEFINE_VISIT_CHILDREN_WITH_MODIFIER(JS_EXPORT_PRIVATE, InternalFieldTuple);
+
+InternalModuleRegistry* InternalModuleRegistry::create(VM& vm, Structure* structure)
+{
+    InternalModuleRegistry* registry = new (NotNull, allocateCell<InternalModuleRegistry>(vm)) InternalModuleRegistry(vm, structure);
+#include "../../../src/js/out/InternalModuleRegistry+create.h"
     return registry;
 }
 

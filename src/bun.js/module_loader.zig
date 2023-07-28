@@ -2288,7 +2288,6 @@ pub const ModuleLoader = struct {
                 .@"node:process" => return jsSyntheticModule(.@"node:process", specifier),
                 .@"node:tty" => return jsSyntheticModule(.@"node:tty", specifier),
                 .@"node:util/types" => return jsSyntheticModule(.@"node:util/types", specifier),
-                .@"bun:events_native" => return jsSyntheticModule(.@"bun:events_native", specifier),
                 .@"node:constants" => return jsSyntheticModule(.@"node:constants", specifier),
                 .@"bun:jsc" => return jsSyntheticModule(.@"bun:jsc", specifier),
 
@@ -2558,7 +2557,6 @@ pub const HardcodedModule = enum {
             .{ "bun:jsc", HardcodedModule.@"bun:jsc" },
             .{ "bun:main", HardcodedModule.@"bun:main" },
             .{ "bun:sqlite", HardcodedModule.@"bun:sqlite" },
-            .{ "bun:events_native", HardcodedModule.@"bun:events_native" },
             .{ "detect-libc", HardcodedModule.@"detect-libc" },
             .{ "node:assert", HardcodedModule.@"node:assert" },
             .{ "node:assert/strict", HardcodedModule.@"node:assert/strict" },

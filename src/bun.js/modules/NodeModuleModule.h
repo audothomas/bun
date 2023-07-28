@@ -1,8 +1,8 @@
-#include "_NativeModule.h"
 #include "CommonJSModuleRecord.h"
 #include "ImportMetaObject.h"
 #include "JavaScriptCore/JSBoundFunction.h"
 #include "JavaScriptCore/ObjectConstructor.h"
+#include "_NativeModule.h"
 
 using namespace Zig;
 using namespace JSC;
@@ -29,7 +29,6 @@ static constexpr ASCIILiteral builtinModuleNames[] = {
     "async_hooks"_s,
     "buffer"_s,
     "bun"_s,
-    "bun:events_native"_s,
     "bun:ffi"_s,
     "bun:jsc"_s,
     "bun:sqlite"_s,
@@ -209,24 +208,33 @@ template <std::size_t N, class T> consteval std::size_t countof(T (&)[N]) {
 
 namespace Zig {
 
-DEFINE_NATIVE_MODULE(NodeModule)
-{
+DEFINE_NATIVE_MODULE(NodeModule) {
   INIT_NATIVE_MODULE(10);
 
-  putNativeFn(Identifier::fromString(vm, "createRequire"_s), jsFunctionNodeModuleCreateRequire);
-  putNativeFn(Identifier::fromString(vm, "paths"_s), Resolver__nodeModulePathsForJS);
-  putNativeFn(Identifier::fromString(vm, "findSourceMap"_s), jsFunctionFindSourceMap);
-  putNativeFn(Identifier::fromString(vm, "syncBuiltinExports"_s), jsFunctionSyncBuiltinExports);
+  putNativeFn(Identifier::fromString(vm, "createRequire"_s),
+              jsFunctionNodeModuleCreateRequire);
+  putNativeFn(Identifier::fromString(vm, "paths"_s),
+              Resolver__nodeModulePathsForJS);
+  putNativeFn(Identifier::fromString(vm, "findSourceMap"_s),
+              jsFunctionFindSourceMap);
+  putNativeFn(Identifier::fromString(vm, "syncBuiltinExports"_s),
+              jsFunctionSyncBuiltinExports);
   putNativeFn(Identifier::fromString(vm, "SourceMap"_s), jsFunctionSourceMap);
-  putNativeFn(Identifier::fromString(vm, "isBuiltin"_s), jsFunctionIsBuiltinModule);
-  putNativeFn(Identifier::fromString(vm, "_resolveFilename"_s), jsFunctionResolveFileName);
-  putNativeFn(Identifier::fromString(vm, "_nodeModulePaths"_s), Resolver__nodeModulePathsForJS);
+  putNativeFn(Identifier::fromString(vm, "isBuiltin"_s),
+              jsFunctionIsBuiltinModule);
+  putNativeFn(Identifier::fromString(vm, "_resolveFilename"_s),
+              jsFunctionResolveFileName);
+  putNativeFn(Identifier::fromString(vm, "_nodeModulePaths"_s),
+              Resolver__nodeModulePathsForJS);
 
-  put(Identifier::fromString(vm, "_cache"_s), jsCast<Zig::GlobalObject *>(globalObject)->lazyRequireCacheObject());
+  put(Identifier::fromString(vm, "_cache"_s),
+      jsCast<Zig::GlobalObject *>(globalObject)->lazyRequireCacheObject());
 
-  put(Identifier::fromString(vm, "globalPaths"_s), constructEmptyArray(globalObject, nullptr, 0));
+  put(Identifier::fromString(vm, "globalPaths"_s),
+      constructEmptyArray(globalObject, nullptr, 0));
 
-  put(Identifier::fromString(vm, "prototype"_s), constructEmptyObject(globalObject));
+  put(Identifier::fromString(vm, "prototype"_s),
+      constructEmptyObject(globalObject));
 
   JSC::JSArray *builtinModules = JSC::JSArray::create(
       vm,

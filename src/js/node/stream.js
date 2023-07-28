@@ -7,16 +7,16 @@ console.log("streams!");
 // This must go at the top of the file, before any side effects.
 // IS_BUN_DEVELOPMENT is a bundle-only global variable that is set to true when
 // building a development bundle.
-const __TRACK_EE__ = IS_BUN_DEVELOPMENT && !!process.env.DEBUG_TRACK_EE;
-const __DEBUG__ = IS_BUN_DEVELOPMENT && !!(process.env.DEBUG || process.env.DEBUG_STREAMS || __TRACK_EE__);
+// const __TRACK_EE__ = IS_BUN_DEVELOPMENT && !!process.env.DEBUG_TRACK_EE;
+// const __DEBUG__ = IS_BUN_DEVELOPMENT && !!(process.env.DEBUG || process.env.DEBUG_STREAMS || __TRACK_EE__);
 
-if (__DEBUG__) {
-  globalThis.__IDS_TO_TRACK = process.env.DEBUG_TRACK_EE?.length
-    ? process.env.DEBUG_TRACK_EE.split(",")
-    : process.env.DEBUG_STREAMS?.length
-    ? process.env.DEBUG_STREAMS.split(",")
-    : null;
-}
+// if (__DEBUG__) {
+//   globalThis.__IDS_TO_TRACK = process.env.DEBUG_TRACK_EE?.length
+//     ? process.env.DEBUG_TRACK_EE.split(",")
+//     : process.env.DEBUG_STREAMS?.length
+//     ? process.env.DEBUG_STREAMS.split(",")
+//     : null;
+// }
 
 // Separating DEBUG, DEBUG_STREAMS and DEBUG_TRACK_EE env vars makes it easier to focus on the
 // events in this file rather than all debug output across all files
@@ -36,7 +36,7 @@ var debug = __DEBUG__
     : (...args) => console.log(...args.slice(0, -1))
   : () => {};
 
-const { EventEmitter: EE } = require("bun:events_native");
+const { EventEmitter: EE } = $lazy("events");
 const StringDecoder = require("node:string_decoder").StringDecoder;
 
 var __defProp = Object.defineProperty;

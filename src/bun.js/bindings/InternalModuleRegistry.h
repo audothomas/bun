@@ -9,26 +9,36 @@ using namespace JSC;
 
 class InternalModuleRegistry : public JSInternalFieldObjectImpl<BUN_INTERNAL_MODULE_COUNT> {
 protected:
-    template<typename Visitor>
-    void visitImpl(Visitor& visitor);
+    JS_EXPORT_PRIVATE InternalModuleRegistry(VM&, Structure*);
+    DECLARE_DEFAULT_FINISH_CREATION;
+    DECLARE_VISIT_CHILDREN_WITH_MODIFIER(JS_EXPORT_PRIVATE);
 
     LazyProperty<JSGlobalObject, JSCell> m_internalModule[BUN_INTERNAL_MODULE_COUNT];
 
 public:
-    static InternalModuleRegistry create();
+    using Base = JSInternalFieldObjectImpl<BUN_INTERNAL_MODULE_COUNT>;
 
-    enum ModuleID {
+    enum Field : uint8_t {
 #include "../../../src/js/out/InternalModuleRegistry+enum.h"
     };
+    const WriteBarrier<Unknown>& internalField(Field field) const { return Base::internalField(static_cast<uint32_t>(field)); }
+    WriteBarrier<Unknown>& internalField(Field field) { return Base::internalField(static_cast<uint32_t>(field)); }
+
+    template<typename, SubspaceAccess mode>
+    static GCClient::IsoSubspace* subspaceFor(VM& vm)
+    {
+        return &vm.internalFieldTupleSpace();
+    }
+
+    static InternalModuleRegistry* create(VM& vm, Structure* structure);
+    static Structure* createStructure(VM& vm, JSGlobalObject* globalObject);
 
     // This is like `require` but for internal modules present in `src/js/*`
-    JSCell* get(JSGlobalObject* globalObject, ModuleID id);
-    JSCell* get(JSGlobalObject* globalObject, unsigned id);
-    // This is the js version of InternalModuleRegistry::get
+    JSCell* require(JSGlobalObject* globalObject, Field id);
+    // This is the js version of InternalModuleRegistry::require
     static JSC_DECLARE_HOST_FUNCTION(jsRequireId);
 
-    void visit(AbstractSlotVisitor& visitor);
-    void visit(SlotVisitor& visitor);
+    DECLARE_EXPORT_INFO;
 };
 
 } // namespace Bun

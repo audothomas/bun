@@ -59,13 +59,12 @@ pub const ResolvedSourceTag = enum(u64) {
     @"ws" = 559,
     
     // Native modules are assigned IDs in the range 1024 and up
-    @"node:buffer" = 1024,
-    @"node:process" = 1025,
-    @"bun:events_native" = 1026,
-    @"node:string_decoder" = 1027,
-    @"node:module" = 1028,
-    @"node:tty" = 1029,
-    @"node:util/types" = 1030,
-    @"node:constants" = 1031,
-    @"bun:jsc" = 1032,
+    @"bun:jsc" = 48,
+    @"node:buffer" = 49,
+    @"node:constants" = 50,
+    @"node:module" = 51,
+    @"node:process" = 52,
+    @"node:string_decoder" = 53,
+    @"node:tty" = 54,
+    @"node:util/types" = 55,
 };
