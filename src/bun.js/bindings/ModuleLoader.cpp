@@ -387,15 +387,15 @@ JSValue fetchCommonJSModule(
 
         auto tag = res->result.value.tag;
         switch (tag) {
-// Generated native module cases
-#define CASE(str, name, id)                                                                        \
-    case SyntheticModuleType::name: {                                                              \
-        target->evaluate(globalObject, Bun::toWTFString(*specifier), generateNativeModule_##name); \
-        RETURN_IF_EXCEPTION(scope, {});                                                            \
-        RELEASE_AND_RETURN(scope, target);                                                         \
-    }
-            BUN_FOREACH_NATIVE_MODULE(CASE)
-#undef CASE
+            // Generated native module cases
+            // #define CASE(str, name, id)                                                                        \
+//     case SyntheticModuleType::name: {                                                              \
+//         target->evaluate(globalObject, Bun::toWTFString(*specifier), generateNativeModule_##name); \
+//         RETURN_IF_EXCEPTION(scope, {});                                                            \
+//         RELEASE_AND_RETURN(scope, target);                                                         \
+//     }
+            //             BUN_FOREACH_NATIVE_MODULE(CASE)
+            // #undef CASE
 
         case SyntheticModuleType::ESM: {
             RELEASE_AND_RETURN(scope, jsNumber(-1));
@@ -546,13 +546,13 @@ static JSValue fetchESMSourceCode(
             return rejectOrResolve(JSSourceCode::create(vm, JSC::SourceCode(provider)));
         }
 
-#define CASE(str, name, id)                                                                                                                        \
-    case SyntheticModuleType::name: {                                                                                                              \
-        auto source = JSC::SourceCode(JSC::SyntheticSourceProvider::create(generateNativeModule_##name, JSC::SourceOrigin(), WTFMove(moduleKey))); \
-        return rejectOrResolve(JSSourceCode::create(vm, WTFMove(source)));                                                                         \
-    }
-            BUN_FOREACH_NATIVE_MODULE(CASE)
-#undef CASE
+            // #define CASE(str, name, id)                                                                                                                        \
+//     case SyntheticModuleType::name: {                                                                                                              \
+//         auto source = JSC::SourceCode(JSC::SyntheticSourceProvider::create(generateNativeModule_##name, JSC::SourceOrigin(), WTFMove(moduleKey))); \
+//         return rejectOrResolve(JSSourceCode::create(vm, WTFMove(source)));                                                                         \
+//     }
+            //             BUN_FOREACH_NATIVE_MODULE(CASE)
+            // #undef CASE
 
         // CommonJS modules from src/js/*
         default: {

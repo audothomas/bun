@@ -11,8 +11,8 @@
 
 // To add a new native module
 //   1. Add a new line to `BUN_FOREACH_NATIVE_MODULE`
-//   3. Add a case to `module_loader.zig` that resolevs the import.
-//   2. Add a new file in this folder named after the module, camelcase and suffixed with Module,
+//   2. Add a case to `module_loader.zig` that resolves the import.
+//   3. Add a new file in this folder named after the module, camelcase and suffixed with Module,
 //      like "NodeBufferModule.h" or "BunJSCModule.h". It should call DEFINE_NATIVE_MODULE(name).
 //
 //      The native module function is called to create the module object:
@@ -20,21 +20,19 @@
 //      - put(id, jsvalue) adds an export
 //      - putNativeFn(id, nativefn) lets you quickly add from `JSC_DEFINE_HOST_FUNCTION`
 //      - NATIVE_MODULE_FINISH() do asserts and finalize everything.
-
-// Native module IDs start at 1024 and count upwards
-#define BUN_FOREACH_NATIVE_MODULE(macro) \
-    macro("node:buffer"_s, NodeBuffer, 1024) \
-    macro("node:process"_s, NodeProcess, 1025) \
-    macro("bun:events_native"_s, BunEventsNative, 1026) \
-    macro("node:string_decoder"_s, NodeStringDecoder, 1027) \
-    macro("node:module"_s, NodeModule, 1028) \
-    macro("node:tty"_s, NodeTTY, 1029) \
-    macro("node:util/types"_s, NodeUtilTypes, 1030) \
-    macro("node:constants"_s, NodeConstants, 1031) \
-    macro("bun:jsc"_s, BunJSC, 1032) \
-
 // If you decide to not use INIT_NATIVE_MODULE. make sure the first property
 // given is the default export
+
+#define BUN_FOREACH_NATIVE_MODULE(macro) \
+    macro("bun:jsc"_s, BunJSC) \
+    macro("internal:events"_s, InternalEvents) \
+    macro("node:buffer"_s, NodeBuffer) \
+    macro("node:constants"_s, NodeConstants) \
+    macro("node:module"_s, NodeModule) \
+    macro("node:process"_s, NodeProcess) \
+    macro("node:string_decoder"_s, NodeStringDecoder) \
+    macro("node:tty"_s, NodeTTY) \
+    macro("node:util/types"_s, NodeUtilTypes) \
 
 #if ASSERT_ENABLED
 

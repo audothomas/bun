@@ -1,11 +1,13 @@
 #pragma once
 #include "root.h"
+#include "JavaScriptCore/JSInternalFieldObjectImpl.h"
+#include "JavaScriptCore/JSInternalFieldObjectImplInlines.h"
 #include "../../../src/js/out/InternalModuleRegistry+numberOfModules.h"
 
 namespace Bun {
 using namespace JSC;
 
-class InternalModuleRegistry final {
+class InternalModuleRegistry : public JSInternalFieldObjectImpl<BUN_INTERNAL_MODULE_COUNT> {
 protected:
     template<typename Visitor>
     void visitImpl(Visitor& visitor);

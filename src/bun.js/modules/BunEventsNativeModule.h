@@ -8,6 +8,7 @@ using namespace WebCore;
 // streams should be using it at all.
 DEFINE_NATIVE_MODULE(BunEventsNative) {
   INIT_NATIVE_MODULE(1);
+
   put(JSC::Identifier::fromString(vm, "EventEmitter"_s),
       WebCore::JSEventEmitter::getConstructor(vm, globalObject));
 
