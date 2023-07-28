@@ -4408,6 +4408,4 @@ var require_lib = __commonJS({
 });
 
 // zlib.js
-$exports = require_lib();
-
-export {};
+export default require_lib();

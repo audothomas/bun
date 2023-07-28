@@ -5553,6 +5553,4 @@ Object.defineProperty(exports, "promises", {
 exports[Symbol.for("::bunternal::")] = { _ReadableFromWeb, _ReadableFromWebForUndici };
 exports.eos = require_end_of_stream();
 
-$exports = exports;
-
-export {};
+export default exports;

@@ -17,10 +17,8 @@ function get(input, options, cb) {
   return req;
 }
 
-$exports = {
+export default {
   ...http,
   get,
   request,
 };
-
-export {};

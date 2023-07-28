@@ -1,4 +1,4 @@
-enum SyntheticModuleType : uint64_t {
+enum SyntheticModuleType : uint32_t {
     JavaScript = 0,
     PackageJSONTypeModule = 1,
     Wasm = 2,
@@ -58,14 +58,16 @@ enum SyntheticModuleType : uint64_t {
     ThirdpartyUndici = 558,
     ThirdpartyWS = 559,
     
-    // Native modules are assigned IDs in the range 1024 and up
-    BunJSC = 48,
-    NodeBuffer = 49,
-    NodeConstants = 50,
-    NodeModule = 51,
-    NodeProcess = 52,
-    NodeStringDecoder = 53,
-    NodeTTY = 54,
-    NodeUtilTypes = 55,
+    // Native modules run through the same system, but with different underlying initializers.
+    // They also have bit 10 set to differentiate them from JS builtins.
+    NativeModuleFlag = 1 << 10,
+    BunJSC = 1584,
+    NodeBuffer = 1585,
+    NodeConstants = 1586,
+    NodeModule = 1587,
+    NodeProcess = 1588,
+    NodeStringDecoder = 1589,
+    NodeTTY = 1590,
+    NodeUtilTypes = 1591,
 };
 

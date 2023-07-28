@@ -1038,7 +1038,7 @@ Object.defineProperties(fs, {
 realpath.native = realpath;
 realpathSync.native = realpathSync;
 
-$exports = {
+export default {
   access,
   accessSync,
   appendFile,
@@ -1136,5 +1136,3 @@ $exports = {
   //   return getLazyReadStream();
   // },
 };
-
-export {};

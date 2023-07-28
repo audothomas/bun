@@ -1936,6 +1936,4 @@ var require_wasi = __commonJS({
     exports.default = WASI;
   },
 });
-$exports = require_wasi();
-
-export {};
+export default require_wasi();

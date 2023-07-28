@@ -300,7 +300,7 @@ Undici.buildConnector =
 
 Undici.fetch = fetch;
 
-$exports = {
+export default {
   fetch,
   Response,
   Headers,
@@ -326,5 +326,3 @@ $exports = {
   Agent,
   Undici,
 };
-
-export {};

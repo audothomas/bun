@@ -1,5 +1,5 @@
 // Hardcoded module "node:stream/web" / "readable-stream/web"
-$exports = {
+export default {
   ReadableStream,
   ReadableStreamDefaultReader,
   ReadableStreamBYOBReader,
@@ -18,5 +18,3 @@ $exports = {
   // CompressionStream,
   // DecompressionStream,
 };
-
-export {};

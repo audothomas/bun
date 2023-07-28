@@ -1725,7 +1725,7 @@ class SystemError extends Error {
   }
 }
 
-$exports = {
+export default {
   ChildProcess,
   spawn,
   execFile,
@@ -1735,5 +1735,3 @@ $exports = {
   execFileSync,
   execSync,
 };
-
-export {};

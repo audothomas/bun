@@ -1257,6 +1257,5 @@ function CallTracker() {
 }
 
 assert_module["CallTracker"] = CallTracker;
-$exports = assert_module;
 
-export {};
+export default assert_module;

@@ -5,11 +5,6 @@
 const EventEmitter = require("node:events");
 const { throwNotImplemented } = require("$shared");
 
-var SCHED_NONE = 0,
-  SCHED_RR = 1,
-  Worker,
-  schedulingPolicy = 2;
-
 // TODO: is it okay for this to be a class?
 class Cluster extends EventEmitter {
   isWorker = false;
@@ -42,6 +37,4 @@ class Cluster extends EventEmitter {
   }
 }
 
-$exports = new Cluster();
-
-export {};
+export default new Cluster();

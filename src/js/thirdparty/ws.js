@@ -1137,7 +1137,7 @@ var createWebSocketStream = ws => {
   throw new Error("Not supported yet in Bun");
 };
 
-$exports = Object.assign(BunWebSocket, {
+export default Object.assign(BunWebSocket, {
   createWebSocketStream,
   Receiver,
   Sender,
@@ -1145,5 +1145,3 @@ $exports = Object.assign(BunWebSocket, {
   Server: WebSocketServer,
   WebSocketServer: WebSocketServer,
 });
-
-export {};

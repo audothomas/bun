@@ -1,4 +1,2 @@
 // Hardcoded module "node:readline/promises"
-$exports = require("node:readline").promises;
-
-export {};
+export default require("node:readline").promises;

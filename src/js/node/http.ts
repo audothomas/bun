@@ -1878,7 +1878,7 @@ function get(url, options, cb) {
 }
 
 var globalAgent = new Agent();
-$exports = {
+export default {
   Agent,
   Server,
   METHODS,
@@ -1898,5 +1898,3 @@ $exports = {
   ClientRequest,
   OutgoingMessage,
 };
-
-export {};

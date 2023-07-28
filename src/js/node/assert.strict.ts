@@ -1,4 +1,2 @@
 // Hardcoded module "node:assert/strict"
-$exports = require("node:assert").strict;
-
-export {};
+export default require("node:assert").strict;

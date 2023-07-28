@@ -104,6 +104,4 @@ function bound(obj) {
   };
 }
 
-$exports = bound(Bun._Os());
-
-export {};
+export default bound(Bun._Os());

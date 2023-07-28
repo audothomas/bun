@@ -476,6 +476,4 @@ Object.assign(EventEmitter, {
   listenerCount,
 });
 
-$exports = EventEmitter;
-
-export {};
+export default EventEmitter;

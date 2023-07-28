@@ -7,7 +7,7 @@
 - `./thirdparty` contains npm modules we replace like `ws`
 - `./internal` contains modules that aren't assigned to the module resolver
 
-Each `.ts`/`.js` file above is assigned a numeric id at compile time and inlined into an array of lazily initialized modules. `require` is replaced with `$requireId(id)` which allows these modules to import each other in a way that skips the module resolver. Being written in a syncronous format also makes this faster than ESM. All calls to `require` must be statically known.
+Each `.ts`/`.js` file above is assigned a numeric id at compile time and inlined into an array of lazily initialized modules. Internal modules referencing each other is extremely optimized, skipping the module resolver entirely.
 
 ## Builtins Syntax
 
@@ -34,19 +34,25 @@ console.log($getInternalField)
 
 V8 has a [similar feature](https://v8.dev/blog/embedded-builtins) to this syntax (they use `%` instead)
 
+On top of this, we have some special functions that are handled by the bundle preprocessor:
+
+- `require` works, but it must be a string literal that resolves to a module within src/js. This call gets replaced with `$requireId(id)`, which is a special function that skips the module resolver and directly loads the module by it's generated numerical ID.
+- `$debug` is exactly like console.log, but is stripped in release builds. It is disabled by default, requiring you to pass one of: `BUN_DEBUG_MODULE_NAME=1`, `BUN_DEBUG_JS=1`, or `BUN_DEBUG_ALL=1`.
+- `process.platform` is properly inlined and DCE'd. Do use this to run different code on different platforms.
+- `$bundleError` is like Zig's `@compileError`. It will stop a compile from succeeding.
+
 ## Builtin Modules
 
-In module files, instead of using `module.exports`, use the `$exports` variable. Due to the internal implementation, these must be `JSCell` types (function / object).
+In module files, instead of using `module.exports`, use the `export default` variable. Due to the internal implementation, these must be `JSCell` types (function / object).
 
 ```ts
-$exports = {
+export default {
   hello: 2,
   world: 3,
 };
-
-// This is needed to make TS happy. It is removed during bundling.
-export {};
 ```
+
+Keep in mind that **these are not ES modules**. `export default` is only syntax sugar to assign to the variable `$exports`, which is actually how the module exports it's contents. `export var` and `export function` are banned syntax, and so is `import` (use `require` instead)
 
 To actually wire up one of these modules to the resolver, that is done separately in `module_resolver.zig`. Maybe in the future we can do codegen for it.
 
@@ -68,6 +74,10 @@ object->putDirectBuiltinFunction(
 );
 ```
 
+## Extra Features
+
+`require` is replaced with `$requireId(id)` which allows these modules to import each other in a way that skips the module resolver. Being written in a syncronous format also makes this faster than ESM. All calls to `require` must be statically known or else this transformation is not possible.
+
 ## Building
 
 Run `make js` to bundle all the builtins. The output is placed in `src/js/out/{modules,functions}/`, where these files are loaded dynamically by `bun-debug` (an exact filepath is inlined into the binary pointing at where you cloned bun, so moving the binary to another machine may not work). In a release build, these get minified and inlined into the binary (Please commit those generated headers).
@@ -80,7 +90,7 @@ _This isn't really required knowledge to use it, but a rough overview of how ./\
 
 The build process is built on top of Bun's bundler. The first step is scanning all modules and assigning each a numerical ID. The order is determined by an A-Z sort.
 
-The `$` for private names is actually a lie, and in JSC it actually uses `@`; though that is a syntax error in regular JS/TS, so we opted for better IDE support. So first we have to pre-process the files to spot all instances of `$` at the start of an identifier and we convert it to `__intrinsic__`. We also scan for `require(string)` and replace it with `$requireId(n)` after resolving it to the integer id, which is defined in `./functions/Module.ts`. `$exports = ...;` is transformed into `return ...;`, however this transform is a little more complicated that a string replace because it supports `doSomething($exports)` and other cases.
+The `$` for private names is actually a lie, and in JSC it actually uses `@`; though that is a syntax error in regular JS/TS, so we opted for better IDE support. So first we have to pre-process the files to spot all instances of `$` at the start of an identifier and we convert it to `__intrinsic__`. We also scan for `require(string)` and replace it with `$requireId(n)` after resolving it to the integer id, which is defined in `./functions/Module.ts`. `export default` is transformed into `return ...;`, however this transform is a little more complicated that a string replace because it supports that not being the final statement, and access to the underlying variable `$exports`, etc.
 
 The preprocessor is smart enough to not replace `$` in strings, comments, regex, etc. However, it is not a real JS parser and instead a recursive regex-based nightmare, so may hit some edge cases. Yell at Dave if it breaks.
 

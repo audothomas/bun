@@ -29,7 +29,7 @@ class PerformanceEntry {
   }
 }
 
-$exports = {
+export default {
   performance,
   // performance: {
   //   clearMarks: [Function: clearMarks],
@@ -57,5 +57,3 @@ $exports = {
   // monitorEventLoopDelay: [Function: monitorEventLoopDelay],
   // createHistogram: [Function: createHistogram],
 };
-
-export {};

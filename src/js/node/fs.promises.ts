@@ -161,5 +161,3 @@ module.exports = {
   constants,
   watch,
 };
-
-export {};

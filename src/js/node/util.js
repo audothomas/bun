@@ -536,7 +536,7 @@ var toUSVString = input => {
   return (input + "").toWellFormed();
 };
 
-$exports = Object.assign(cjs_exports, {
+export default Object.assign(cjs_exports, {
   format,
   deprecate,
   debuglog,
@@ -567,5 +567,3 @@ $exports = Object.assign(cjs_exports, {
   TextDecoder,
   TextEncoder,
 });
-
-export {};

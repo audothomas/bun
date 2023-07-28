@@ -14,12 +14,10 @@ function _createSocketHandle() {
   throwNotImplemented("node:dgram _createSocketHandle", 1630);
 }
 
-$exports = {
+export default {
   createSocket,
   Socket,
   _createSocketHandle,
 };
 
 hideFromStack(createSocket, Socket, _createSocketHandle);
-
-export {};

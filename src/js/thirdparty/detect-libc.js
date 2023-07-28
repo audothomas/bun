@@ -26,7 +26,7 @@ function isNonGlibcLinux() {
   return Promise.resolve(isNonGlibcLinuxSync());
 }
 
-$exports = {
+export default {
   GLIBC,
   MUSL,
   family,
@@ -36,5 +36,3 @@ $exports = {
   version,
   versionAsync,
 };
-
-export {};

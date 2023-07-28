@@ -1,4 +1,2 @@
 // Hardcoded module "node:path/posix"
-$exports = require("node:path").posix;
-
-export {};
+export default require("node:path").posix;

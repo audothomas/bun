@@ -395,7 +395,7 @@ function CFunction(options) {
 
 const read = ffi.read;
 
-$exports = {
+export default {
   CFunction,
   CString,
   FFIType,
@@ -410,5 +410,3 @@ $exports = {
   toBuffer,
   viewSource,
 };
-
-export {};

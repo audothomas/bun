@@ -29,7 +29,7 @@ function hideFromStack(...fns) {
   }
 }
 
-$exports = {
+export default {
   NotImplementedError,
   throwNotImplemented,
   hideFromStack,

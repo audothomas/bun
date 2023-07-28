@@ -9,12 +9,10 @@ const buffer = async readableStream => {
 
 const blob = Bun.readableStreamToBlob;
 
-$exports = {
+export default {
   arrayBuffer,
   text,
   json,
   buffer,
   blob,
 };
-
-export {};

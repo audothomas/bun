@@ -1,4 +1,2 @@
 // Hardcoded module "node:stream/promises"
-$exports = require("node:stream").promises;
-
-export {};
+export default require("node:stream").promises;

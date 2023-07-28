@@ -306,7 +306,7 @@ const asyncWrapProviders = {
   INSPECTORJSBINDING: 57,
 };
 
-$exports = {
+export default {
   AsyncLocalStorage,
   createHook,
   executionAsyncId,
@@ -315,5 +315,3 @@ $exports = {
   asyncWrapProviders,
   AsyncResource,
 };
-
-export {};

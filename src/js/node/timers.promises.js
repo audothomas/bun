@@ -232,7 +232,7 @@ function setIntervalPromise(after = 1, value, options = {}) {
   }
 }
 
-$exports = {
+export default {
   setTimeout: setTimeoutPromise,
   setImmediate: setImmediatePromise,
   setInterval: setIntervalPromise,
@@ -241,5 +241,3 @@ $exports = {
     yield: setImmediatePromise,
   },
 };
-
-export {};

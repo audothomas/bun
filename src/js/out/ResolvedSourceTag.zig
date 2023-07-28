@@ -1,4 +1,4 @@
-pub const ResolvedSourceTag = enum(u64) {
+pub const ResolvedSourceTag = enum(u32) {
     // Predefined
     javascript = 0,
     package_json_type_module = 1,
@@ -57,14 +57,14 @@ pub const ResolvedSourceTag = enum(u64) {
     @"detect-libc/linux" = 557,
     @"undici" = 558,
     @"ws" = 559,
-    
-    // Native modules are assigned IDs in the range 1024 and up
-    @"bun:jsc" = 48,
-    @"node:buffer" = 49,
-    @"node:constants" = 50,
-    @"node:module" = 51,
-    @"node:process" = 52,
-    @"node:string_decoder" = 53,
-    @"node:tty" = 54,
-    @"node:util/types" = 55,
+    // Native modules run through the same system, but with different underlying initializers.
+    // They also have bit 10 set to differentiate them from JS builtins.
+    @"bun:jsc" = 1584,
+    @"node:buffer" = 1585,
+    @"node:constants" = 1586,
+    @"node:module" = 1587,
+    @"node:process" = 1588,
+    @"node:string_decoder" = 1589,
+    @"node:tty" = 1590,
+    @"node:util/types" = 1591,
 };

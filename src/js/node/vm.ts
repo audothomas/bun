@@ -34,7 +34,7 @@ class SyntheticModule {
   }
 }
 
-$exports = {
+export default {
   createContext,
   runInContext,
   runInNewContext,
@@ -47,5 +47,3 @@ $exports = {
   SourceTextModule,
   SyntheticModule,
 };
-
-export {};

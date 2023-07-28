@@ -881,7 +881,7 @@ function createServer(options, connectionListener) {
   return new Server(options, connectionListener);
 }
 
-$exports = {
+export default {
   createServer,
   Server,
   createConnection,
@@ -892,5 +892,3 @@ $exports = {
   Socket,
   [Symbol.for("::bunternal::")]: SocketClass,
 };
-
-export {};

@@ -28,6 +28,4 @@ const win32: any = bound(Bun._Path(true));
 posix.win32 = win32.win32 = win32;
 posix.posix = win32.posix = posix;
 
-$exports = process.platform === "win32" ? win32 : posix;
-
-export {};
+export default process.platform === "win32" ? win32 : posix;

@@ -3099,7 +3099,7 @@ var PromisesInterface = class Interface extends _Interface {
 // ----------------------------------------------------------------------------
 // Exports
 // ----------------------------------------------------------------------------
-$exports = {
+export default {
   Interface,
   clearLine,
   clearScreenDown,
@@ -3123,5 +3123,3 @@ $exports = {
     },
   },
 };
-
-export {};

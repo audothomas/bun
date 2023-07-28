@@ -89,7 +89,7 @@ for (let i = 0; i < moduleList.length; i++) {
     });
     let fileToTranspile = `// @ts-nocheck
 // GENERATED TEMP FILE - DO NOT EDIT
-// Sourced from TODO
+// Sourced from src/js/${moduleList[i]}
 
 $$capture_start$$(function() {
 ${processed.result.slice(1)}
@@ -100,7 +100,7 @@ return __intrinsic__exports;
     // otherwise, declare $exports so it works.
     let exportOptimization = false;
     fileToTranspile = fileToTranspile.replace(
-      /__intrinsic__exports\s*=\s*(.*|.*\{[^\}]*}|.*\([^\)]*\));\n\s*return __intrinsic__exports;/g,
+      /__intrinsic__exports\s*=\s*(.*|.*\{[^\}]*}|.*\([^\)]*\));?\n\s*return\s*__intrinsic__exports;/g,
       (_, a) => {
         exportOptimization = true;
         return "return " + a + ";";
@@ -315,7 +315,7 @@ ${moduleList
 // This is a generated enum for zig code (exports.zig)
 fs.writeFileSync(
   path.join(BASE, "out/ResolvedSourceTag.zig"),
-  `pub const ResolvedSourceTag = enum(u64) {
+  `pub const ResolvedSourceTag = enum(u32) {
     // Predefined
     javascript = 0,
     package_json_type_module = 1,
@@ -327,10 +327,10 @@ fs.writeFileSync(
     // Built in modules are loaded through InternalModuleRegistry by numerical ID.
     // In this enum are represented as \`(1 << 9) & id\`
 ${moduleList.map((id, n) => `    @"${idToPublicSpecifierOrEnumName(id)}" = ${(1 << 9) | n},`).join("\n")}
-    
-    // Native modules are assigned IDs in the range 1024 and up
+    // Native modules run through the same system, but with different underlying initializers.
+    // They also have bit 10 set to differentiate them from JS builtins.
 ${Object.entries(nativeModuleIds)
-  .map(([id, n]) => `    @"${id}" = ${n},`)
+  .map(([id, n]) => `    @"${id}" = ${(1 << 10) | (1 << 9) | n},`)
   .join("\n")}
 };
 `,
@@ -339,7 +339,7 @@ ${Object.entries(nativeModuleIds)
 // This is a generated enum for c++ code (headers-handwritten.h)
 fs.writeFileSync(
   path.join(BASE, "out/SyntheticModuleType.h"),
-  `enum SyntheticModuleType : uint64_t {
+  `enum SyntheticModuleType : uint32_t {
     JavaScript = 0,
     PackageJSONTypeModule = 1,
     Wasm = 2,
@@ -352,9 +352,11 @@ fs.writeFileSync(
     InternalModuleRegistryFlag = 1 << 9,
 ${moduleList.map((id, n) => `    ${idToEnumName(id)} = ${(1 << 9) | n},`).join("\n")}
     
-    // Native modules are assigned IDs in the range 1024 and up
+    // Native modules run through the same system, but with different underlying initializers.
+    // They also have bit 10 set to differentiate them from JS builtins.
+    NativeModuleFlag = 1 << 10,
 ${Object.entries(nativeModuleEnumToId)
-  .map(([id, n]) => `    ${id} = ${n},`)
+  .map(([id, n]) => `    ${id} = ${(1 << 10) | (1 << 9) | n},`)
   .join("\n")}
 };
 

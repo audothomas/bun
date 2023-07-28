@@ -18,7 +18,7 @@ function start() {
   throwNotImplemented("node:repl");
 }
 
-$exports = {
+export default {
   lines: [],
   context: globalThis,
   historyIndex: -1,
@@ -75,5 +75,3 @@ $exports = {
     },
   ),
 };
-
-export {};

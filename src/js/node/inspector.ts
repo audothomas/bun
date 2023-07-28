@@ -33,7 +33,7 @@ const console = {
   },
 };
 
-$exports = {
+export default {
   console,
   open,
   close,
@@ -43,5 +43,3 @@ $exports = {
 };
 
 hideFromStack(open, close, url, waitForDebugger, Session.prototype.constructor);
-
-export {};

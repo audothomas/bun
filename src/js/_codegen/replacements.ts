@@ -8,7 +8,7 @@ export const replacements: ReplacementRule[] = [
   { from: /\bthrow new RangeError\b/g, to: "$throwRangeError" },
   { from: /\bthrow new OutOfMemoryError\b/g, to: "$throwOutOfMemoryError" },
   { from: /\bnew TypeError\b/g, to: "$makeTypeError" },
-  { from: /\bexport\s+=/g, to: "var $exports =" },
+  { from: /\bexport\s*default/g, to: "$exports =" },
 ];
 
 // These rules are run on the entire file, including within strings.
