@@ -1,6 +1,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 var lazyCpus = function({ cpus }) {
   return () => {
     const array = new Array(navigator.hardwareConcurrency);
@@ -100,3 +101,46 @@ module.exports = bound(Bun._Os());
 =======
 (function (){"use strict";var tmpdir=function(){var{Bun:Bun2}=globalThis[globalThis.Symbol.for('Bun.lazy')]("primordials"),env=Bun2.env;return tmpdir=function(){var path=env.TMPDIR||env.TMP||env.TEMP||"/tmp";const length=path.length;if(length>1&&path[length-1]==="/")path=path.slice(0,-1);return path},tmpdir()};function bound(obj){return{arch:obj.arch.bind(obj),cpus:obj.cpus.bind(obj),endianness:obj.endianness.bind(obj),freemem:obj.freemem.bind(obj),getPriority:obj.getPriority.bind(obj),homedir:obj.homedir.bind(obj),hostname:obj.hostname.bind(obj),loadavg:obj.loadavg.bind(obj),networkInterfaces:obj.networkInterfaces.bind(obj),platform:obj.platform.bind(obj),release:obj.release.bind(obj),setPriority:obj.setPriority.bind(obj),get tmpdir(){return tmpdir},totalmem:obj.totalmem.bind(obj),type:obj.type.bind(obj),uptime:obj.uptime.bind(obj),userInfo:obj.userInfo.bind(obj),version:obj.version.bind(obj),machine:obj.machine.bind(obj),devNull:obj.devNull,EOL:obj.EOL,constants:obj.constants}}return bound(Bun._Os())})
 >>>>>>> b105f9932 (not done but work)
+=======
+(function () {"use strict";
+  var tmpdir = function() {
+    var env = Bun.env;
+    return tmpdir = function() {
+      var path = env.TMPDIR || env.TMP || env.TEMP || "/tmp";
+      const length = path.length;
+      if (length > 1 && path[length - 1] === "/")
+        path = path.slice(0, -1);
+      return path;
+    }, tmpdir();
+  };
+  function bound(obj) {
+    return {
+      arch: obj.arch.bind(obj),
+      cpus: obj.cpus.bind(obj),
+      endianness: obj.endianness.bind(obj),
+      freemem: obj.freemem.bind(obj),
+      getPriority: obj.getPriority.bind(obj),
+      homedir: obj.homedir.bind(obj),
+      hostname: obj.hostname.bind(obj),
+      loadavg: obj.loadavg.bind(obj),
+      networkInterfaces: obj.networkInterfaces.bind(obj),
+      platform: obj.platform.bind(obj),
+      release: obj.release.bind(obj),
+      setPriority: obj.setPriority.bind(obj),
+      get tmpdir() {
+        return tmpdir;
+      },
+      totalmem: obj.totalmem.bind(obj),
+      type: obj.type.bind(obj),
+      uptime: obj.uptime.bind(obj),
+      userInfo: obj.userInfo.bind(obj),
+      version: obj.version.bind(obj),
+      machine: obj.machine.bind(obj),
+      devNull: obj.devNull,
+      EOL: obj.EOL,
+      constants: obj.constants
+    };
+  }
+  return bound(Bun._Os());
+})
+>>>>>>> c21e64a6c (not done yet but this is how far i am)

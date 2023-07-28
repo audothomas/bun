@@ -1,6 +1,4 @@
 // Hardcoded module "node:stream/consumers" / "readable-stream/consumer"
-const { Bun } = $lazy("primordials");
-
 const arrayBuffer = Bun.readableStreamToArrayBuffer;
 const text = Bun.readableStreamToText;
 const json = stream => Bun.readableStreamToText(stream).then(JSON.parse);

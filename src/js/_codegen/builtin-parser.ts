@@ -17,7 +17,7 @@ export function sliceSourceCode(
   let i = 0;
   let result = "";
   while (contents.length) {
-    const match = contents.match(/\/\*|\/\/|'|"|{|}|`|\brequire\(|([(,=;]\s*)\/(?!\/|\*)/);
+    const match = contents.match(/\/\*|\/\/|'|"|{|}|`|(?<!\$)\brequire\(|([(,=;]\s*)\/(?!\/|\*)/);
     i = match?.index ?? contents.length;
     const chunk = replace ? applyReplacements(contents.slice(0, i)) : contents.slice(0, i);
     result += chunk;

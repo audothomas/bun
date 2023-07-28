@@ -11,7 +11,7 @@ pub const ResolvedSourceTag = enum(u64) {
     // In this enum are represented as `(1 << 9) & id`
     @"bun:ffi" = 512,
     @"bun:sqlite" = 513,
-    @"InternalShared" = 514,
+    @"internal:shared" = 514,
     @"node:assert" = 515,
     @"node:assert/strict" = 516,
     @"node:async_hooks" = 517,
@@ -58,7 +58,7 @@ pub const ResolvedSourceTag = enum(u64) {
     @"undici" = 558,
     @"ws" = 559,
     
-    // Native modules are loaded ... TODO, but we'll use 1024 and up
+    // Native modules are assigned IDs in the range 1024 and up
     @"node:buffer" = 1024,
     @"node:process" = 1025,
     @"bun:events_native" = 1026,

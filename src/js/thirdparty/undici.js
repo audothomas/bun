@@ -1,4 +1,3 @@
-const { Object } = $lazy("primordials");
 const EventEmitter = require("node:events");
 const StreamModule = require("node:stream");
 const { Readable } = StreamModule;

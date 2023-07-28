@@ -1,5 +1,4 @@
 // Hardcoded module "node:assert"
-var { Bun } = $lazy("primordials");
 const util = require("node:util");
 
 var isDeepEqual = Bun.deepEquals;
@@ -781,6 +780,7 @@ should equal
           _possibleConstructorReturn(_this)
         );
       }
+      AssertionError2.prototype = {};
       return (
         _createClass(AssertionError2, [
           {

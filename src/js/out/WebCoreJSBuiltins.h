@@ -1390,7 +1390,7 @@ extern const JSC::ImplementationVisibility s_moduleRequireResolveCodeImplementat
 #define WEBCORE_FOREACH_MODULE_BUILTIN_DATA(macro) \
     macro(main, moduleMain, 0) \
     macro(require, moduleRequire, 1) \
-    macro(requireBuiltin, moduleRequireBuiltin, 1) \
+    macro(requireBuiltin, moduleRequireBuiltin, 0) \
     macro(requireResolve, moduleRequireResolve, 1) \
 
 #define WEBCORE_FOREACH_MODULE_BUILTIN_CODE(macro) \

@@ -8,7 +8,7 @@ import { spawn } from "bun";
 async function createStaticHashtables() {
   const STATIC_HASH_TABLES = ["src/bun.js/bindings/Process.cpp"];
   console.time("Creating static hash tables...");
-  const create_hash_table = path.join(import.meta.dir, "../../../../src/bun.js/scripts/create_hash_table");
+  const create_hash_table = path.join(import.meta.dir, "../../../src/bun.js/scripts/create_hash_table");
   if (!create_hash_table) {
     console.warn(
       "Could not find create_hash_table executable. Run `bun i` or clone webkit to build static hash tables",
@@ -16,7 +16,7 @@ async function createStaticHashtables() {
     return;
   }
   for (let cpp of STATIC_HASH_TABLES) {
-    cpp = path.join(import.meta.dir, "../../../../", cpp);
+    cpp = path.join(import.meta.dir, "../../../", cpp);
     const { stdout, exited } = spawn({
       cmd: [create_hash_table, cpp],
       stdout: "pipe",
@@ -41,12 +41,12 @@ const MINIFY = process.argv.includes("--minify") || process.argv.includes("-m");
 const PARALLEL = process.argv.includes("--parallel") || process.argv.includes("-p");
 const KEEP_TMP = process.argv.includes("--keep-tmp") || process.argv.includes("-k") || true;
 
-const SRC_DIR = path.join(import.meta.dir, "../");
+const SRC_DIR = path.join(import.meta.dir, "../builtins");
 const OUT_DIR = path.join(SRC_DIR, "../out");
-const TMP_DIR = path.join(SRC_DIR, "../out/tmp");
+const TMP_DIR = path.join(SRC_DIR, "../out/tmp/builtins");
 
 if (existsSync(TMP_DIR)) rmSync(TMP_DIR, { recursive: true });
-mkdirSync(TMP_DIR);
+mkdirSync(TMP_DIR, { recursive: true });
 
 const define = {
   "process.env.NODE_ENV": "development",

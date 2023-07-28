@@ -4,7 +4,6 @@ const net = require("node:net");
 const { Server: NetServer, [Symbol.for("::bunternal::")]: InternalTCPSocket } = net;
 const bunSocketInternal = Symbol.for("::bunnetsocketinternal::");
 
-const { RegExp, Array, String } = $lazy("primordials");
 const SymbolReplace = Symbol.replace;
 const RegExpPrototypeSymbolReplace = RegExp.prototype[SymbolReplace];
 const RegExpPrototypeExec = RegExp.prototype.exec;

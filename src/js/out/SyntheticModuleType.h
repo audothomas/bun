@@ -6,17 +6,6 @@ enum SyntheticModuleType : uint64_t {
     File = 4,
     ESM = 5,
 
-    // ooh deprecated scary oooh scary boo
-    Buffer = 1025,
-    Process = 1024,
-    NativeEvents = 1026,
-    StringDecoder = 1027,
-    NodeModule = 1028,
-    TTY = 1029,
-    NodeUtilTypes = 1030,
-    Constants = 1031,
-    BunJSC = 1032,
-
     // Built in modules are loaded through InternalModuleRegistry by numerical ID.
     // In this enum are represented as `(1 << 9) & id`
     InternalModuleRegistryFlag = 1 << 9,
@@ -69,26 +58,15 @@ enum SyntheticModuleType : uint64_t {
     ThirdpartyUndici = 558,
     ThirdpartyWS = 559,
     
-    // Native modules are loaded ... TODO, but we'll use 1024 and up
+    // Native modules are assigned IDs in the range 1024 and up
     NodeBuffer = 1024,
     NodeProcess = 1025,
     BunEventsNative = 1026,
     NodeStringDecoder = 1027,
     NodeModule = 1028,
-    NodeTty = 1029,
+    NodeTTY = 1029,
     NodeUtilTypes = 1030,
     NodeConstants = 1031,
     BunJSC = 1032,
-
 };
 
-#define BUN_FOREACH_NATIVE_MODULE_NAME(macro) \
-    macro(NodeBuffer, 1024) \
-    macro(NodeProcess, 1025) \
-    macro(BunEventsNative, 1026) \
-    macro(NodeStringDecoder, 1027) \
-    macro(NodeModule, 1028) \
-    macro(NodeTty, 1029) \
-    macro(NodeUtilTypes, 1030) \
-    macro(NodeConstants, 1031) \
-    macro(BunJSC, 1032) \

@@ -35,18 +35,9 @@
 #include <JavaScriptCore/JSMapInlines.h>
 
 #include "../modules/_NativeModule.h"
-#include "../modules/BufferModule.h"
-#include "../modules/BunJSCModule.h"
-#include "../modules/ConstantsModule.h"
-#include "../modules/NativeEventsModule.h"
-#include "../modules/NodeModuleModule.h"
-#include "../modules/NodeUtilTypesModule.h"
-#include "../modules/ProcessModule.h"
-#include "../modules/StringDecoderModule.h"
-#include "../modules/TTYModule.h"
+#include "../../js/out/NativeModuleImpl.h"
 
 #include "../modules/ObjectModule.h"
-
 
 namespace Bun {
 using namespace Zig;
@@ -394,24 +385,33 @@ JSValue fetchCommonJSModule(
             return JSValue();
         }
 
-        switch (res->result.value.tag) {
-        #define CASE(name, _) \
-            case SyntheticModuleType::name: {\
-                target->evaluate(globalObject, Bun::toWTFString(*specifier), generateNativeModule_##name); \
-                RETURN_IF_EXCEPTION(scope, {});\
-                RELEASE_AND_RETURN(scope, target);\
-            }
-        BUN_FOREACH_NATIVE_MODULE_NAME(CASE)
-        #undef CASE
+        auto tag = res->result.value.tag;
+        switch (tag) {
+// Generated native module cases
+#define CASE(str, name, id)                                                                        \
+    case SyntheticModuleType::name: {                                                              \
+        target->evaluate(globalObject, Bun::toWTFString(*specifier), generateNativeModule_##name); \
+        RETURN_IF_EXCEPTION(scope, {});                                                            \
+        RELEASE_AND_RETURN(scope, target);                                                         \
+    }
+            BUN_FOREACH_NATIVE_MODULE(CASE)
+#undef CASE
 
         case SyntheticModuleType::ESM: {
             RELEASE_AND_RETURN(scope, jsNumber(-1));
         }
 
         default: {
-            target->evaluate(globalObject, Bun::toWTFString(*specifier).isolatedCopy(), res->result.value, true);
-            RETURN_IF_EXCEPTION(scope, {});
-            RELEASE_AND_RETURN(scope, target);
+            if (tag & SyntheticModuleType::InternalModuleRegistryFlag) {
+                constexpr auto mask = (SyntheticModuleType::InternalModuleRegistryFlag - 1);
+                target->putDirect(
+                    vm,
+                    builtinNames.exportsPublicName(),
+                    globalObject->internalModuleRegistry.get(globalObject, tag & mask),
+                    JSC::PropertyAttribute::ReadOnly | 0);
+                RETURN_IF_EXCEPTION(scope, {});
+                RELEASE_AND_RETURN(scope, target);
+            }
         }
         }
     }
@@ -539,34 +539,37 @@ static JSValue fetchESMSourceCode(
 
         auto moduleKey = Bun::toWTFString(*specifier);
 
-        switch (res->result.value.tag) {
+        auto tag = res->result.value.tag;
+        switch (tag) {
         case SyntheticModuleType::ESM: {
             auto&& provider = Zig::SourceProvider::create(globalObject, res->result.value, JSC::SourceProviderSourceType::Module, true);
             return rejectOrResolve(JSSourceCode::create(vm, JSC::SourceCode(provider)));
         }
 
-        #define CASE(name, _) \
-            case SyntheticModuleType::name: {\
-                auto source = JSC::SourceCode(JSC::SyntheticSourceProvider::create(generateNativeModule_##name, JSC::SourceOrigin(), WTFMove(moduleKey))); \
-                return rejectOrResolve(JSSourceCode::create(vm, WTFMove(source))); \
-            }
-        BUN_FOREACH_NATIVE_MODULE_NAME(CASE)
-        #undef CASE
+#define CASE(str, name, id)                                                                                                                        \
+    case SyntheticModuleType::name: {                                                                                                              \
+        auto source = JSC::SourceCode(JSC::SyntheticSourceProvider::create(generateNativeModule_##name, JSC::SourceOrigin(), WTFMove(moduleKey))); \
+        return rejectOrResolve(JSSourceCode::create(vm, WTFMove(source)));                                                                         \
+    }
+            BUN_FOREACH_NATIVE_MODULE(CASE)
+#undef CASE
 
         // CommonJS modules from src/js/*
         default: {
-            auto created = Bun::createCommonJSModule(globalObject, res->result.value, true);
+            if (tag & SyntheticModuleType::InternalModuleRegistryFlag) {
+                auto created = Bun::createCommonJSModule(globalObject, res->result.value, true);
 
-            if (created.has_value()) {
-                return rejectOrResolve(JSSourceCode::create(vm, WTFMove(created.value())));
-            }
+                if (created.has_value()) {
+                    return rejectOrResolve(JSSourceCode::create(vm, WTFMove(created.value())));
+                }
 
-            if constexpr (allowPromise) {
-                auto* exception = scope.exception();
-                scope.clearException();
-                return rejectedInternalPromise(globalObject, exception);
-            } else {
-                return JSC::jsUndefined();
+                if constexpr (allowPromise) {
+                    auto* exception = scope.exception();
+                    scope.clearException();
+                    return rejectedInternalPromise(globalObject, exception);
+                } else {
+                    return JSC::jsUndefined();
+                }
             }
         }
         }

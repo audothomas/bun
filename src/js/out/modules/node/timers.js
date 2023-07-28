@@ -1,1 +1,10 @@
-(function (){"use strict";return{setTimeout,clearTimeout,setInterval,setImmediate,clearInterval,clearImmediate}})
+(function () {"use strict";
+  return {
+    setTimeout,
+    clearTimeout,
+    setInterval,
+    setImmediate,
+    clearInterval,
+    clearImmediate
+  };
+})

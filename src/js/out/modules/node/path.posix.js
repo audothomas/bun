@@ -1,1 +1,3 @@
-(function (){"use strict";return @requireId(23).posix})
+(function () {"use strict";
+  return @requireId(23).posix;
+})

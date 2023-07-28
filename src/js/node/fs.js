@@ -2,7 +2,6 @@
 var ReadStream;
 var WriteStream;
 const EventEmitter = require("node:events");
-var { direct, isPromise, isCallable } = $lazy("primordials");
 const promises = require("node:fs/promises");
 const Stream = require("node:stream");
 
@@ -416,7 +415,7 @@ ReadStream = (function (InternalReadStream) {
       // Get the stream controller
       // We need the pointer to the underlying stream controller for the NativeReadable
       var stream = fileRef.stream();
-      var native = direct(stream);
+      var native = $direct(stream);
       if (!native) {
         debug("no native readable stream");
         throw new Error("no native readable stream");
@@ -597,9 +596,9 @@ ReadStream = (function (InternalReadStream) {
       this[kIoDone] = false;
       var res = super._read(n);
       debug("res -- undefined? why?", res);
-      if (isPromise(res)) {
+      if ($isPromise(res)) {
         var then = res?.then;
-        if (then && isCallable(then)) {
+        if (then && $isCallable(then)) {
           then(
             () => {
               this[kIoDone] = true;

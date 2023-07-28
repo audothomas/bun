@@ -11,25 +11,67 @@
 
 namespace Bun {
 
-#define INTERNAL_MODULE_REGISTRY_GENERATE(init, SOURCE)                                                            \
-    SourceCode source = JSC::makeSource(SOURCE, {});                                                               \
-                                                                                                                   \
-    JSFunction* func                                                                                               \
-        = JSFunction::create(                                                                                      \
-            init.vm,                                                                                               \
-            createBuiltinExecutable(                                                                               \
-                init.vm, source,                                                                                   \
-                Identifier::fromString(init.vm, "require"_s),                                                      \
-                ImplementationVisibility::Public,                                                                  \
-                ConstructorKind::None,                                                                             \
-                ConstructAbility::CannotConstruct)                                                                 \
-                ->link(init.vm, nullptr, source),                                                                  \
-            static_cast<JSC::JSGlobalObject*>(init.owner));                                                        \
-                                                                                                                   \
-    JSC::MarkedArgumentBuffer argList;                                                                             \
-    JSValue result = JSC::call(init.owner, func, JSC::getCallData(func), init.owner, JSC::MarkedArgumentBuffer()); \
-    ASSERT(result.isCell());                                                                                       \
-    init.set(result.asCell());
+#define INTERNAL_MODULE_REGISTRY_GENERATE_(init, SOURCE)    \
+    SourceCode source = JSC::makeSource(SOURCE, {});        \
+                                                            \
+    JSFunction* func                                        \
+        = JSFunction::create(                               \
+            init.vm,                                        \
+            createBuiltinExecutable(                        \
+                init.vm, source,                            \
+                Identifier(),                               \
+                ImplementationVisibility::Public,           \
+                ConstructorKind::None,                      \
+                ConstructAbility::CannotConstruct)          \
+                ->link(init.vm, nullptr, source),           \
+            static_cast<JSC::JSGlobalObject*>(init.owner)); \
+                                                            \
+    JSC::MarkedArgumentBuffer argList;                      \
+                                                            \
+    auto scope = DECLARE_CATCH_SCOPE(init.vm);              \
+                                                            \
+    JSValue result = JSC::call(                             \
+        init.owner,                                         \
+        func,                                               \
+        JSC::getCallData(func),                             \
+        init.owner, JSC::MarkedArgumentBuffer());           \
+                                                            \
+    if (UNLIKELY(scope.exception())) {                      \
+        init.set(scope.exception());                        \
+    } else {                                                \
+        init.set(result.asCell());                          \
+    }
+
+#if BUN_DEBUG
+void initializeInternalModuleFromDisk(
+    const JSC::LazyProperty<JSC::JSGlobalObject, JSC::JSCell>::Initializer& init,
+    WTF::String moduleId,
+    WTF::String file)
+{
+    if (auto contents = WTF::FileSystemImpl::readEntireFile(file)) {
+        auto string = WTF::String::fromUTF8(contents.value());
+        INTERNAL_MODULE_REGISTRY_GENERATE_(init, string);
+    } else {
+        printf("\n"
+               "FileNotFound: \"%s\".\n"
+               "\n"
+               "error: bun-debug failed to load bundled version of \"%s\" (was it deleted?)\n"
+               "\n"
+               "In the development build of Bun, all JavaScript code is loaded from disk to\n"
+               "allow to allow a faster iteration cycle. You can run `make js` to regenerate\n"
+               "these files. This should have automatically happened when you ran `make dev`\n"
+               "\n",
+            file.utf8().data(),
+            moduleId.utf8().data());
+        abort();
+    }
+}
+#define INTERNAL_MODULE_REGISTRY_GENERATE(init, moduleId, filename, SOURCE) \
+    initializeInternalModuleFromDisk(init, moduleId, filename)
+#else
+#define INTERNAL_MODULE_REGISTRY_GENERATE(init, moduleId, filename, SOURCE) \
+    INTERNAL_MODULE_REGISTRY_GENERATE_(init, SOURCE)
+#endif
 
 InternalModuleRegistry InternalModuleRegistry::create()
 {
@@ -38,12 +80,12 @@ InternalModuleRegistry InternalModuleRegistry::create()
     return registry;
 }
 
-JSValue InternalModuleRegistry::get(JSGlobalObject* globalObject, ModuleID id)
+JSCell* InternalModuleRegistry::get(JSGlobalObject* globalObject, ModuleID id)
 {
     return m_internalModule[id].get(globalObject);
 }
 
-JSValue InternalModuleRegistry::get(JSGlobalObject* globalObject, unsigned id)
+JSCell* InternalModuleRegistry::get(JSGlobalObject* globalObject, unsigned id)
 {
     return m_internalModule[id].get(globalObject);
 }
@@ -72,4 +114,5 @@ JSC_DEFINE_HOST_FUNCTION(InternalModuleRegistry::jsRequireId, (JSGlobalObject * 
 
 } // namespace Bun
 
+#undef INTERNAL_MODULE_REGISTRY_GENERATE_
 #undef INTERNAL_MODULE_REGISTRY_GENERATE

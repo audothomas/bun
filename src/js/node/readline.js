@@ -25,7 +25,6 @@
 // ----------------------------------------------------------------------------
 // Section: Imports
 // ----------------------------------------------------------------------------
-var { Array, RegExp, String, Bun } = $lazy("primordials");
 const EventEmitter = require("node:events");
 const { StringDecoder } = require("node:string_decoder");
 var isWritable;

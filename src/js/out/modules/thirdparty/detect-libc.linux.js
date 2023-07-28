@@ -1,1 +1,31 @@
-(function (){"use strict";function family(){return Promise.resolve(familySync())}function familySync(){return GLIBC}const GLIBC="glibc",MUSL="musl";function versionAsync(){return Promise.resolve(version())}function version(){return"2.29"}function isNonGlibcLinuxSync(){return!1}function isNonGlibcLinux(){return Promise.resolve(isNonGlibcLinuxSync())}return{GLIBC,MUSL,family,familySync,isNonGlibcLinux,isNonGlibcLinuxSync,version,versionAsync}})
+(function () {"use strict";
+  function family() {
+    return Promise.resolve(familySync());
+  }
+  function familySync() {
+    return GLIBC;
+  }
+  const GLIBC = "glibc", MUSL = "musl";
+  function versionAsync() {
+    return Promise.resolve(version());
+  }
+  function version() {
+    return "2.29";
+  }
+  function isNonGlibcLinuxSync() {
+    return !1;
+  }
+  function isNonGlibcLinux() {
+    return Promise.resolve(isNonGlibcLinuxSync());
+  }
+  return {
+    GLIBC,
+    MUSL,
+    family,
+    familySync,
+    isNonGlibcLinux,
+    isNonGlibcLinuxSync,
+    version,
+    versionAsync
+  };
+})

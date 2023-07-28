@@ -1,9 +1,13 @@
-interface Module {
-  id: string;
-  path: string;
-
+interface CommonJSModuleRecord {
   $require(id: string, mod: any): any;
-  children: Module[];
+  children: CommonJSModuleRecord[];
+  exports: any;
+  id: string;
+  loaded: boolean;
+  parent: undefined;
+  path: string;
+  paths: string[];
+  require: typeof require;
 }
 
 $getter;
@@ -11,7 +15,7 @@ export function main() {
   return $requireMap.$get(Bun.main);
 }
 
-export function require(this: Module, id: string) {
+export function require(this: CommonJSModuleRecord, id: string) {
   const existing = $requireMap.$get(id) || $requireMap.$get((id = $resolveSync(id, this.path, false)));
   if (existing) {
     // Scenario where this is necessary:
@@ -86,6 +90,6 @@ export function require(this: Module, id: string) {
   return mod.exports;
 }
 
-export function requireResolve(this: Module, id: string) {
+export function requireResolve(this: CommonJSModuleRecord, id: string) {
   return $resolveSync(id, this.path, false);
 }

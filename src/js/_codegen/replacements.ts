@@ -42,6 +42,9 @@ export const globalsToPrefix = [
   "TransformStream",
   "TransformStreamDefaultController",
   "Uint8Array",
+  "String",
+  "Buffer",
+  "RegExp",
   "WritableStream",
   "WritableStreamDefaultController",
   "WritableStreamDefaultWriter",
@@ -83,7 +86,7 @@ export interface ReplacementRule {
 
 /** Applies source code replacements as defined in `replacements` */
 export function applyReplacements(src: string) {
-  let result = src.replace(/([^a-zA-Z0-9_\$])\$([a-zA-Z0-9_]+[^a-zA-Z0-9_\$])/gm, `$1__intrinsic__$2`);
+  let result = src.replace(/([^a-zA-Z0-9_\$])\$([a-zA-Z0-9_]+\b)/gm, `$1__intrinsic__$2`);
   for (const replacement of replacements) {
     result = result.replace(replacement.from, replacement.to.replaceAll("$", "__intrinsic__"));
   }

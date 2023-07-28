@@ -30,17 +30,25 @@ for (let i = 0; i < moduleList.length; i++) {
   }
 }
 
-const nativeModules = {
-  "node:buffer": 1024,
-  "node:process": 1025,
-  "bun:events_native": 1026, // native version of EventEmitter used for streams
-  "node:string_decoder": 1027,
-  "node:module": 1028,
-  "node:tty": 1029,
-  "node:util/types": 1030,
-  "node:constants": 1031,
-  "bun:jsc": 1032,
-};
+// Native Module registry
+const nativeModuleH = fs.readFileSync(path.join(BASE, "../bun.js/modules/_NativeModule.h"), "utf8");
+const nativeModuleDefine = nativeModuleH.match(/BUN_FOREACH_NATIVE_MODULE\(macro\)\s*\\\n((.*\\\n)*\n)/);
+if (!nativeModuleDefine) {
+  throw new Error(
+    "Could not find BUN_FOREACH_NATIVE_MODULE in _NativeModule.h. Knowing native module IDs is a part of the codegen process.",
+  );
+}
+const nativeModuleIds: Record<string, number> = {};
+const nativeModuleEnums: Record<string, string> = {};
+const nativeModuleEnumToId: Record<string, number> = {};
+for (const [_, idString, enumValue, numericId] of nativeModuleDefine[0].matchAll(/macro\((.*?),(.*?),(.*?)\)/g)) {
+  const processedIdString = JSON.parse(idString.trim().replace(/_s$/, ""));
+  const processedEnumValue = enumValue.trim();
+  const processedNumericId = parseInt(numericId.trim());
+  nativeModuleIds[processedIdString] = processedNumericId;
+  nativeModuleEnums[processedIdString] = processedEnumValue;
+  nativeModuleEnumToId[processedEnumValue] = processedNumericId;
+}
 
 mark("Scan internal registry");
 
@@ -56,8 +64,8 @@ for (let i = 0; i < moduleList.length; i++) {
       const directMatch = internalRegistry.get(specifier);
       if (directMatch) return `__intrinsic__requireId(${directMatch}/*${specifier}*/)`;
 
-      // TODO: remove this and assign native modules to their own IDs
-      if (specifier in nativeModules) return `__intrinsic__requireBuiltin("${specifier}")`;
+      if (specifier in nativeModuleIds)
+        return `__intrinsic__requireBuiltin(${nativeModuleIds[specifier]}/* native ${nativeModuleEnums[specifier]}*/)`;
 
       const relativeMatch =
         resolveSyncOrNull(specifier, path.join(BASE, path.dirname(moduleList[i]))) ??
@@ -114,28 +122,13 @@ return __intrinsic__exports;
 
 mark("Preprocess modules");
 
-const permutations = {
-  "linux": {
-    define: {
-      "process.platform": '"linux"',
-    },
-  },
-  "mac": {
-    define: {
-      "process.platform": '"darwin"',
-    },
-  },
-  "win": {
-    define: {
-      "process.platform": '"win32"',
-    },
-  },
-};
-
 const bundled = await Bun.build({
   entrypoints: bundledEntryPoints,
-  minify: { syntax: true, whitespace: true },
+  minify: { syntax: true, whitespace: false },
   root: TMP,
+  define: {
+    IS_BUN_DEVELOPMENT: "false",
+  },
 });
 if (!bundled.success) {
   console.error(bundled.logs);
@@ -178,29 +171,22 @@ function idToPublicSpecifierOrEnumName(id: string) {
     return "node:" + id.slice(5).replaceAll(".", "/");
   } else if (id.startsWith("bun/")) {
     return "bun:" + id.slice(4).replaceAll(".", "/");
+  } else if (id.startsWith("internal/")) {
+    return "internal:" + id.slice(9).replaceAll(".", "/");
   } else if (id.startsWith("thirdparty/")) {
     return id.slice(11).replaceAll(".", "/");
   }
   return idToEnumName(id);
 }
 
+// This is a file with a single macro that is used in defining InternalModuleRegistry.h
 fs.writeFileSync(
   path.join(BASE, "out/InternalModuleRegistry+numberOfModules.h"),
   `#define BUN_INTERNAL_MODULE_COUNT ${moduleList.length}\n`,
 );
 
-fs.writeFileSync(
-  path.join(BASE, "out/InternalModuleRegistry+initInternalModules.h"),
-  moduleList
-    .map((id, n) => {
-      return `registry.m_internalModule[${n}].initLater([](const JSC::LazyProperty<JSC::JSGlobalObject, JSC::JSCell>::Initializer& init) {
-    INTERNAL_MODULE_REGISTRY_GENERATE(init, InternalModuleRegistryConstants::${idToEnumName(id)}Code);
-});
-`;
-    })
-    .join(""),
-);
-
+// This code slice is used in InternalModuleRegistry.h for inlining the enum. I dont think we
+// actually use this enum but it's probably a good thing to include.
 fs.writeFileSync(
   path.join(BASE, "out/InternalModuleRegistry+enum.h"),
   moduleList
@@ -210,6 +196,23 @@ fs.writeFileSync(
     .join("\n") + "\n",
 );
 
+// This code slice is used in InternalModuleRegistry.cpp. It calls initLater a ton of times with inlined code.
+// It expects a macro defined in InternalModuleRegistry.cpp
+fs.writeFileSync(
+  path.join(BASE, "out/InternalModuleRegistry+initInternalModules.h"),
+  moduleList
+    .map((id, n) => {
+      return `registry.m_internalModule[${n}].initLater([](const JSC::LazyProperty<JSC::JSGlobalObject, JSC::JSCell>::Initializer& init) {
+    INTERNAL_MODULE_REGISTRY_GENERATE(init, "${idToPublicSpecifierOrEnumName(id)}"_s, ${JSON.stringify(
+        path.join(BASE, "out/modules", id.replace(/\.[mc]?[tj]s$/, ".js")),
+      )}_s, InternalModuleRegistryConstants::${idToEnumName(id)}Code);
+});
+`;
+    })
+    .join(""),
+);
+
+// This code slice is used in InternalModuleRegistry.cpp and calls .visit for each module.
 fs.writeFileSync(
   path.join(BASE, "out/InternalModuleRegistry+visitImpl.h"),
   moduleList
@@ -219,6 +222,8 @@ fs.writeFileSync(
     .join("\n") + "\n",
 );
 
+// This header is used by InternalModuleRegistry.cpp, and should only be included in that file.
+// It inlines all the strings for the module IDs.
 fs.writeFileSync(
   path.join(BASE, "out/InternalModuleRegistryConstants.h"),
   `#pragma once
@@ -226,17 +231,23 @@ fs.writeFileSync(
 namespace Bun {
 namespace InternalModuleRegistryConstants {
 
+// The reasoning behind excluding these definitions in debug mode, and forcing dynamic loading
+// is so that rebuilds in C++ in debug mode do not depend on the JS contents, and theoretically
+// faster compile times. I don't know how much impact this has.
+#if !BUN_DEBUG
 ${moduleList
   .map(
     (id, n) =>
       `static constexpr ASCIILiteral ${idToEnumName(id)}Code = ${fmtCPPString(bundledOutputs.get(id.slice(0, -3)))}_s;`,
   )
   .join("\n")}
+#endif
 
 }
 }`,
 );
 
+// This is a generated enum for zig code (exports.zig)
 fs.writeFileSync(
   path.join(BASE, "out/ResolvedSourceTag.zig"),
   `pub const ResolvedSourceTag = enum(u64) {
@@ -252,14 +263,15 @@ fs.writeFileSync(
     // In this enum are represented as \`(1 << 9) & id\`
 ${moduleList.map((id, n) => `    @"${idToPublicSpecifierOrEnumName(id)}" = ${(1 << 9) | n},`).join("\n")}
     
-    // Native modules are loaded ... TODO, but we'll use 1024 and up
-${Object.entries(nativeModules)
+    // Native modules are assigned IDs in the range 1024 and up
+${Object.entries(nativeModuleIds)
   .map(([id, n]) => `    @"${id}" = ${n},`)
   .join("\n")}
 };
 `,
 );
 
+// This is a generated enum for c++ code (headers-handwritten.h)
 fs.writeFileSync(
   path.join(BASE, "out/SyntheticModuleType.h"),
   `enum SyntheticModuleType : uint64_t {
@@ -270,33 +282,26 @@ fs.writeFileSync(
     File = 4,
     ESM = 5,
 
-    // ooh deprecated scary oooh scary boo
-    Buffer = 1025,
-    Process = 1024,
-    NativeEvents = 1026,
-    StringDecoder = 1027,
-    NodeModule = 1028,
-    TTY = 1029,
-    NodeUtilTypes = 1030,
-    Constants = 1031,
-    BunJSC = 1032,
-
     // Built in modules are loaded through InternalModuleRegistry by numerical ID.
     // In this enum are represented as \`(1 << 9) & id\`
     InternalModuleRegistryFlag = 1 << 9,
 ${moduleList.map((id, n) => `    ${idToEnumName(id)} = ${(1 << 9) | n},`).join("\n")}
     
-    // Native modules are loaded ... TODO, but we'll use 1024 and up
-${Object.entries(nativeModules)
-  .map(([id, n]) => `    ${idToEnumName(id)} = ${n},`)
+    // Native modules are assigned IDs in the range 1024 and up
+${Object.entries(nativeModuleEnumToId)
+  .map(([id, n]) => `    ${id} = ${n},`)
   .join("\n")}
 };
 
-#define BUN_FOREACH_NATIVE_MODULE_NAME(macro) \\
-${Object.entries(nativeModules)
-  .map(([id, n]) => `    macro(${idToEnumName(id)}, ${n}) \\`)
-  .join("\n")}
 `,
+);
+
+// This is used in ModuleLoader.cpp to link to all the headers for native modules.
+fs.writeFileSync(
+  path.join(BASE, "out/NativeModuleImpl.h"),
+  Object.values(nativeModuleEnums)
+    .map(value => `#include "../../bun.js/modules/${value}Module.h"`)
+    .join("\n") + "\n",
 );
 
 mark("Generate Code");

@@ -20,8 +20,8 @@ public:
     };
 
     // This is like `require` but for internal modules present in `src/js/*`
-    JSValue get(JSGlobalObject* globalObject, ModuleID id);
-    JSValue get(JSGlobalObject* globalObject, unsigned id);
+    JSCell* get(JSGlobalObject* globalObject, ModuleID id);
+    JSCell* get(JSGlobalObject* globalObject, unsigned id);
     // This is the js version of InternalModuleRegistry::get
     static JSC_DECLARE_HOST_FUNCTION(jsRequireId);
 

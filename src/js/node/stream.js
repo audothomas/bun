@@ -2,6 +2,8 @@
 // "readable-stream" npm package
 // just transpiled
 
+console.log("streams!");
+
 // This must go at the top of the file, before any side effects.
 // IS_BUN_DEVELOPMENT is a bundle-only global variable that is set to true when
 // building a development bundle.
@@ -34,7 +36,6 @@ var debug = __DEBUG__
     : (...args) => console.log(...args.slice(0, -1))
   : () => {};
 
-var { isPromise, isCallable, direct, Object } = $lazy("primordials");
 const { EventEmitter: EE } = require("bun:events_native");
 const StringDecoder = require("node:string_decoder").StringDecoder;
 
@@ -2435,7 +2436,7 @@ var require_readable = __commonJS({
               value;
             const firstResult = reader.readMany();
 
-            if (isPromise(firstResult)) {
+            if ($isPromise(firstResult)) {
               ({ done, value } = await firstResult);
 
               if (this.#closed) {
@@ -2814,7 +2815,7 @@ var require_readable = __commonJS({
             }
           }
 
-          if (isPromise(result) && result?.then && isCallable(result.then)) {
+          if ($isPromise(result) && result?.then && $isCallable(result.then)) {
             __DEBUG__ && debug("async _read result.then setup", this.__id);
             result.then(nop, function (err) {
               errorOrDestroy(this, err);
@@ -5422,7 +5423,7 @@ function getNativeReadableStream(Readable, stream, options) {
     return undefined;
   }
 
-  const native = direct(stream);
+  const native = $direct(stream);
   if (!native) {
     debug("no native readable stream");
     return undefined;

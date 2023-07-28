@@ -1,8 +1,6 @@
 // Hardcoded module "node:dns"
 // only resolve4, resolve, lookup, resolve6 and resolveSrv are implemented.
-const {
-  Bun: { dns },
-} = $lazy("primordials");
+const dns = Bun.dns;
 
 function lookup(domain, options, callback) {
   if (typeof options == "function") {

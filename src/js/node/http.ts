@@ -1,6 +1,5 @@
 // Hardcoded module "node:http"
 const EventEmitter = require("node:events");
-const { Readable, Writable, Duplex } = require("node:stream");
 const { isTypedArray } = require("node:util/types");
 
 const headerCharRegex = /[^\t\x20-\x7e\x80-\xff]/;
@@ -56,8 +55,6 @@ function isIPv6(input) {
 // TODO: add primordial for URL
 // Importing from node:url is unnecessary
 const { URL } = globalThis;
-
-const { newArrayWithSize, String, Object, Array } = $lazy("primordials");
 
 const globalReportError = globalThis.reportError;
 const setTimeout = globalThis.setTimeout;
@@ -558,7 +555,7 @@ class Server extends EventEmitter {
 
 function assignHeaders(object, req) {
   var headers = req.headers.toJSON();
-  const rawHeaders = newArrayWithSize(req.headers.count * 2);
+  const rawHeaders = $newArrayWithSize(req.headers.count * 2);
   var i = 0;
   for (const key in headers) {
     rawHeaders[i++] = key;

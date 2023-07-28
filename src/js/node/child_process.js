@@ -5,7 +5,6 @@ const {
   constants: { signals },
 } = require("node:os");
 const { promisify } = require("node:util");
-const { ArrayBuffer, Uint8Array, String, Object, Buffer, Promise } = $lazy("primordials");
 
 var ObjectCreate = Object.create;
 var ObjectAssign = Object.assign;

@@ -1788,13 +1788,14 @@ pub const ModuleLoader = struct {
                             strings.append3(
                                 bun.default_allocator,
                                 JSC.Node.fs.constants_string,
-                                @as(string, jsModuleFromFile(jsc_vm.load_builtins_from_path, "node/wasi.js")),
+                                // @as(string, jsModuleFromFile(jsc_vm.load_builtins_from_path, "node/wasi.js")),
+                                "TODO:",
                                 @embedFile("../js/wasi-runner.js"),
                             ) catch unreachable,
                         ),
                         .specifier = input_specifier,
                         .source_url = ZigString.init(path.text),
-                        .tag = .ESM,
+                        .tag = .esm,
                         .hash = 0,
                     };
                 }
@@ -2181,7 +2182,7 @@ pub const ModuleLoader = struct {
                             .specifier = bun.String.init(bun.asByteSlice(JSC.VirtualMachine.main_file_name)),
                             .source_url = ZigString.init(bun.asByteSlice(JSC.VirtualMachine.main_file_name)),
                             .hash = 0,
-                            .tag = .ESM,
+                            .tag = .esm,
                         };
                     }
                     defer jsc_vm.transpiled_count += 1;
@@ -2276,7 +2277,7 @@ pub const ModuleLoader = struct {
                         .specifier = specifier,
                         .source_url = ZigString.init(bun.asByteSlice(JSC.VirtualMachine.main_file_name)),
                         .hash = 0,
-                        .tag = .ESM,
+                        .tag = .esm,
                     };
                 },
 
@@ -2292,76 +2293,77 @@ pub const ModuleLoader = struct {
                 .@"bun:jsc" => return jsSyntheticModule(.@"bun:jsc", specifier),
 
                 // TODO:
-                .@"node:fs/promises" => {
-                    return ResolvedSource{
-                        .allocator = null,
-                        .source_code = bun.String.static(comptime "(()=>{\"use strict\";" ++ JSC.Node.fs.constants_string ++ @embedFile("../js/out/modules/node/fs.promises.js")[19..]),
-                        .specifier = specifier,
-                        .source_url = ZigString.init("node:fs/promises"),
-                        .hash = 0,
-                    };
-                },
-                .@"bun:ffi" => {
-                    const shared_library_suffix = if (Environment.isMac) "dylib" else if (Environment.isLinux) "so" else if (Environment.isWindows) "dll" else "";
-                    return ResolvedSource{
-                        .allocator = null,
-                        .source_code = bun.String.static(
-                            comptime ("(()=>{\"use strict\";var FFIType=" ++
-                                JSC.FFI.ABIType.map_to_js_object ++
-                                ",suffix='" ++ shared_library_suffix ++ "';" ++
-                                @embedFile("../js/out/modules/bun/ffi.js")[19..]),
-                        ),
-                        .specifier = specifier,
-                        .source_url = ZigString.init("bun:ffi"),
-                        .hash = 0,
-                    };
-                },
+                // .@"node:fs/promises" => {
+                //     return ResolvedSource{
+                //         .allocator = null,
+                //         .source_code = bun.String.static(comptime "(()=>{\"use strict\";" ++ JSC.Node.fs.constants_string ++ @embedFile("../js/out/modules/node/fs.promises.js")[19..]),
+                //         .specifier = specifier,
+                //         .source_url = ZigString.init("node:fs/promises"),
+                //         .hash = 0,
+                //     };
+                // },
+                // .@"bun:ffi" => {
+                //     const shared_library_suffix = if (Environment.isMac) "dylib" else if (Environment.isLinux) "so" else if (Environment.isWindows) "dll" else "";
+                //     return ResolvedSource{
+                //         .allocator = null,
+                //         .source_code = bun.String.static(
+                //             comptime ("(()=>{\"use strict\";var FFIType=" ++
+                //                 JSC.FFI.ABIType.map_to_js_object ++
+                //                 ",suffix='" ++ shared_library_suffix ++ "';" ++
+                //                 @embedFile("../js/out/modules/bun/ffi.js")[19..]),
+                //         ),
+                //         .specifier = specifier,
+                //         .source_url = ZigString.init("bun:ffi"),
+                //         .hash = 0,
+                //     };
+                // },
 
                 // These are defined in src/js/*
-                .@"bun:sqlite" => return jsSyntheticModule(.@"bun:sqlite"),
-                .@"node:assert" => return jsSyntheticModule(.@"node:assert"),
-                .@"node:assert/strict" => return jsSyntheticModule(.@"node:assert/strict"),
-                .@"node:async_hooks" => return jsSyntheticModule(.@"node:async_hooks"),
-                .@"node:child_process" => return jsSyntheticModule(.@"node:child_process"),
-                .@"node:cluster" => return jsSyntheticModule(.@"node:cluster"),
-                .@"node:crypto" => return jsSyntheticModule(.@"node:crypto"),
-                .@"node:dgram" => return jsSyntheticModule(.@"node:dgram"),
-                .@"node:diagnostics_channel" => return jsSyntheticModule(.@"node:diagnostics_channel"),
-                .@"node:dns" => return jsSyntheticModule(.@"node:dns"),
-                .@"node:dns/promises" => return jsSyntheticModule(.@"node:dns/promises"),
-                .@"node:events" => return jsSyntheticModule(.@"node:child_process"),
-                .@"node:fs" => return jsSyntheticModule(.@"node:fs"),
-                .@"node:http" => return jsSyntheticModule(.@"node:http"),
-                .@"node:http2" => return jsSyntheticModule(.@"node:http2"),
-                .@"node:https" => return jsSyntheticModule(.@"node:https"),
-                .@"node:inspector" => return jsSyntheticModule(.@"node:inspector"),
-                .@"node:net" => return jsSyntheticModule(.@"node:net"),
-                .@"node:os" => return jsSyntheticModule(.@"node:os"),
-                .@"node:path" => return jsSyntheticModule(.@"node:path"),
-                .@"node:path/posix" => return jsSyntheticModule(.@"node:path/posix"),
-                .@"node:path/win32" => return jsSyntheticModule(.@"node:path/win32"),
-                .@"node:perf_hooks" => return jsSyntheticModule(.@"node:perf_hooks"),
-                .@"node:readline" => return jsSyntheticModule(.@"node:readline"),
-                .@"node:readline/promises" => return jsSyntheticModule(.@"node:readline/promises"),
-                .@"node:repl" => return jsSyntheticModule(.@"node:repl"),
-                .@"node:stream" => return jsSyntheticModule(.@"node:stream"),
-                .@"node:stream/consumers" => return jsSyntheticModule(.@"node:stream/consumers"),
-                .@"node:stream/promises" => return jsSyntheticModule(.@"node:stream/promises"),
-                .@"node:stream/web" => return jsSyntheticModule(.@"node:stream/web"),
-                .@"node:timers" => return jsSyntheticModule(.@"node:timers"),
-                .@"node:timers/promises" => return jsSyntheticModule(.@"node:timers/promises"),
-                .@"node:tls" => return jsSyntheticModule(.@"node:tls"),
-                .@"node:trace_events" => return jsSyntheticModule(.@"node:trace_events"),
-                .@"node:url" => return jsSyntheticModule(.@"node:url"),
-                .@"node:util" => return jsSyntheticModule(.@"node:util"),
-                .@"node:v8" => return jsSyntheticModule(.@"node:v8"),
-                .@"node:vm" => return jsSyntheticModule(.@"node:vm"),
-                .@"node:wasi" => return jsSyntheticModule(.@"node:wasi"),
-                .@"node:zlib" => return jsSyntheticModule(.@"node:zlib"),
-
-                .@"detect-libc" => return jsSyntheticModule(.@"detect-libc", specifier),
-                .undici => return jsSyntheticModule(.undici),
-                .ws => return jsSyntheticModule(.ws),
+                .@"bun:ffi" => return jsSyntheticModule(.@"bun:ffi", specifier),
+                .@"bun:sqlite" => return jsSyntheticModule(.@"bun:sqlite", specifier),
+                .@"node:assert" => return jsSyntheticModule(.@"node:assert", specifier),
+                .@"node:assert/strict" => return jsSyntheticModule(.@"node:assert/strict", specifier),
+                .@"node:async_hooks" => return jsSyntheticModule(.@"node:async_hooks", specifier),
+                .@"node:child_process" => return jsSyntheticModule(.@"node:child_process", specifier),
+                .@"node:cluster" => return jsSyntheticModule(.@"node:cluster", specifier),
+                .@"node:crypto" => return jsSyntheticModule(.@"node:crypto", specifier),
+                .@"node:dgram" => return jsSyntheticModule(.@"node:dgram", specifier),
+                .@"node:diagnostics_channel" => return jsSyntheticModule(.@"node:diagnostics_channel", specifier),
+                .@"node:dns" => return jsSyntheticModule(.@"node:dns", specifier),
+                .@"node:dns/promises" => return jsSyntheticModule(.@"node:dns/promises", specifier),
+                .@"node:events" => return jsSyntheticModule(.@"node:child_process", specifier),
+                .@"node:fs" => return jsSyntheticModule(.@"node:fs", specifier),
+                .@"node:http" => return jsSyntheticModule(.@"node:http", specifier),
+                .@"node:http2" => return jsSyntheticModule(.@"node:http2", specifier),
+                .@"node:https" => return jsSyntheticModule(.@"node:https", specifier),
+                .@"node:inspector" => return jsSyntheticModule(.@"node:inspector", specifier),
+                .@"node:net" => return jsSyntheticModule(.@"node:net", specifier),
+                .@"node:os" => return jsSyntheticModule(.@"node:os", specifier),
+                .@"node:path" => return jsSyntheticModule(.@"node:path", specifier),
+                .@"node:path/posix" => return jsSyntheticModule(.@"node:path/posix", specifier),
+                .@"node:fs/promises" => return jsSyntheticModule(.@"node:fs/promises", specifier),
+                .@"node:path/win32" => return jsSyntheticModule(.@"node:path/win32", specifier),
+                .@"node:perf_hooks" => return jsSyntheticModule(.@"node:perf_hooks", specifier),
+                .@"node:readline" => return jsSyntheticModule(.@"node:readline", specifier),
+                .@"node:readline/promises" => return jsSyntheticModule(.@"node:readline/promises", specifier),
+                .@"node:repl" => return jsSyntheticModule(.@"node:repl", specifier),
+                .@"node:stream" => return jsSyntheticModule(.@"node:stream", specifier),
+                .@"node:stream/consumers" => return jsSyntheticModule(.@"node:stream/consumers", specifier),
+                .@"node:stream/promises" => return jsSyntheticModule(.@"node:stream/promises", specifier),
+                .@"node:stream/web" => return jsSyntheticModule(.@"node:stream/web", specifier),
+                .@"node:timers" => return jsSyntheticModule(.@"node:timers", specifier),
+                .@"node:timers/promises" => return jsSyntheticModule(.@"node:timers/promises", specifier),
+                .@"node:tls" => return jsSyntheticModule(.@"node:tls", specifier),
+                .@"node:trace_events" => return jsSyntheticModule(.@"node:trace_events", specifier),
+                .@"node:url" => return jsSyntheticModule(.@"node:url", specifier),
+                .@"node:util" => return jsSyntheticModule(.@"node:util", specifier),
+                .@"node:v8" => return jsSyntheticModule(.@"node:v8", specifier),
+                .@"node:vm" => return jsSyntheticModule(.@"node:vm", specifier),
+                .@"node:wasi" => return jsSyntheticModule(.@"node:wasi", specifier),
+                .@"node:zlib" => return jsSyntheticModule(.@"node:zlib", specifier),
+                .@"detect-libc" => return jsSyntheticModule(if (Environment.isLinux) .@"detect-libc/linux" else .@"detect-libc", specifier),
+                .undici => return jsSyntheticModule(.undici, specifier),
+                .ws => return jsSyntheticModule(.ws, specifier),
             }
         } else if (specifier.hasPrefixComptime(js_ast.Macro.namespaceWithColon)) {
             const spec = specifier.toUTF8(bun.default_allocator);

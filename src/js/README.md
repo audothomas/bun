@@ -1,8 +1,25 @@
 # JS Modules
 
+**TLDR**: If anything here changes, re-run `make js`. If you add/remove files, `make regenerate-bindings`.
+
 - `./node` contains all `node:*` modules
 - `./bun` contains all `bun:*` modules
 - `./thirdparty` contains npm modules we replace like `ws`
+- `./internal` contains modules that aren't assigned to the module resolver
+
+Each `.ts`/`.js` file above is assigned a numeric id at compile time and inlined into an array of lazily initialized modules. `require` is replaced with `$requireId(id)` which allows these modules to import each other in a way that skips the module resolver. Being written in a syncronous format also makes this faster than ESM. All calls to `require` must be statically known.
+
+`./functions` contains isolated functions. Each function within is bundled separately, meaning you may not use global variables, non-type `import`s, and even directly referencing the other functions in these files. `require` is still resolved the same way it does in the modules.
+
+Within these files, the `$` prefix on variables can be used to access private property names as well as JSC intrinsics.
+
+```ts
+// Many globals
+const hello = $Array.from(...);
+
+$requireMap // internal set by bun
+
+```
 
 When you change any of those folders, run this to bundle and minify them:
 

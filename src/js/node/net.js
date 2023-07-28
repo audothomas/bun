@@ -56,7 +56,6 @@ function isIP(s) {
   return 0;
 }
 
-const { Bun, createFIFO, Object } = $lazy("primordials");
 const { connect: bunConnect } = Bun;
 var { setTimeout } = globalThis;
 
@@ -294,7 +293,7 @@ const Socket = (function (InternalSocket) {
     #closed = false;
     connecting = false;
     localAddress = "127.0.0.1";
-    #readQueue = createFIFO();
+    #readQueue = $createFIFO();
     remotePort;
     [bunSocketInternal] = null;
     [bunTLSConnectOptions] = null;

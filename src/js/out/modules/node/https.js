@@ -1,1 +1,19 @@
-(function (){"use strict";const http=@requireId(16);function request(input,options,cb){if(input&&typeof input==="object"&&!(input instanceof URL))input.protocol??="https:";else if(typeof options==="object")options.protocol??="https:";return http.request(input,options,cb)}function get(input,options,cb){const req=request(input,options,cb);return req.end(),req}return{...http,get,request}})
+(function () {"use strict";
+  const http = @requireId(16);
+  function request(input, options, cb) {
+    if (input && typeof input === "object" && !(input instanceof URL))
+      input.protocol ??= "https:";
+    else if (typeof options === "object")
+      options.protocol ??= "https:";
+    return http.request(input, options, cb);
+  }
+  function get(input, options, cb) {
+    const req = request(input, options, cb);
+    return req.end(), req;
+  }
+  return {
+    ...http,
+    get,
+    request
+  };
+})

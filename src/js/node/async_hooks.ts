@@ -21,7 +21,15 @@
 // AsyncContextData is an immutable array managed in here, formatted [key, value, key, value] where
 // each key is an AsyncLocalStorage object and the value is the associated value.
 //
-const { get, set, cleanupLater } = $lazy("async_hooks");
+const { cleanupLater } = $lazy("async_hooks");
+
+function get(): ReadonlyArray<any> | undefined {
+  return $getInternalField($asyncContext, 0);
+}
+
+function set(contextValue: ReadonlyArray<any> | undefined) {
+  return $putInternalField($asyncContext, 0, contextValue);
+}
 
 class AsyncLocalStorage {
   #disableCalled = false;

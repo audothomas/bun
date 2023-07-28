@@ -1,6 +1,5 @@
 // Hardcoded module "node:util"
 const types = require("node:util/types");
-const { isArray } = $lazy("primordials");
 
 var cjs_exports = {};
 
@@ -220,7 +219,7 @@ function formatValue(ctx, value, recurseTimes) {
   var base = "",
     array = false,
     braces = ["{", "}"];
-  if (isArray(value)) {
+  if ($isArray(value)) {
     array = true;
     braces = ["[", "]"];
   }
@@ -544,7 +543,7 @@ $exports = Object.assign(cjs_exports, {
   _extend,
   inspect,
   types,
-  isArray,
+  isArray: $isArray,
   isBoolean,
   isNull,
   isNullOrUndefined,

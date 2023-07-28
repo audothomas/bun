@@ -1,1 +1,3 @@
-(function (){"use strict";return @requireId(26).promises})
+(function () {"use strict";
+  return @requireId(26).promises;
+})
